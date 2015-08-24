@@ -4,7 +4,7 @@
 #include "button_drv.h"
 #include "button_action.h"
 #include "net_config.h"
-#include "ind_drv.h"
+//#include "ind_drv.h"
 #include "beeper_drv.h"
 #include "control.h"
 #include "gran.h"
@@ -23,6 +23,27 @@
 //#include "simbol.h"
 #include "simbol16x9.h"
 #include "stdio.h"
+
+
+#define BUT_ON 4
+#define BUT_ONL 20 
+
+#define BUT0	0	 //L
+#define BUT1	1	 //R
+#define BUT2	2	 //D
+#define BUT3	3	 //U
+#define BUT4	4	 //F
+#define BUT_MASK (1UL<<BUT0)|(1UL<<BUT1)|(1UL<<BUT2)|(1UL<<BUT3)|(1UL<<BUT4)
+unsigned char poz_display, poz_display_bf, poz_display_bf_2, poz_kursor=1, poz_kursor_bf, poz_kursor_bf_2;
+unsigned delay_scrin_saver;
+unsigned char count_richt,count_left,count_down,count_up,count_f,flag_f;
+unsigned short flag_richt,flag_left,flag_down,flag_up;
+#define K_U (LPC_GPIO2->FIOPIN&(1<<BUT3))
+#define K_D (LPC_GPIO2->FIOPIN&(1<<BUT2))
+#define K_R (LPC_GPIO2->FIOPIN&(1<<BUT1))
+#define K_L (LPC_GPIO2->FIOPIN&(1<<BUT0))
+#define K_F (LPC_GPIO2->FIOPIN&(1<<BUT4))
+
 
 extern LOCALM localm[];
 extern U8 own_hw_adr[];
@@ -272,15 +293,6 @@ char plazma_pal;
 signed short rele_cnt;
 char bRELE;
 //-----------------------------------------------
-void ind_hndl(void)
-{
-if(ind==iMn)
-	{
-	}
-if(ind==iDef_net_set)
-	{
-	}
-}
 
 //-----------------------------------------------
 void delay_us(long del)
@@ -313,138 +325,8 @@ while (--syst);
 #define butE		247
 #define butE_		247-128
 
- /*
 //-----------------------------------------------
-void bitmap_hndl(void)
-{
-short x,ii,i;
-unsigned int ptr_bitmap;
-static char ptr_cnt,ptr_cnt1,ptr_cnt2,ptr_cnt3,ptr_cnt4;
 
-for(ii=0;ii<488;ii++)
-	{
-	lcd_bitmap[ii]=0x00;
-	}
-
-	{
-	for(i=0;i<4;i++)
-		{
-		ptr_bitmap=122*(unsigned)i;
-		for(x=(20*i);x<((20*i)+20);x++)
-	 		{
-			lcd_bitmap[ptr_bitmap++]=caracter[(unsigned)lcd_buffer[x]*6];
-			lcd_bitmap[ptr_bitmap++]=caracter[((unsigned)lcd_buffer[x]*6)+1];
-			lcd_bitmap[ptr_bitmap++]=caracter[((unsigned)lcd_buffer[x]*6)+2];
-			lcd_bitmap[ptr_bitmap++]=caracter[((unsigned)lcd_buffer[x]*6)+3];
-			lcd_bitmap[ptr_bitmap++]=caracter[((unsigned)lcd_buffer[x]*6)+4];
-			lcd_bitmap[ptr_bitmap++]=caracter[((unsigned)lcd_buffer[x]*6)+5];
-			} 
-		}
-	}	
-}
-
-//-----------------------------------------------
-void bitmap_hndl2(void)
-{
-short x,ii,i;
-unsigned int ptr_bitmap;
-static char ptr_cnt,ptr_cnt1,ptr_cnt2,ptr_cnt3,ptr_cnt4;
-
-for(ii=0;ii<1023;ii++)
-	{
-	lcd_bitmap[ii]=0x00;
-	}
-//lcd_bitmap[0]=caracter2[0];
-//lcd_bitmap[128]=caracter2[0];
-for(i=0;i<4;i++)
-	{
-	ptr_bitmap=4+(256*(unsigned)i);
-	
-//lcd_bitmap[ptr_bitmap++]=caracter2[0];
-
-	for(x=(12*i);x<((12*i)+12);x++)
-	 	{
-		lcd_bitmap[ptr_bitmap++]=caracter2[((unsigned)lcd_buffer[x])*20];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+1];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+2];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+3];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+4];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+5];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+6];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+7];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+8];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+9];
-		}  
-	
-	ptr_bitmap=(256*(unsigned)i)+132;
-	for(x=(12*i);x<((12*i)+12);x++)
-		{
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+10];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+11];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+12];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+13];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+14];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+15];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+16];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+17];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+18];
-		lcd_bitmap[ptr_bitmap++]=caracter2[(((unsigned)lcd_buffer[x])*20)+19];
-		} 
-	}
-}
-*/
-//-----------------------------------------------
-void bitmap_hndl16x9(void)
-{
-short x,i,a;
-unsigned int ptr_bitmap, z;
-
-
-for(i=0;i<1023;i++)
-	{
-	lcd_bitmap[i]=0;
-	}
-
-
-for(i=0;i<4;i++) {
-	for(x=0;x<10;x++)
-	 	{
-		//если 192 то надо 93
-		if(lcd_buffer[x+10*i]>191) z=((lcd_buffer[x+10*i]-99)*24);
-		else if(lcd_buffer[x+10*i]>31) z=(lcd_buffer[x+10*i]-32)*24;
-		else z=0;
-
-		ptr_bitmap=(256*(unsigned)i)+(12*x);
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+2];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+4];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+6];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+8];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+10];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+12];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+14];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+16];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+18];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+20];
-		ptr_bitmap=(256*(unsigned)i)+(12*x)+128;
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+1];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+3];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+5];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+7];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+9];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+11];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+13];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+15];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+17];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+19];
-		lcd_bitmap[ptr_bitmap++]=caracter16x9[z+21];
-		} 
-	
-
-	 
-	}
-
-}
 //-----------------------------------------------
 void but_an(void)
 {
@@ -716,13 +598,7 @@ n_but=0;
 }	
 
 
-#define BUT_ON 4
-#define BUT_ONL 20 
 
-#define BUT0	24	 //R
-#define BUT1	25	 //C
-#define BUT2	26	 //L
-#define BUT_MASK (1UL<<BUT0)|(1UL<<BUT1)|(1UL<<BUT2)
 //-----------------------------------------------
 void but_drv(void)
 {
@@ -1012,11 +888,14 @@ if (++t1==1000)
 }
 //===============================================
 //===============================================
+#include "oleg_keypad.h"
+#include "lcd_f.c"
+
 //===============================================
 //===============================================
 int main (void)
 {
-short iiii_;
+
 char mac_adr[6] = { 0x00,0x73,0x05,50,60,70 };
 
 SystemInit();
@@ -1025,6 +904,14 @@ SysTick_Config(SystemFrequency/1000 - 1); /* Generate interrupt each 1 ms   */
 
 LPC_GPIO1->FIODIR|=(1<<20);	  // для ресета
 LPC_GPIO1->FIODIR&=~(1<<28);	 // выход контроля наличия сети
+
+LPC_GPIO2->FIODIR&=~BUT_MASK;
+LPC_PINCON->PINMODE4&=~(0x3ff);
+LPC_PINCON->PINMODE4&=~(1<<(BUT0*2))&~(1<<((BUT0*2)+1));
+LPC_PINCON->PINMODE4&=~(1<<(BUT1*2))&~(1<<((BUT1*2)+1));
+LPC_PINCON->PINMODE4&=~(1<<(BUT2*2))&~(1<<((BUT2*2)+1));
+LPC_PINCON->PINMODE4&=~(1<<(BUT3*2))&~(1<<((BUT3*2)+1));
+LPC_PINCON->PINMODE4&=~(1<<(BUT4*2))&~(1<<((BUT4*2)+1));
 
 ///beep(0,0,0,0,0); //инициализация
 ///blink(0,0,0,0);
@@ -1105,16 +992,7 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 //LPC_GPIO2->FIODIR|=(1<<9);
 //LPC_GPIO2->FIOPIN|=(1<<9);
 
- delete_oleg='А';
- sprintf(lcd_buffer,"АБВГД=%u",delete_oleg);
- bitmap_hndl16x9();
- for(iiii_=0;iiii_<1024;iiii_++)	ssd1306_data(lcd_bitmap[iiii_]);
-while(1){
- // bitmap_hndl16x9();
-// for(iiii_=0;iiii_<1024;iiii_++)	ssd1306_data(lcd_bitmap[iiii_]);
- Delay(100000);
-
-}
+ 
 
 while(1)
 	{
@@ -1131,8 +1009,13 @@ while(1)
 		//button_on();
 		blinker();
 		beeper();
-		but_drv();
-		but_an();
+		//but_drv();
+		//but_an();
+		keypad_long  (K_R,&count_richt,&flag_richt);
+		keypad_long  (K_L,&count_left,&flag_left);
+		keypad_long  (K_U,&count_up,&flag_up);
+		keypad_long  (K_D,&count_down,&flag_down);
+
 		}
 	if(f50Hz)
 		{
@@ -1223,23 +1106,8 @@ snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
 		char data;
 		f2Hz=0;
 		if(level_U_mode==flash||level_I_mode==flash||level_Q_mode==flash) flash_=0;
-
-
-		//bitmap_hndl2();
-		//bitmap_hndl();
-
-		//data++;
-		//for(iiii=0;iiii<1024;iiii++)	ssd1306_data(lcd_bitmap[iiii]);
-		//ssd1306_command(SSD1306_DISPLAYOFF);
-	/*	ssd1306_command(SSD1306_DISPLAYALLON );
-		ssd1306_command(SSD1306_DISPLAYON);
-		ssd1306_command(SSD1306_INVERTDISPLAY);*/
-		//i2c_Start();
-		//delay_us(10);
-		//i2c_SendByte(0x78);
-		//i2c_ReadAcknowledge();
-		//i2c_Stop();
-
+ 
+ 		lcd_out();
 		
 		}
 	if(f1Hz)
