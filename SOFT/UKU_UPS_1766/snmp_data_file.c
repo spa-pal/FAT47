@@ -53,6 +53,7 @@ signed short snmp_spc_trap_value;
 signed short snmp_inverter_voltage;
 signed short snmp_inverter_current;
 signed short snmp_inverter_temperature;
+signed short snmp_inverter_power;
 
 
 //Команды

@@ -560,11 +560,6 @@
               </FileOption>
             </File>
             <File>
-              <FileName>ind_drv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ind_drv.c</FilePath>
-            </File>
-            <File>
               <FileName>beeper_drv.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\beeper_drv.c</FilePath>
@@ -1175,11 +1170,6 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
-            </File>
-            <File>
-              <FileName>ind_drv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ind_drv.c</FilePath>
             </File>
             <File>
               <FileName>beeper_drv.c</FileName>

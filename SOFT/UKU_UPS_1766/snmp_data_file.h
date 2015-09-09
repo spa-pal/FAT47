@@ -33,6 +33,7 @@ extern signed short snmp_battery_current;
 extern signed short snmp_inverter_voltage;
 extern signed short snmp_inverter_current;
 extern signed short snmp_inverter_temperature;
+extern signed short snmp_inverter_power;
 
 //Спецфункции
 extern signed short snmp_spc_stat;

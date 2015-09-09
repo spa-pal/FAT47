@@ -830,10 +830,13 @@ snmp_battery_current=(signed short)temp_SL*(-1L);
 
 //snmp_battery_current=(signed short)adc_buff_[1];
 
+/*
 temp_SL=(signed long)adc_buff_[2]; //2618 (73V)
 temp_SL*=Kunet; // min=1500
 temp_SL/=15000L;
 snmp_main_voltage=(signed short)temp_SL;
+*/
+
 //snmp_main_voltage=but;
 //
 //
