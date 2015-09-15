@@ -38,6 +38,7 @@ unsigned char poz_display, poz_display_bf, poz_display_bf2, poz_kursor, poz_kurs
 unsigned delay_scrin_saver;
 unsigned char count_right,count_left,count_down,count_up,count_f;
 unsigned short flag_right,flag_left,flag_down,flag_up,flag_f;
+bool flag_l_r;
 #define K_U (LPC_GPIO2->FIOPIN&(1<<BUT3))
 #define K_D (LPC_GPIO2->FIOPIN&(1<<BUT2))
 #define K_R (LPC_GPIO2->FIOPIN&(1<<BUT1))
@@ -619,7 +620,12 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 //LPC_GPIO2->FIODIR|=(1<<9);
 //LPC_GPIO2->FIOPIN|=(1<<9);
 
- 
+//lc640_write_int(EE_KUBAT1,1800); 
+//lc640_write_int(EE_KI0BAT1,0);
+//lc640_write_int(EE_KI1BAT1,1000);
+poz_display=40;
+poz_kursor=1;
+
 
 while(1)
 	{
@@ -627,13 +633,11 @@ while(1)
 		{
 		f1000Hz=0;
 		adc_drv7();
-		//ind_drv();
 		}
 	if(f100Hz)
 		{
 		f100Hz=0;
 		LPC_GPIO1->FIODIR^=(1<<20);	 // сброс супервизора
-		//button_on();
 		blinker();
 		beeper();
 
@@ -642,7 +646,9 @@ while(1)
 		keypad_long  (K_U,&count_up,&flag_up);
 		keypad_long  (K_D,&count_down,&flag_down);
 		keypad_long  (K_F,&count_f,&flag_f);
-		analiz_keypad();
+		if(flag_right||flag_left||flag_down||flag_up||flag_f) {
+			analiz_keypad(); f2Hz=1; t2=0;
+		}
 		}
 	if(f50Hz)
 		{
@@ -716,29 +722,22 @@ snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
 	if(f5Hz)
 		{
 		f5Hz=0;
-		if(!init)			// просто эффект инициализации
-			{
-			if (level_U<10) {++level_U;++level_I;++level_Q;}
-			else if(!init) {init=1;level_U=level_I=level_Q=0;}
-			}
 		avar_hndl();
 		memo_read();
-		if (init) matemat();
+
+		matemat();
 		rele_hndl();
 		snmp_data();
 		}
 	if(f2Hz)
 		{
 		f2Hz=0;
-		if(level_U_mode==flash||level_I_mode==flash||level_Q_mode==flash) flash_=0;
- 
  		lcd_out();
 		
 		}
 	if(f1Hz)
 		{
 		f1Hz=0;
-		if(level_U_mode==flash||level_I_mode==flash||level_Q_mode==flash) flash_=10;
 		
 		if(main_cnt<1000)main_cnt++;
 //snmp_trap_send("Main power alarm. Power source is ACB",1,1);	 

@@ -791,7 +791,7 @@ if (level_I>10)	level_I=10;
 snmp_inverter_current=	bps[i]._Ii;
 
 snmp_inverter_temperature=	bps[i]._Ti;
-//snmp_inverter_temperature=	but;
+
 
 //if (bps[i]._Ti>0&&bps[i]._Ti<=80) level_Q=bps[i]._Ti/8;
 //else if (bps[i]._Ti>80) level_Q=10;
@@ -801,21 +801,6 @@ temp_SL*=Kubat[0]; // min=1500
 temp_SL/=6400L;
 
 snmp_battery_voltage=(signed short)temp_SL;
-
-#ifndef BAT48
-if (temp_SL>500&&temp_SL<=720)level_Q=(temp_SL-500)/22;
-else if (temp_SL>720) level_Q=10;
-else level_Q=0;
-if (level_Q>10)	level_Q=10;
-#endif
-
-#ifdef BAT48
-if (temp_SL>400&&temp_SL<=570)level_Q=(temp_SL-400)/17;
-else if (temp_SL>570) level_Q=10;
-else level_Q=0;
-if (level_Q>10)	level_Q=10;
-
-#endif
 
 temp_SL=(signed long)adc_buff_[1];
 temp_SL-=(signed long)Kibat0[0];
@@ -922,17 +907,10 @@ NVIC_EnableIRQ(ADC_IRQn);             /* enable ADC Interrupt               */
 //-----------------------------------------------
 void adc_drv7(void) //(Uсети - постоянка)
 {
-//int temp_S;
-//char i;
-//signed short temp_SS;
 
 adc_self_ch_disp[0]=abs_pal(adc_self_ch_buff[1]-adc_self_ch_buff[0]);//adc_self_ch_buff[0]&0x0f80;
 adc_self_ch_disp[1]=abs_pal(adc_self_ch_buff[2]-adc_self_ch_buff[1]);//adc_self_ch_buff[1]&0x0f80;
 adc_self_ch_disp[2]=abs_pal(adc_self_ch_buff[2]-adc_self_ch_buff[0]);//adc_self_ch_buff[2]&0x0f80;
-
-//adc_self_ch_disp[0]=adc_self_ch_buff[0]&0x0ff0;
-//adc_self_ch_disp[1]=adc_self_ch_buff[1]&0x0ff0;
-//adc_self_ch_disp[2]=adc_self_ch_buff[2]&0x0ff0;
 
 
 if(adc_self_ch_disp[2]<300)//==adc_self_ch_disp[2])
@@ -947,31 +925,8 @@ else if(adc_self_ch_disp[0]<300)//==adc_self_ch_disp[1])
 	{
 	adc_result=adc_self_ch_buff[0];
 	}
-    //adc_result=92;
-
-//if(adc_ch_net)
-//	{
-
-	//main_power_buffer[0]+=(long)(adc_result);
-	//main_power_buffer[1]+=(long)(adc_result);
-	//main_power_buffer[2]+=(long)(adc_result);
-	//main_power_buffer[3]+=(long)(adc_result);
-
-/*	adc_net_buff_cnt++;
-	if(adc_net_buff_cnt>=0x1000)
-		{
-		adc_net_buff_cnt=0;
-		}
-	if((adc_net_buff_cnt&0x03ff)==0)
-		{
-		net_buff_=(short)((main_power_buffer[adc_net_buff_cnt>>10])>>8);
-		main_power_buffer[adc_net_buff_cnt>>10]=0;
-		} */
 
 
-//	} 
-//else if(!adc_ch_net)
-	{
 	adc_buff[adc_ch][adc_ch_cnt]=(long)adc_result;
 	
 	if((adc_ch_cnt&0x03)==0)
@@ -993,64 +948,11 @@ else if(adc_self_ch_disp[0]<300)//==adc_self_ch_disp[1])
 		adc_ch_cnt++;
 		if(adc_ch_cnt>=16)adc_ch_cnt=0;
 		}
-	}
-
-//adc_buff[adc_ch][adc_cnt1]=(adc_self_ch_buff[2]+adc_self_ch_buff[1])/2;
-
-//if(adc_buff[adc_ch][adc_cnt1]<adc_buff_min[adc_ch])adc_buff_min[adc_ch]=adc_buff[adc_ch][adc_cnt1];
-//if(adc_buff[adc_ch][adc_cnt1]>adc_buff_max[adc_ch])adc_buff_max[adc_ch]=adc_buff[adc_ch][adc_cnt1];
-/*
-	{
-	if((adc_cnt1&0x03)==0)
-		{
-		temp_S=0;
-		for(i=0;i<16;i++)
-			{
-			temp_S+=adc_buff[adc_ch][i];
-			} 
-         	adc_buff_[adc_ch]=temp_S>>4;
-          }
-	}*/
 
 
-		  
 
 adc_self_ch_cnt=0;
 
-//adc_ch_net++;
-//adc_ch_net&=1;
-
-//SET_REG(LPC_GPIO0->FIODIR,7,5,3);
-//SET_REG(LPC_GPIO0->FIOPIN,adc_ch,5,3);
-/*
-if(adc_ch_net)
-	{
-	LPC_GPIO2->FIODIR|=(1<<7);				 // ??
-	LPC_GPIO2->FIOPIN|=(1<<7);
-//	SET_REG(LPC_ADC->ADCR,1<<2,0,8);		// AD0.2 P0.25
-	}
-else
-	{
-	LPC_GPIO2->FIODIR|=(1<<7);
-	LPC_GPIO2->FIOPIN&=~(1<<7);
-	if(adc_ch==0)	SET_REG(LPC_ADC->ADCR,1<<0,0,8);   // AD0.0 P0.23
-	else 			SET_REG(LPC_ADC->ADCR,1<<1,0,8);	   // AD0.1 P0.24
-
-
-//	SET_REG(LPC_GPIO0->FIODIR,1,28,1);
-//	SET_REG(LPC_GPIO1->FIODIR,1,30,1);
-//	SET_REG(LPC_GPIO3->FIODIR,1,26,1);
-//
-//	if(!(adc_ch&(1<<0)))SET_REG(LPC_GPIO0->FIOPIN,0,28,1);
-//	else 			SET_REG(LPC_GPIO0->FIOPIN,1,28,1);
-//
-//	if(!(adc_ch&(1<<1)))SET_REG(LPC_GPIO1->FIOPIN,0,30,1);
-//	else 			SET_REG(LPC_GPIO1->FIOPIN,1,30,1);
-//
-//	if(!(adc_ch&(1<<2)))SET_REG(LPC_GPIO3->FIOPIN,0,26,1);
-//	else 			SET_REG(LPC_GPIO3->FIOPIN,1,26,1);
-	}
-*/	
 
 if(adc_ch==0)		SET_REG(LPC_ADC->ADCR,1<<0,0,8);   // AD0.0 P0.23
 else if(adc_ch==1) 	SET_REG(LPC_ADC->ADCR,1<<1,0,8);	   // AD0.1 P0.24
