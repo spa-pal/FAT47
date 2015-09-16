@@ -2,6 +2,8 @@
 
 #define RESET_CNT	0x08
 
+#define EEPROM_INIT 0x0E // »Õ»÷»¿À»«¿÷»ﬂ ≈≈–ROM ‰ÂÎ‡ÂÚÒˇ 1 ‡Á;
+
 #define SECTOR_KOEF 0x10
 
 
@@ -262,8 +264,8 @@
 #define EE_LOCATION				SECTOR_LOCATION
 #define EE_SERIAL_NUMBER		SECTOR_LOCATION+50
 
-#define SECTOR_COMMUNITY  	SECTOR_ETH+270
-#define EE_COMMUNITY		SECTOR_COMMUNITY
+//#define SECTOR_COMMUNITY  	SECTOR_ETH+278
+//#define EE_COMMUNITY		SECTOR_COMMUNITY
 
 
 

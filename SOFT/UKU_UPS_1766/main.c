@@ -9,7 +9,6 @@
 #include "control.h"
 #include "gran.h"
 #include "25lc640.h"
-#include "memo.h"
 #include "full_can.h"
 #include "cmd.h"
 #include "avar_hndl.h"
@@ -22,6 +21,7 @@
 #include "ssd_1306.h"
 //#include "simbol.h"
 #include "simbol16x9.h"
+#include "memo.h"
 #include "stdio.h"
 
 
@@ -50,7 +50,7 @@ unsigned char pass_error;
 
 extern LOCALM localm[];
 extern U8 own_hw_adr[];
-extern U8  snmp_Community[];
+//extern U8  snmp_Community[10];
 extern U16  snmp_PortNum;
 extern U16  snmp_TrapPort;
 
@@ -74,7 +74,7 @@ ind_mode level_U_mode,level_I_mode,level_Q_mode;
 stuct_ind a,b[10];
 short ind_out[3];
 char lcd_bitmap[1024];
-char lcd_buffer[LCD_SIZE+100];//={"QWERTYUIOP12345ZXCVBNMASDFGHJKL12345ФЫВА"};
+char lcd_buffer[70];//={"QWERTYUIOP12345ZXCVBNMASDFGHJKL12345ФЫВА"};
 //-----Состояние
 //typedef enum work{power_net,acb} work;
 work work_at=power_net;
@@ -553,6 +553,16 @@ Delay(10000000);
 
 adc_init();
 
+if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализация EEPROM
+	lc640_write_int(EE_KUBAT1,1800); 
+	lc640_write_int(EE_KI0BAT1,0);
+	lc640_write_int(EE_KI1BAT1,1000);
+	ethernet_default();
+
+	//lc640_write_int(EEPROM_INIT,0);
+}
+else memo_read();
+
 ///can1_init(BITRATE62_5K6_25MHZ);
 ///FullCAN_SetFilter(0,0x18e);
 
@@ -571,6 +581,7 @@ mem_copy (own_hw_adr, mac_adr, 6);
 
 LPC_GPIO1->FIOPIN^=(1<<20);
 
+// snmp_Community имеет 8 разрядов по описанию. Олег.
 
 snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
 if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
@@ -592,6 +603,7 @@ snmp_Community[8]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+8);
 if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
 snmp_Community[9]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+9); 
 if((snmp_Community[9]==0)||(snmp_Community[9]==' '))snmp_Community[9]=0;
+/*
 snmp_Community[10]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+10); 
 if((snmp_Community[10]==0)||(snmp_Community[10]==' '))snmp_Community[10]=0;
 snmp_Community[11]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+11); 
@@ -604,7 +616,8 @@ snmp_Community[14]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+14);
 if((snmp_Community[14]==0)||(snmp_Community[14]==' '))snmp_Community[14]=0;
 snmp_Community[15]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+15); 
 if((snmp_Community[15]==0)||(snmp_Community[15]==' '))snmp_Community[15]=0;
-///snmp_Community[16]=0; 
+*/
+snmp_Community[9]=0; 
 ///LPC_GPIO1->FIOPIN^=(1<<20);
 ///snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
 ///snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT); 
@@ -620,9 +633,7 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 //LPC_GPIO2->FIODIR|=(1<<9);
 //LPC_GPIO2->FIOPIN|=(1<<9);
 
-//lc640_write_int(EE_KUBAT1,1800); 
-//lc640_write_int(EE_KI0BAT1,0);
-//lc640_write_int(EE_KI1BAT1,1000);
+
 poz_display=40;
 poz_kursor=1;
 
@@ -677,7 +688,7 @@ while(1)
 				
 
 snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
-//if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
+if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
 snmp_Community[1]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+1);
 if((snmp_Community[1]==0)||(snmp_Community[1]==' '))snmp_Community[1]=0;
 snmp_Community[2]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+2);
@@ -696,6 +707,7 @@ snmp_Community[8]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+8);
 if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
 snmp_Community[9]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+9); 
 if((snmp_Community[9]==0)||(snmp_Community[9]==' '))snmp_Community[9]=0;
+/*
 snmp_Community[10]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+10); 
 if((snmp_Community[10]==0)||(snmp_Community[10]==' '))snmp_Community[10]=0;
 snmp_Community[11]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+11); 
@@ -708,7 +720,8 @@ snmp_Community[14]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+14);
 if((snmp_Community[14]==0)||(snmp_Community[14]==' '))snmp_Community[14]=0;
 snmp_Community[15]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+15); 
 if((snmp_Community[15]==0)||(snmp_Community[15]==' '))snmp_Community[15]=0;
-snmp_Community[16]=0;
+*/
+snmp_Community[9]=0;
 
 snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
 snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);

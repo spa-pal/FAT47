@@ -1,4 +1,4 @@
-extern char snmp_community[10];
+extern char snmp_Community[10];
 
 //Информация об устройстве
 extern signed short snmp_device_code;

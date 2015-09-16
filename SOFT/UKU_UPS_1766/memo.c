@@ -46,14 +46,26 @@ Kunet=lc640_read_int(EE_KUNET);
 //	
 SNMP_READ_PORT=lc640_read_int(EE_SNMP_READ_PORT);
 SNMP_WRITE_PORT=lc640_read_int(EE_SNMP_WRITE_PORT);
-for(i=0;i<16;i++)
+for(i=0;i<9;i++)
 	{
 	snmp_snmp_settings_read_community[i]=lc640_read(EE_SNMP_READ_COMMUNITY+i);
 	}
+snmp_snmp_settings_read_community[9]=0;
+/*
 for(i=0;i<16;i++)
 	{
 	snmp_snmp_settings_write_community[i]=lc640_read(EE_SNMP_WRITE_COMMUNITY+i);
 	}
+
+*/
+for(i=0;i<9;i++)
+{
+	snmp_Community[i]=lc640_read(EE_SNMP_READ_COMMUNITY+(i*2) );
+}
+snmp_Community[9]=0;
+
+
+
 SNMP_TRAP1_IP_1=lc640_read_int(EE_SNMP_TRAP1_IP_1);
 SNMP_TRAP1_IP_2=lc640_read_int(EE_SNMP_TRAP1_IP_2);
 SNMP_TRAP1_IP_3=lc640_read_int(EE_SNMP_TRAP1_IP_3);
