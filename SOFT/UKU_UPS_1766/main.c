@@ -634,8 +634,8 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 //LPC_GPIO2->FIOPIN|=(1<<9);
 
 
-poz_display=40;
-poz_kursor=1;
+//poz_display=40;
+//poz_kursor=1;
 
 
 while(1)
