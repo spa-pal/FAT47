@@ -3,7 +3,7 @@
 #include "eeprom_map.h"
 #include "main.h"
 #include "snmp_data_file.h"
-
+extern unsigned char par_glav_menu[10];
 //-----------------------------------------------
 void memo_read (void)
 {
@@ -211,8 +211,8 @@ SNMP_TRAP5_IP_4=lc640_read_int(EE_SNMP_TRAP5_IP_4);
 //pos_vent=lc640_read_int(EE_POS_VENT);
 //POWER_CNT_ADRESS=lc640_read_int(EE_POWER_CNT_ADRESS);
 //
-//ETH_IS_ON=lc640_read_int(EE_ETH_IS_ON);
-//ETH_DHCP_ON=lc640_read_int(EE_ETH_DHCP_ON);
+ETH_IS_ON=lc640_read_int(EE_ETH_IS_ON);
+ETH_DHCP_ON=lc640_read_int(EE_ETH_DHCP_ON);
 ETH_IP_1=lc640_read_int(EE_ETH_IP_1);
 ETH_IP_2=lc640_read_int(EE_ETH_IP_2);
 ETH_IP_3=lc640_read_int(EE_ETH_IP_3);
@@ -248,6 +248,8 @@ for(i=0;i<64;i++)
 	{
 	snmp_location[i]=lc640_read(EE_LOCATION+i);
 	}*/
+
+for(i=0;i<10;i++) par_glav_menu[i]=(unsigned char)lc640_read_int(EE_PAR_GLAV_MENU+i*2);
 
 
 }

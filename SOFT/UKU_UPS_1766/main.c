@@ -23,6 +23,7 @@
 #include "simbol16x9.h"
 #include "memo.h"
 #include "stdio.h"
+#include "string.h"
 
 
 #define BUT_ON 4
@@ -38,7 +39,7 @@ unsigned char poz_display, poz_display_bf, poz_display_bf2, poz_kursor, poz_kurs
 unsigned delay_scrin_saver;
 unsigned char count_right,count_left,count_down,count_up,count_f;
 unsigned short flag_right,flag_left,flag_down,flag_up,flag_f;
-bool flag_l_r;
+bool flag_l_r, flash_1S;
 #define K_U (LPC_GPIO2->FIOPIN&(1<<BUT3))
 #define K_D (LPC_GPIO2->FIOPIN&(1<<BUT2))
 #define K_R (LPC_GPIO2->FIOPIN&(1<<BUT1))
@@ -46,11 +47,14 @@ bool flag_l_r;
 #define K_F (LPC_GPIO2->FIOPIN&(1<<BUT4))
 unsigned short password, password_obr;
 unsigned char pass_error; 
+unsigned char poz_flash;
 
-
+unsigned char par_glav_menu[10]; // [0]-включение/отключение гл. меню
+								 // [1]задержка перед включением
+							   	 // [2]интервал переключения параметров
 extern LOCALM localm[];
 extern U8 own_hw_adr[];
-//extern U8  snmp_Community[10];
+
 extern U16  snmp_PortNum;
 extern U16  snmp_TrapPort;
 
@@ -553,15 +557,17 @@ Delay(10000000);
 
 adc_init();
 
+//lc640_write_int(EEPROM_INIT,0xFFFF);
 if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализация EEPROM
 	lc640_write_int(EE_KUBAT1,1800); 
 	lc640_write_int(EE_KI0BAT1,0);
 	lc640_write_int(EE_KI1BAT1,1000);
 	ethernet_default();
 
-	//lc640_write_int(EEPROM_INIT,0);
+	lc640_write_int(EEPROM_INIT,0);
 }
-else memo_read();
+memo_read();
+
 
 ///can1_init(BITRATE62_5K6_25MHZ);
 ///FullCAN_SetFilter(0,0x18e);
@@ -581,7 +587,7 @@ mem_copy (own_hw_adr, mac_adr, 6);
 
 LPC_GPIO1->FIOPIN^=(1<<20);
 
-// snmp_Community имеет 8 разрядов по описанию. Олег.
+// snmp_Community имеет 8 разрядов по описанию. Олег.  девятый 0
 
 snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
 if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
@@ -634,9 +640,11 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 //LPC_GPIO2->FIOPIN|=(1<<9);
 
 
-//poz_display=40;
+//if(ETH_IS_ON) poz_display=40; 
+//else poz_display=66;
 //poz_kursor=1;
-
+//tcp_init_cnt=10;
+poz_display=70;
 
 while(1)
 	{
@@ -649,7 +657,7 @@ while(1)
 		{
 		f100Hz=0;
 		LPC_GPIO1->FIODIR^=(1<<20);	 // сброс супервизора
-		blinker();
+		//blinker();
 		beeper();
 
 		keypad_long  (K_R,&count_right,&flag_right);
@@ -658,7 +666,8 @@ while(1)
 		keypad_long  (K_D,&count_down,&flag_down);
 		keypad_long  (K_F,&count_f,&flag_f);
 		if(flag_right||flag_left||flag_down||flag_up||flag_f) {
-			analiz_keypad(); f2Hz=1; t2=0;
+			analiz_keypad(); 
+			//lcd_out(); 
 		}
 		}
 	if(f50Hz)
@@ -671,7 +680,7 @@ while(1)
 		{
 		f10Hz=0;
 		LPC_GPIO1->FIOPIN^=(1<<20);
-		//button_act();		// обрабатываем реакцию на нажатие кнопок L C R
+
 		unet_drv();			// следилка за сетью 220
 		if(main_cnt>2)inv_drv(NUMB);
 		 
@@ -736,6 +745,7 @@ snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
 		{
 		f5Hz=0;
 		avar_hndl();
+		//if (poz_display<10) 
 		memo_read();
 
 		matemat();
@@ -746,12 +756,13 @@ snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
 		{
 		f2Hz=0;
  		lcd_out();
-		
+		if(flash_1S) flash_1S=0;
+		else flash_1S=1;
 		}
 	if(f1Hz)
 		{
 		f1Hz=0;
-		
+		 
 		if(main_cnt<1000)main_cnt++;
 //snmp_trap_send("Main power alarm. Power source is ACB",1,1);	 
 		}

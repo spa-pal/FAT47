@@ -168,8 +168,8 @@ extern signed short ETH_DEF_GATW_2;
 extern signed short ETH_DEF_GATW_3;
 extern signed short ETH_DEF_GATW_4;
 
-//extern signed short ETH_IS_ON;
-//extern signed short ETH_DHCP_ON;
+extern signed short ETH_IS_ON;
+extern signed short ETH_DHCP_ON;
 //extern signed short ETH_IP_1;
 //extern signed short ETH_IP_2;
 //extern signed short ETH_IP_3;
