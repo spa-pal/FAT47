@@ -643,8 +643,8 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 //if(ETH_IS_ON) poz_display=40; 
 //else poz_display=66;
 //poz_kursor=1;
-//tcp_init_cnt=10;
-poz_display=70;
+tcp_init_cnt=10;
+//poz_display=70;
 
 while(1)
 	{
@@ -657,7 +657,7 @@ while(1)
 		{
 		f100Hz=0;
 		LPC_GPIO1->FIODIR^=(1<<20);	 // сброс супервизора
-		//blinker();
+		blinker();
 		beeper();
 
 		keypad_long  (K_R,&count_right,&flag_right);
@@ -716,6 +716,7 @@ snmp_Community[8]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+8);
 if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
 snmp_Community[9]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+9); 
 if((snmp_Community[9]==0)||(snmp_Community[9]==' '))snmp_Community[9]=0;
+
 /*
 snmp_Community[10]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+10); 
 if((snmp_Community[10]==0)||(snmp_Community[10]==' '))snmp_Community[10]=0;
@@ -732,8 +733,8 @@ if((snmp_Community[15]==0)||(snmp_Community[15]==' '))snmp_Community[15]=0;
 */
 snmp_Community[9]=0;
 
-snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
-snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
+//snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
+//snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
 
 	init_TcpNet ();
 
