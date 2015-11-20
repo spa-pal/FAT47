@@ -27,6 +27,7 @@ typedef enum ind_mode{norm,reverse,alone,flash} ind_mode;	   // 3 вида режима от
 extern ind_mode level_U_mode,level_I_mode,level_Q_mode;
 extern signed short flash_net_def_cnt;
 
+extern unsigned char canzz_tmp, canzx_tmp;
 
 //**********************************************
 //Коэффициенты, отображаемые из EEPROM

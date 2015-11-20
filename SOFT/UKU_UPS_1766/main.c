@@ -58,9 +58,11 @@ extern U8 own_hw_adr[];
 extern U16  snmp_PortNum;
 extern U16  snmp_TrapPort;
 
+
 char delete_oleg;
 const char sm_mont[13][4]={"упс","янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"}; //
 char tcp_init_cnt;
+unsigned char canzz_tmp, canzx_tmp;
 
 /////
 
@@ -547,6 +549,9 @@ LPC_PINCON->PINMODE4&=~(1<<(BUT4*2))&~(1<<((BUT4*2)+1));
 
 ///beep(0,0,0,0,0); //инициализация
 ///blink(0,0,0,0);
+INIT_LED_RED;
+INIT_LED_GREEN;
+
 ///rtc_init();
 ///LPC_GPIO0->FIODIR|=(1<<POWER_NET);
 ///LPC_GPIO0->FIOCLR|=(1<<POWER_NET);
@@ -569,8 +574,8 @@ if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализация EEPROM
 memo_read();
 
 
-///can1_init(BITRATE62_5K6_25MHZ);
-///FullCAN_SetFilter(0,0x18e);
+can1_init(BITRATE62_5K6_25MHZ);
+FullCAN_SetFilter(0,0x18e);
 
 ///memo_read();
 ///LPC_GPIO1->FIOPIN^=(1<<20);
@@ -657,7 +662,7 @@ while(1)
 		{
 		f100Hz=0;
 		LPC_GPIO1->FIODIR^=(1<<20);	 // сброс супервизора
-		blinker();
+		//blinker();
 		beeper();
 
 		keypad_long  (K_R,&count_right,&flag_right);
@@ -757,15 +762,18 @@ snmp_Community[9]=0;
 		{
 		f2Hz=0;
  		lcd_out();
-		if(flash_1S) flash_1S=0;
-		else flash_1S=1;
+		if(flash_1S) {flash_1S=0; }
+		else {flash_1S=1; }
+		//can1_out(cnt_net_drv,cnt_net_drv,0xFD,0,0,0,0,0);
+
 		}
 	if(f1Hz)
 		{
 		f1Hz=0;
 		 
 		if(main_cnt<1000)main_cnt++;
-//snmp_trap_send("Main power alarm. Power source is ACB",1,1);	 
+//snmp_trap_send("Main power alarm. Power source is ACB",1,1);
+	 
 		}
 	}// end while
 	

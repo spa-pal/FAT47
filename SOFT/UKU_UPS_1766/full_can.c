@@ -27,7 +27,11 @@ long can2_datb[8];
 
 unsigned short rotor_can[6];
 
-
+extern signed short snmp_inverter_voltage;
+extern signed short snmp_inverter_current;
+extern signed short snmp_inverter_temperature;
+extern signed short snmp_inverter_power;
+extern signed short snmp_main_voltage;
 
 
 // FullCAN Message List
@@ -901,7 +905,7 @@ void can_in_an1(void)
 {
 //char i;
 //signed short temp_SS;
-char slave_num;
+//char slave_num;
 
 //if(!bIN2) goto CAN_IN_AN1_end; 
 
@@ -912,126 +916,25 @@ can_rotor[1]++;
 //	{
 //	mess_send(MESS2IND_HNDL,PARAM_U_AVT_GOOD,0,10);
 //	}
+canzz_tmp=RXBUFF[3];
 
 
-if((RXBUFF[1]==PUTTM1)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<8))  /**/
+if((RXBUFF[1]==0xDD)&&((RXBUFF[0]&0x1f)==27))  /**/
      {
-	can_debug_plazma[1][2]++;
-     slave_num=RXBUFF[0]&0x1f;
-     
-     if((RXBUFF[0]&0xe0)==0)bps[slave_num]._device=dSRC;
-     else if((RXBUFF[0]&0xe0)==0x40)bps[slave_num]._device=dINV;
-     	
-	bps[slave_num]._buff[0]=RXBUFF[2]; 
-	bps[slave_num]._buff[1]=RXBUFF[3];
-	bps[slave_num]._buff[2]=RXBUFF[4];
-	bps[slave_num]._buff[3]=RXBUFF[5];
-	bps[slave_num]._buff[4]=RXBUFF[6];
-	bps[slave_num]._buff[5]=RXBUFF[7];
-	
-	bps[slave_num]._cnt=0;
-	bps[slave_num]._is_on_cnt=10;
-	
-	if((bps[slave_num]._cnt==0)&&(bps[slave_num]._av&(1<<3))) avar_bps_hndl(slave_num,3,0);	
+		snmp_inverter_current= (((unsigned short)RXBUFF[3])<<8)|RXBUFF[2];
+		snmp_inverter_power=0;
+		snmp_inverter_power= ( snmp_inverter_power | ((unsigned short)RXBUFF[5]<<8) ) |RXBUFF[4];
+		snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];
      }
 
-if((RXBUFF[1]==PUTTM2)&&((RXBUFF[0]&0x1f)>=0)&&((RXBUFF[0]&0x1f)<8)) /**/
+if((RXBUFF[1]==0xDE)&&((RXBUFF[0]&0x1f)==27))  /**/
      {
-     slave_num=RXBUFF[0]&0x1f;  
+		snmp_inverter_temperature= RXBUFF[2];
+		snmp_main_voltage= (((unsigned short)RXBUFF[5])<<8)|RXBUFF[4];
 
-     if((RXBUFF[0]&0xe0)==0)bps[slave_num]._device=dSRC;
-     else if((RXBUFF[0]&0xe0)==0x40)bps[slave_num]._device=dINV;
-     
-	bps[slave_num]._buff[6]=RXBUFF[2]; 
-	bps[slave_num]._buff[7]=RXBUFF[3];
-	bps[slave_num]._buff[8]=RXBUFF[4];
-	bps[slave_num]._buff[9]=RXBUFF[5];
-	bps[slave_num]._buff[10]=RXBUFF[6];
-	bps[slave_num]._buff[11]=RXBUFF[7];
-	
-	bps[slave_num]._cnt=0;
-	bps[slave_num]._is_on_cnt=10; 
-
-	plazma_pal=RXBUFF[4];
-   	//if((src[slave_num]._cnt==0)&&(src[slave_num]._av_net)) avar_bps_hndl(slave_num,3,0); 
      }
 
 
-//if( ((RXBUFF[0]&0x1f)==8)&&((RXBUFF[1])==PUTTM) )
-//     {
-//     adc_buff_ext_[0]=*((short*)&RXBUFF[2]);
-//     adc_buff_ext_[1]=*((short*)&RXBUFF[4]);
-//     adc_buff_ext_[2]=*((short*)&RXBUFF[6]);
-//	if((adc_buff_ext_[2]>=-50) && (adc_buff_ext_[2]<=100))
-//		{
-//		t_ext_can=adc_buff_ext_[2];
-//		t_ext_can_nd=0;
-//		}
-//		t_ext_can=adc_buff_ext_[2];
-//	//ext_can_cnt++;
-//     }
-//
-//if( ((RXBUFF[0]&0x1f)==9)&&((RXBUFF[1])==PUTTM) )
-//     {
-//     vvod_pos=RXBUFF[2];
-//	ext_can_cnt=RXBUFF[3];
-//	if(ext_can_cnt<10)bRESET_EXT=0;
-//     }
-//
-//if( ((RXBUFF[0]&0x1f)==10)&&((RXBUFF[1])==PUTTM) )
-//     {
-//     power_current=*((signed short*)&RXBUFF[2]);
-//     power_summary=*((signed long*)&RXBUFF[4]);
-//	//ext_can_cnt++;
-//     }
-//
-//
-//if( ((RXBUFF[0]&0x1f)==20)&&((RXBUFF[1])==PUTTM) )
-//     {
-//     eb2_data[0]=RXBUFF[2];
-//	eb2_data[1]=RXBUFF[3];
-//     eb2_data[2]=RXBUFF[4];
-//	eb2_data[3]=RXBUFF[5];
-//	eb2_data[4]=RXBUFF[6];
-//	eb2_data[5]=RXBUFF[7];
-//     }
-//
-//if( ((RXBUFF[0]&0x1f)==21)&&((RXBUFF[1])==PUTTM) )
-//     {
-//     eb2_data[6]=RXBUFF[2];
-//	eb2_data[7]=RXBUFF[3];
-//     eb2_data[8]=RXBUFF[4];
-//	eb2_data[9]=RXBUFF[5];
-//	eb2_data[10]=RXBUFF[6];
-//	eb2_data[11]=RXBUFF[7];
-//	eb2_data_short[6]=*((short*)&eb2_data[6]);
-//     }
-//
-//if( ((RXBUFF[0]&0x1f)==22)&&((RXBUFF[1])==PUTTM) )
-//     {
-//     eb2_data[12]=RXBUFF[2];
-//	eb2_data[13]=RXBUFF[3];
-//     eb2_data[14]=RXBUFF[4];
-//	eb2_data[15]=RXBUFF[5];
-//	eb2_data[16]=RXBUFF[6];
-//	eb2_data[17]=RXBUFF[7];
-//	eb2_data_short[0]=*((short*)&eb2_data[12]);
-//	eb2_data_short[1]=*((short*)&eb2_data[14]);
-//	eb2_data_short[2]=*((short*)&eb2_data[16]);
-//     }
-//
-//if( ((RXBUFF[0]&0x1f)==23)&&((RXBUFF[1])==PUTTM) )
-//     {
-//     eb2_data[18]=RXBUFF[2];
-//	eb2_data[19]=RXBUFF[3];
-//     eb2_data[20]=RXBUFF[4];
-//	eb2_data[21]=RXBUFF[5];
-//	eb2_data[22]=RXBUFF[6];
-//	eb2_data[23]=RXBUFF[7];
-//	eb2_data_short[3]=*((short*)&eb2_data[18]);
-//	eb2_data_short[4]=*((short*)&eb2_data[20]);
-//	eb2_data_short[5]=*((short*)&eb2_data[22]);
-//     }
 
 //CAN_IN_AN1_end:
 bIN2=0;
@@ -1098,7 +1001,7 @@ rotor_can[1]++;
 		}
 	can_in_an1();
 	    
-    
+ LPC_GPIO0->FIOSET|=(1<<26);   
   }
 
   LPC_CAN1->CMR = 0x04; // release receive buffer
@@ -1181,7 +1084,7 @@ void can_isr_tx1 (void)
 //char *ptr,j;
 
 //plazma_can2++;
-
+LPC_GPIO0->FIOSET|=(1<<25);
 can_tx_cnt++;
 
 rotor_can[5]++;
@@ -1369,7 +1272,7 @@ if ( CANStatus & (1 << 0) )
 if ( CANStatus & (1 << 1) )
      {
 	can_isr_tx1();
-	
+	canzx_tmp=canzx_tmp+1;
      }
 
 return;

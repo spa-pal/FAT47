@@ -24,6 +24,7 @@ if (q!=b_quantity||d!=b_duration||p!=b_pause||dl!=b_delay)//если новая команда, 
 	}
 }
 
+/*
 void blinker (void)
 {
 	INIT_LED;						   //инициализация порта
@@ -66,3 +67,5 @@ void blinker (void)
 			}					
 		}
 }
+*/
+
