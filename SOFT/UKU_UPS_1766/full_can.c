@@ -901,6 +901,7 @@ void can_adr_hndl(void)
 //}
 //
 //-----------------------------------------------
+extern unsigned char data_can_reset;
 void can_in_an1(void)
 {
 //char i;
@@ -916,7 +917,7 @@ can_rotor[1]++;
 //	{
 //	mess_send(MESS2IND_HNDL,PARAM_U_AVT_GOOD,0,10);
 //	}
-canzz_tmp=RXBUFF[3];
+data_can_reset=0;
 
 
 if((RXBUFF[1]==0xDD)&&((RXBUFF[0]&0x1f)==27))  /**/
@@ -931,7 +932,7 @@ if((RXBUFF[1]==0xDE)&&((RXBUFF[0]&0x1f)==27))  /**/
      {
 		snmp_inverter_temperature= RXBUFF[2];
 		snmp_main_voltage= (((unsigned short)RXBUFF[5])<<8)|RXBUFF[4];
-
+		//snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];
      }
 
 

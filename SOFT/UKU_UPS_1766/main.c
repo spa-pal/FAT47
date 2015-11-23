@@ -47,7 +47,7 @@ bool flag_l_r, flash_1S;
 #define K_F (LPC_GPIO2->FIOPIN&(1<<BUT4))
 unsigned short password, password_obr;
 unsigned char pass_error; 
-unsigned char poz_flash;
+unsigned char poz_flash, data_can_reset;
 
 unsigned char par_glav_menu[10]; // [0]-включение/отключение гл. меню
 								 // [1]задержка перед включением
@@ -568,7 +568,16 @@ if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализация EEPROM
 	lc640_write_int(EE_KI0BAT1,0);
 	lc640_write_int(EE_KI1BAT1,1000);
 	ethernet_default();
-
+	lc640_write_int(EE_PAR_GLAV_MENU,0);
+	lc640_write_int(EE_PAR_GLAV_MENU+2,30);
+	lc640_write_int(EE_PAR_GLAV_MENU+4,3);
+	lc640_write_int(EE_PAR_GLAV_MENU+6,'+');
+	lc640_write_int(EE_PAR_GLAV_MENU+8,'-');
+	lc640_write_int(EE_PAR_GLAV_MENU+10,'-');
+	lc640_write_int(EE_PAR_GLAV_MENU+12,'-');
+	lc640_write_int(EE_PAR_GLAV_MENU+14,'-');
+	lc640_write_int(EE_PAR_GLAV_MENU+16,'-');
+	lc640_write_int(EE_PAR_GLAV_MENU+18,'-');
 	lc640_write_int(EEPROM_INIT,0);
 }
 memo_read();
@@ -644,12 +653,10 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 //LPC_GPIO2->FIODIR|=(1<<9);
 //LPC_GPIO2->FIOPIN|=(1<<9);
 
-
-//if(ETH_IS_ON) poz_display=40; 
-//else poz_display=66;
-//poz_kursor=1;
 tcp_init_cnt=10;
-//poz_display=70;
+
+poz_display=70; 
+poz_kursor=1;
 
 while(1)
 	{
@@ -762,9 +769,18 @@ snmp_Community[9]=0;
 		{
 		f2Hz=0;
  		lcd_out();
-		if(flash_1S) {flash_1S=0; }
+		if(flash_1S) {
+			flash_1S=0; 
+			if(data_can_reset<5) data_can_reset+=1;
+		}
 		else {flash_1S=1; }
-		//can1_out(cnt_net_drv,cnt_net_drv,0xFD,0,0,0,0,0);
+		if(data_can_reset==4){
+			snmp_inverter_voltage=0;
+			snmp_inverter_current=0;
+			snmp_inverter_power=0;
+			snmp_main_voltage=0;
+			snmp_inverter_temperature=0;
+		}
 
 		}
 	if(f1Hz)

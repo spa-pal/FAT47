@@ -753,49 +753,7 @@ void matemat(void)
 {
 
 signed long temp_SL/*,temp_SL_*/;
-char /*temp,*/i;
 
-
-i=NUMB;
-	if(bps[i]._cnt<5)
-     	{
-     	bps[i]._Ii=bps[i]._buff[0]+(bps[i]._buff[1]*256);
-     	bps[i]._Uin=bps[i]._buff[2]+(bps[i]._buff[3]*256);
-     	bps[i]._Uii=bps[i]._buff[4]+(bps[i]._buff[5]*256);
-     	bps[i]._Ti=(signed)(bps[i]._buff[6]);
-     	bps[i]._adr_ee=bps[i]._buff[7];
-     	bps[i]._flags_tm=bps[i]._buff[8];
-	    bps[i]._rotor=bps[i]._buff[10]+(bps[i]._buff[11]*256); 
-     	} 
-	else 
-     	{
-     	bps[i]._Uii=0; 
-     	bps[i]._Ii=0;
-     	bps[i]._Uin=0;
-     	bps[i]._Ti=0;
-     	bps[i]._flags_tm=0; 
-	    bps[i]._rotor=0;
-     	}
-if (bps[i]._Uii>1900&&bps[i]._Uii<=2400) level_U=(bps[i]._Uii-1900)/50;
-else if (bps[i]._Uii>2400) level_U=10;
-else level_U=0;
-if (level_U>10)	level_U=10;
-
-snmp_inverter_voltage=	bps[i]._Uii/10;
-
-if (bps[i]._Ii>0&&bps[i]._Ii<=155)level_I=bps[i]._Ii*10/150;  // 15A при 150
-else if (bps[i]._Ii>155) level_I=0;
-else level_I=0;
-if (level_I>10)	level_I=10;
-//level_I=bps[i]._cnt/6;
-snmp_inverter_current=	bps[i]._Ii;
-
-snmp_inverter_temperature=	bps[i]._Ti;
-
-
-//if (bps[i]._Ti>0&&bps[i]._Ti<=80) level_Q=bps[i]._Ti/8;
-//else if (bps[i]._Ti>80) level_Q=10;
-//else level_Q=0;
 temp_SL=(signed long)adc_buff_[0]; //2618 (73V)
 temp_SL*=Kubat[0]; // min=1500
 temp_SL/=6400L;
@@ -807,63 +765,7 @@ temp_SL-=(signed long)Kibat0[0];
 temp_SL*=(signed long)Kibat1[0];
 temp_SL/=1000L;
 snmp_battery_current=(signed short)temp_SL*(-1L);
-
-//snmp_battery_current=(signed short)adc_buff_[1];
-
-//snmp_battery_voltage=(signed short)adc_buff_[1];
-//snmp_battery_current=(signed short)Kibat0[0];
-
-//snmp_battery_current=(signed short)adc_buff_[1];
-
-/*
-temp_SL=(signed long)adc_buff_[2]; //2618 (73V)
-temp_SL*=Kunet; // min=1500
-temp_SL/=15000L;
-snmp_main_voltage=(signed short)temp_SL;
-*/
-
-//snmp_main_voltage=but;
-//
-//
-//
-//load_I=-(bat[0]._Ib/10)-(bat[1]._Ib/10);
-//
-//Isumm=0;
-//
-//for(i=0;i<NUMIST;i++)
-//     {
-//     if(bps[i]._cnt<5)Isumm+=bps[i]._Ii;
-//     }  
-//     
-//load_I=load_I+Isumm;
-//if(load_I<0)load_I=0;
-//
-// 
-//if (NUMINV)
-//	{
-//	for(i=4;i<(4+NUMINV);i++)// адресация инверторов начинается с 4			   /**/
-//	{
-//	if(bps[i]._cnt<25)
-//     	{
-//     	bps[i]._Ii=bps[i]._buff[0]+(bps[i]._buff[1]*256);
-//     	bps[i]._Uin=bps[i]._buff[2]+(bps[i]._buff[3]*256);
-//     	bps[i]._Uii=bps[i]._buff[4]+(bps[i]._buff[5]*256);
-//     	bps[i]._Ti=(signed)(bps[i]._buff[6]);
-//     	bps[i]._adr_ee=bps[i]._buff[7];
-//     	bps[i]._flags_tm=bps[i]._buff[8];
-//	    bps[i]._rotor=bps[i]._buff[10]+(bps[i]._buff[11]*256);    
-//     	} 
-//	else 
-//     	{
-//     	bps[i]._Uii=0; 
-//     	bps[i]._Ii=0;
-//     	bps[i]._Uin=0;
-//     	bps[i]._Ti=0;
-//     	bps[i]._flags_tm=0; 
-//	    bps[i]._rotor=0;    
-//     	}
-//     }
-//   }						  
+					  
 }
 
 ////-----------------------------------------------
