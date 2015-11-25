@@ -866,153 +866,21 @@ LPC_ADC->ADCR |=  (1<<24);	   // start conversion
 }
 
 
+
+//*******************
+void rele_init (void){
+LPC_GPIO1->FIODIR|=(1<<24);
+LPC_GPIO1->FIODIR|=(1<<25);
+}
+
 //*************-----------------------------------------------
 void rele_hndl(void)
 {
-LPC_GPIO1->FIODIR|=(1<<23);
-if (bps[NUMB]._av&(0x1F)) 
-	{
-	rele_cnt++;
-	if(rele_cnt>50)rele_cnt=50;
-	}
-else
-	{
-	rele_cnt--;
-	if(rele_cnt<0)rele_cnt=0;
-	}
-if(rele_cnt>48)bRELE=1;
-else if(rele_cnt<2)bRELE=0;
 
-if(bRELE)LPC_GPIO1->FIOCLR|=(1<<23);
-else LPC_GPIO1->FIOSET|=(1<<23);
-////static char cnt_rel_sam;
-////char temp;
-//
-////temp=0;
-//
-//
-//SET_REG(LPC_PINCON->PINSEL0,0,4*2,6*2);
-//SET_REG(LPC_GPIO0->FIODIR,63,4,6);
-//SET_REG(LPC_PINCON->PINSEL7,0,(25-16)*2,2);
-//SET_REG(LPC_GPIO3->FIODIR,1,25,1);
-//SET_REG(LPC_PINCON->PINSEL1,0,(29-16)*2,2);
-//SET_REG(LPC_GPIO0->FIODIR,1,29,1);
-//
-//
-//
-//
-//
-//
-//if(((bat[0]._rel_stat)  || (tbatdisable_stat!=tbdsON))&&(tbatdisable_cmnd))
-//	{
-//	SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_BAT1,1);
-//	}
-//else SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_BAT1,1);	  	
-//
-//if(((bat[1]._rel_stat) || (tbatdisable_stat!=tbdsON))&&(tbatdisable_cmnd))
-//	{
-//	SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_BAT2,1);
-//	}
-//else SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_BAT2,1);
-//
-//
-//if(mess_find_unvol((MESS2RELE_HNDL))&&(PARAM_RELE_SAMOKALIBR)) 
-//	{
-//	if(mess_data[1]==1)SET_REG(LPC_GPIO0->FIOSET,1,29,1);
-//	else if(mess_data[1]==0) SET_REG(LPC_GPIO0->FIOCLR,1,29,1);
-//	}
-//else SET_REG(LPC_GPIO0->FIOCLR,1,29,1);
-//
-//
-////Реле аварии сети
-//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_AV_NET))
-//	{
-//	if(mess_data[1]==0) SET_REG(LPC_GPIO3->FIOSET,1,SHIFT_REL_AV_NET,1);
-//	else SET_REG(LPC_GPIO3->FIOCLR,1,SHIFT_REL_AV_NET,1);
-//	}
-//else	if(!(avar_ind_stat&0x00000001)) SET_REG(LPC_GPIO3->FIOSET,1,SHIFT_REL_AV_NET,1);
-//else SET_REG(LPC_GPIO3->FIOCLR,1,SHIFT_REL_AV_NET,1);
-//
-//
-//#ifdef U
-////Реле общей аварии
-//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_AV_COMM))
-//	{
-//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_AV_COMM);
-//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_AV_COMM);
-//	}
-//else 
-//	{
-//     if(  (!(avar_ind_stat&0x00007fff)) &&
-//          ((!SK_REL_EN[0]) || (sk_av_stat[0]!=sasON))  &&
-//          ((!SK_REL_EN[1]) || (sk_av_stat[1]!=sasON))  &&
-//          ((!SK_REL_EN[2]) || (sk_av_stat[2]!=sasON))  /*&&
-//          ((!SK_REL_EN[3]) || (sk_av_stat[3]!=sasON))*/  )temp&=~(1<<SHIFT_REL_AV_COMM);
-//     else temp|=(1<<SHIFT_REL_AV_COMM);
-//	}
-//
-//
-////Реле осевого вентилятора
-//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_VENT))
-//	{
-//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_VENT);
-//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_VENT);
-//	}
-//else 
-//	{
-//	if(mixer_vent_stat==mvsOFF) temp&=~(1<<SHIFT_REL_VENT);
-//     else temp|=(1<<SHIFT_REL_VENT);
-//	}
-///*
-////Реле аварии батарей
-//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_AV_BAT))
-//	{
-//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_AV_BAT);
-//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_AV_BAT);
-//     }
-//else 
-//	{
-//	if(!(avar_ind_stat&0x00000006)) temp&=~(1<<SHIFT_REL_AV_BAT);
-//     else temp|=(1<<SHIFT_REL_AV_BAT);
-//	} 
-//*/
-////Реле выключения нагрузки
-//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_LOAD_OFF))
-//	{
-//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_LOAD_OFF);
-//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_LOAD_OFF);
-//     }
-//else if(tloaddisable_cmnd==0)
-//	{
-//	temp|=(1<<SHIFT_REL_LOAD_OFF);
-//	}
-//else if((tloaddisable_cmnd)&&(tloaddisable_cmnd<=11))
-//	{
-//	temp&=~(1<<SHIFT_REL_LOAD_OFF);
-//	}
-//
-//else 
-//	{
-//	if(!(tloaddisable_stat==tldsON)) temp&=~(1<<SHIFT_REL_LOAD_OFF);
-//     else temp|=(1<<SHIFT_REL_LOAD_OFF);
-//	} 
-//
-//
-//
-////Реле освещения
-//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_LIGHT))
-//	{
-//	if(mess_data[1]==0) SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_LIGHT,1);
-//	else if(mess_data[1]==1) SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_LIGHT,1);
-//     }
-//else 
-//	{
-//	if(sk_av_stat[0]!=sasON) SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_LIGHT,1);
-//     else SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_LIGHT,1);
-//	}
-//
-//rele_stat=temp;
-//#endif
+
+//if(bRELE)LPC_GPIO1->FIOCLR|=(1<<24);
+//else LPC_GPIO1->FIOSET|=(1<<24);
+
 }
 
 ////-----------------------------------------------

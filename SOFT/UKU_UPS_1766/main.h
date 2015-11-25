@@ -8,9 +8,7 @@
 
 #define GET_REG( reg, shift, lengt) 		( (reg & MASK_OFFSET(shift,lengt)) >> shift)
 #define SET_REG( reg, val, shift, lengt)  	reg = ( (reg & ~MASK_OFFSET(shift,lengt)) | (val << shift) )
-//--------------реле
-#define COIL_ON		LPC_GPIO1->FIODIR|=(1<<23);LPC_GPIO1->FIOSET|=(1<<23)
-#define COIL_OFF	LPC_GPIO1->FIODIR|=(1<<23);LPC_GPIO1->FIOCLR|=(1<<23)
+//--------------реле  калибровки нуля тока
 #define COIL_CAL_ON		LPC_GPIO1->FIODIR|=(1<<22);LPC_GPIO1->FIOSET|=(1<<22)
 #define COIL_CAL_OFF	LPC_GPIO1->FIODIR|=(1<<22);LPC_GPIO1->FIOCLR|=(1<<22)
 

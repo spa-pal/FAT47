@@ -64,6 +64,12 @@ const char sm_mont[13][4]={"упс","янв","фев","мар","апр","май","июн","июл","авг"
 char tcp_init_cnt;
 unsigned char canzz_tmp, canzx_tmp;
 
+void rele_init(void);
+#define  RELE1_OFF LPC_GPIO1->FIOCLR|=(1<<24);
+#define  RELE1_ON LPC_GPIO1->FIOSET|=(1<<24);
+#define  RELE2_OFF LPC_GPIO1->FIOCLR|=(1<<25);
+#define  RELE2_ON LPC_GPIO1->FIOSET|=(1<<25);
+
 /////
 
 //------Таймер
@@ -537,7 +543,7 @@ SystemInit();
 SysTick_Config(SystemFrequency/1000 - 1); /* Generate interrupt each 1 ms   */
 
 LPC_GPIO1->FIODIR|=(1<<20);	  // для ресета
-LPC_GPIO1->FIODIR&=~(1<<28);	 // выход контроля наличия сети
+
 
 LPC_GPIO2->FIODIR&=~BUT_MASK;
 LPC_PINCON->PINMODE4&=~(0x3ff);
@@ -547,10 +553,18 @@ LPC_PINCON->PINMODE4&=~(1<<(BUT2*2))&~(1<<((BUT2*2)+1));
 LPC_PINCON->PINMODE4&=~(1<<(BUT3*2))&~(1<<((BUT3*2)+1));
 LPC_PINCON->PINMODE4&=~(1<<(BUT4*2))&~(1<<((BUT4*2)+1));
 
-///beep(0,0,0,0,0); //инициализация
+
+
+//beep(0,0,0,0,0); //инициализация
+INIT_BP;
+BEEPER_OFF;
 ///blink(0,0,0,0);
 INIT_LED_RED;
 INIT_LED_GREEN;
+
+RELE1_OFF;
+RELE2_OFF;
+rele_init();
 
 ///rtc_init();
 ///LPC_GPIO0->FIODIR|=(1<<POWER_NET);
@@ -655,8 +669,8 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 
 tcp_init_cnt=10;
 
-poz_display=70; 
-poz_kursor=1;
+//poz_display=70; 
+//poz_kursor=1;
 
 while(1)
 	{
@@ -670,7 +684,7 @@ while(1)
 		f100Hz=0;
 		LPC_GPIO1->FIODIR^=(1<<20);	 // сброс супервизора
 		//blinker();
-		beeper();
+		//beeper();
 
 		keypad_long  (K_R,&count_right,&flag_right);
 		keypad_long  (K_L,&count_left,&flag_left);
@@ -772,8 +786,9 @@ snmp_Community[9]=0;
 		if(flash_1S) {
 			flash_1S=0; 
 			if(data_can_reset<5) data_can_reset+=1;
+			
 		}
-		else {flash_1S=1; }
+		else {flash_1S=1;}
 		if(data_can_reset==4){
 			snmp_inverter_voltage=0;
 			snmp_inverter_current=0;
