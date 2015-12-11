@@ -8,9 +8,6 @@
 
 #define GET_REG( reg, shift, lengt) 		( (reg & MASK_OFFSET(shift,lengt)) >> shift)
 #define SET_REG( reg, val, shift, lengt)  	reg = ( (reg & ~MASK_OFFSET(shift,lengt)) | (val << shift) )
-//--------------реле  калибровки нуля тока
-#define COIL_CAL_ON		LPC_GPIO1->FIODIR|=(1<<22);LPC_GPIO1->FIOSET|=(1<<22)
-#define COIL_CAL_OFF	LPC_GPIO1->FIODIR|=(1<<22);LPC_GPIO1->FIOCLR|=(1<<22)
 
 //-----------------------------------
 #define CNT_SRC_MAX	10
@@ -177,8 +174,8 @@ extern signed short ETH_DHCP_ON;
 //extern signed short ETH_MASK_2;
 //extern signed short ETH_MASK_3;
 //extern signed short ETH_MASK_4;
-//extern signed short ETH_SNMP_PORT_READ;
-//extern signed short ETH_SNMP_PORT_WRITE;
+extern signed short ETH_SNMP_PORT_READ;
+extern signed short ETH_SNMP_PORT_WRITE;
 //extern signed short ETH_GW_1;
 //extern signed short ETH_GW_2;
 //extern signed short ETH_GW_3;

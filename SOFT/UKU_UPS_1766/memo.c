@@ -60,9 +60,9 @@ for(i=0;i<16;i++)
 */
 for(i=0;i<9;i++)
 {
-	snmp_Community[i]=lc640_read(EE_SNMP_READ_COMMUNITY+(i*2) );
+//	snmp_Community[i]=lc640_read(EE_SNMP_READ_COMMUNITY+(i*2) );
 }
-snmp_Community[9]=0;
+//snmp_Community[9]=0;
 
 
 
@@ -241,8 +241,8 @@ BATTERY_VOLTAGE_TRAP_SEND_OF_NO_AV=lc640_read_int(EE_BATTERY_VOLTAGE_TRAP_SEND_O
 
 
 
-//ETH_SNMP_PORT_READ=lc640_read_int(EE_ETH_SNMP_PORT_READ);
-//ETH_SNMP_PORT_WRITE=lc640_read_int(EE_ETH_SNMP_PORT_WRITE);
+ETH_SNMP_PORT_READ=lc640_read_int(EE_ETH_SNMP_PORT_READ);
+ETH_SNMP_PORT_WRITE=lc640_read_int(EE_ETH_SNMP_PORT_WRITE);
 /*
 for(i=0;i<64;i++)
 	{

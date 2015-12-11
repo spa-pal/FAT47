@@ -39,6 +39,7 @@ unsigned char poz_display, poz_display_bf, poz_display_bf2, poz_kursor, poz_kurs
 unsigned delay_scrin_saver;
 unsigned char count_right,count_left,count_down,count_up,count_f;
 unsigned short flag_right,flag_left,flag_down,flag_up,flag_f;
+unsigned short count_kalibr_i_bat;
 bool flag_l_r, flash_1S;
 #define K_U (LPC_GPIO2->FIOPIN&(1<<BUT3))
 #define K_D (LPC_GPIO2->FIOPIN&(1<<BUT2))
@@ -64,23 +65,31 @@ const char sm_mont[13][4]={"упс","янв","фев","мар","апр","май","июн","июл","авг"
 char tcp_init_cnt;
 unsigned char canzz_tmp, canzx_tmp;
 
-void rele_init(void);
-#define  RELE1_OFF LPC_GPIO1->FIOCLR|=(1<<24);
-#define  RELE1_ON LPC_GPIO1->FIOSET|=(1<<24);
-#define  RELE2_OFF LPC_GPIO1->FIOCLR|=(1<<25);
-#define  RELE2_ON LPC_GPIO1->FIOSET|=(1<<25);
 
-/////
+void sk_init(void);
+#define SK_X18 (LPC_GPIO1->FIOPIN&(1<<26))
+#define SK_X19 (LPC_GPIO1->FIOPIN&(1<<27))
+#define  X16_OFF LPC_GPIO1->FIOCLR|=(1<<29)
+#define  X16_ON LPC_GPIO1->FIOSET|=(1<<29)
+#define  X17_OFF LPC_GPIO1->FIOCLR|=(1<<28)
+#define  X17_ON LPC_GPIO1->FIOSET|=(1<<28)                                           
+
+void rele_init(void);
+#define  RELE1_OFF LPC_GPIO1->FIOCLR|=(1<<24)
+#define  RELE1_ON LPC_GPIO1->FIOSET|=(1<<24)
+#define  RELE2_OFF LPC_GPIO1->FIOCLR|=(1<<25)
+#define  RELE2_ON LPC_GPIO1->FIOSET|=(1<<25)
+#define  RELE_I_OFF LPC_GPIO1->FIOCLR|=(1<<22)
+#define  RELE_I_ON LPC_GPIO1->FIOSET|=(1<<22)
 
 //------Таймер
 short t100=10-10,t50=20-5,t10=100-25,t5=200-45,t2=500-65,t1=1000-85;   // подобрана фаза для несовпадения событий
 char f1000Hz,f100Hz,f50Hz,f10Hz,f5Hz,f2Hz,f1Hz;								  // флаги срабатывания событий
 BOOL tick;
-
+bool bDTS; 
 //-----Индикация
-char level_U,level_I,level_Q,init,ind_level_U,ind_level_I,ind_level_Q,flash_;
-//typedef enum ind_mode{norm,reverse,alone,flash} ind_mode;	   // 3 вида режима отображения
-ind_mode level_U_mode,level_I_mode,level_Q_mode; 
+char init; 
+ 
 //-----------------------------------------------
 //Индикация
 stuct_ind a,b[10];
@@ -229,8 +238,8 @@ signed short ETH_DEF_GATW_3;
 signed short ETH_DEF_GATW_4;
 
 //
-//signed short ETH_SNMP_PORT_READ;
-//signed short ETH_SNMP_PORT_WRITE;
+signed short ETH_SNMP_PORT_READ;
+signed short ETH_SNMP_PORT_WRITE;
 //
 
 
@@ -505,6 +514,7 @@ if (++t10==100)
 	{
 	f10Hz=1;
 	t10=0;
+	if(bDTS) LPC_GPIO1->FIOPIN^=(1<<20); 
 	}
 
 if (++t5==200)
@@ -535,8 +545,10 @@ if (++t1==1000)
 //===============================================
 int main (void)
 {
-
+short iiii_;
 char mac_adr[6] = { 0x00,0x73,0x05,50,60,70 };
+
+bDTS=1;
 
 SystemInit();
 
@@ -562,12 +574,18 @@ BEEPER_OFF;
 INIT_LED_RED;
 INIT_LED_GREEN;
 
+RELE_I_OFF;
 RELE1_OFF;
 RELE2_OFF;
 rele_init();
 
+
+X16_OFF;
+X17_OFF;
+sk_init();
+
 ///rtc_init();
-///LPC_GPIO0->FIODIR|=(1<<POWER_NET);
+//LPC_GPIO0->FIODIR|=(1<<POWER_NET);
 ///LPC_GPIO0->FIOCLR|=(1<<POWER_NET);
 ///LPC_GPIO1->FIOPIN^=(1<<20);
 Delay(10000000);
@@ -576,7 +594,7 @@ Delay(10000000);
 
 adc_init();
 
-//lc640_write_int(EEPROM_INIT,0xFFFF);
+//lc640_write_int(EEPROM_INIT,0xFFFF);	//сбросить на умолчания	EEPROM
 if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализация EEPROM
 	lc640_write_int(EE_KUBAT1,1800); 
 	lc640_write_int(EE_KI0BAT1,0);
@@ -600,78 +618,80 @@ memo_read();
 can1_init(BITRATE62_5K6_25MHZ);
 FullCAN_SetFilter(0,0x18e);
 
-///memo_read();
+
 ///LPC_GPIO1->FIOPIN^=(1<<20);
 ///avar_bps_hndl(NUMB,3,1);
 //  init=1;	  // для тестов
 
 SERIAL_NUMBER=lc640_read_long(EE_SERIAL_NUMBER);
 
-mac_adr[5]=*((char*)&SERIAL_NUMBER);
-mac_adr[4]=*(((char*)&SERIAL_NUMBER)+1);
-mac_adr[3]=*(((char*)&SERIAL_NUMBER)+2);
-
-mem_copy (own_hw_adr, mac_adr, 6);
-
-LPC_GPIO1->FIOPIN^=(1<<20);
-
-// snmp_Community имеет 8 разрядов по описанию. Олег.  девятый 0
-
-snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
-if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
-snmp_Community[1]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+1);
-if((snmp_Community[1]==0)||(snmp_Community[1]==' '))snmp_Community[1]=0;
-snmp_Community[2]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+2);
-if((snmp_Community[2]==0)||(snmp_Community[2]==' '))snmp_Community[2]=0;
-snmp_Community[3]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+3);
-if((snmp_Community[3]==0)||(snmp_Community[3]==' '))snmp_Community[3]=0;
-snmp_Community[4]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+4);
-if((snmp_Community[4]==0)||(snmp_Community[4]==' '))snmp_Community[4]=0;
-snmp_Community[5]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+5);
-if((snmp_Community[5]==0)||(snmp_Community[5]==' '))snmp_Community[5]=0;
-snmp_Community[6]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+6);
-if((snmp_Community[6]==0)||(snmp_Community[6]==' '))snmp_Community[6]=0;
-snmp_Community[7]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+7);
-if((snmp_Community[7]==0)||(snmp_Community[7]==' '))snmp_Community[7]=0;
-snmp_Community[8]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+8);
-if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
-snmp_Community[9]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+9); 
-if((snmp_Community[9]==0)||(snmp_Community[9]==' '))snmp_Community[9]=0;
-/*
-snmp_Community[10]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+10); 
-if((snmp_Community[10]==0)||(snmp_Community[10]==' '))snmp_Community[10]=0;
-snmp_Community[11]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+11); 
-if((snmp_Community[11]==0)||(snmp_Community[11]==' '))snmp_Community[11]=0;
-snmp_Community[12]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+12); 
-if((snmp_Community[12]==0)||(snmp_Community[12]==' '))snmp_Community[12]=0;
-snmp_Community[13]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+13); 
-if((snmp_Community[13]==0)||(snmp_Community[13]==' '))snmp_Community[13]=0;
-snmp_Community[14]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+14); 
-if((snmp_Community[14]==0)||(snmp_Community[14]==' '))snmp_Community[14]=0;
-snmp_Community[15]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+15); 
-if((snmp_Community[15]==0)||(snmp_Community[15]==' '))snmp_Community[15]=0;
-*/
-snmp_Community[9]=0; 
-///LPC_GPIO1->FIOPIN^=(1<<20);
-///snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
-///snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT); 
-///LPC_GPIO1->FIOPIN^=(1<<20);
-///	init_TcpNet ();
-/// LPC_GPIO1->FIOPIN^=(1<<20);
-///	init_ETH();
-///LPC_GPIO1->FIOPIN^=(1<<20); 
-
-
 i2c_init();
 ssd1306_init(SSD1306_SWITCHCAPVCC); 
-//LPC_GPIO2->FIODIR|=(1<<9);
-//LPC_GPIO2->FIOPIN|=(1<<9);
 
-tcp_init_cnt=10;
+if(ETH_IS_ON){
+	sprintf(lcd_buffer,"\n ИНИЦИАЛИЗАЦИЯ\n   ИНТЕРНЕТ\n");
+	filling_lcd_buffer(lcd_buffer);
+	bitmap_hndl16x9();
+	for(iiii_=0;iiii_<1024;iiii_++)	ssd1306_data(lcd_bitmap[iiii_]);
+
+	mac_adr[5]=*((char*)&SERIAL_NUMBER);
+	mac_adr[4]=*(((char*)&SERIAL_NUMBER)+1);
+	mac_adr[3]=*(((char*)&SERIAL_NUMBER)+2);
+
+	mem_copy (own_hw_adr, mac_adr, 6);
+
+	// snmp_Community имеет 8 разрядов по описанию. Олег.  девятый 0
+	snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
+	if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
+	snmp_Community[1]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+1);
+	if((snmp_Community[1]==0)||(snmp_Community[1]==' '))snmp_Community[1]=0;
+	snmp_Community[2]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+2);
+	if((snmp_Community[2]==0)||(snmp_Community[2]==' '))snmp_Community[2]=0;
+	snmp_Community[3]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+3);
+	if((snmp_Community[3]==0)||(snmp_Community[3]==' '))snmp_Community[3]=0;
+	snmp_Community[4]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+4);
+	if((snmp_Community[4]==0)||(snmp_Community[4]==' '))snmp_Community[4]=0;
+	snmp_Community[5]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+5);
+	LPC_GPIO1->FIOPIN^=(1<<20);
+	if((snmp_Community[5]==0)||(snmp_Community[5]==' '))snmp_Community[5]=0;
+	snmp_Community[6]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+6);
+	if((snmp_Community[6]==0)||(snmp_Community[6]==' '))snmp_Community[6]=0;
+	snmp_Community[7]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+7);
+	if((snmp_Community[7]==0)||(snmp_Community[7]==' '))snmp_Community[7]=0;
+	snmp_Community[8]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+8);
+	if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
+	snmp_Community[9]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+9); 
+	if((snmp_Community[9]==0)||(snmp_Community[9]==' '))snmp_Community[9]=0;
+	
+	/*
+	snmp_Community[10]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+10); 
+	if((snmp_Community[10]==0)||(snmp_Community[10]==' '))snmp_Community[10]=0;
+	snmp_Community[11]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+11); 
+	if((snmp_Community[11]==0)||(snmp_Community[11]==' '))snmp_Community[11]=0;
+	snmp_Community[12]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+12); 
+	if((snmp_Community[12]==0)||(snmp_Community[12]==' '))snmp_Community[12]=0;
+	snmp_Community[13]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+13); 
+	if((snmp_Community[13]==0)||(snmp_Community[13]==' '))snmp_Community[13]=0;
+	snmp_Community[14]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+14); 
+	if((snmp_Community[14]==0)||(snmp_Community[14]==' '))snmp_Community[14]=0;
+	snmp_Community[15]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+15); 
+	if((snmp_Community[15]==0)||(snmp_Community[15]==' '))snmp_Community[15]=0;
+	*/
+	snmp_Community[9]=0;
+	snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
+	snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
+	init_TcpNet ();
+	init_ETH();
+}
+
+
+
+//tcp_init_cnt=10;
 
 //poz_display=70; 
 //poz_kursor=1;
 
+bDTS=0;
 while(1)
 	{
 	if(f1000Hz)
@@ -695,6 +715,10 @@ while(1)
 			analiz_keypad(); 
 			//lcd_out(); 
 		}
+
+		
+		
+		
 		}
 	if(f50Hz)
 		{
@@ -721,50 +745,48 @@ while(1)
 			if(!tcp_init_cnt)
 				{
 				
+	bDTS=1;
+	snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
+	if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
+	snmp_Community[1]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+1);
+	if((snmp_Community[1]==0)||(snmp_Community[1]==' '))snmp_Community[1]=0;
+	snmp_Community[2]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+2);
+	if((snmp_Community[2]==0)||(snmp_Community[2]==' '))snmp_Community[2]=0;
+	snmp_Community[3]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+3);
+	if((snmp_Community[3]==0)||(snmp_Community[3]==' '))snmp_Community[3]=0;
+	snmp_Community[4]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+4);
+	if((snmp_Community[4]==0)||(snmp_Community[4]==' '))snmp_Community[4]=0;
+	snmp_Community[5]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+5);
+	if((snmp_Community[5]==0)||(snmp_Community[5]==' '))snmp_Community[5]=0;
+	snmp_Community[6]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+6);
+	if((snmp_Community[6]==0)||(snmp_Community[6]==' '))snmp_Community[6]=0;
+	snmp_Community[7]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+7);
+	if((snmp_Community[7]==0)||(snmp_Community[7]==' '))snmp_Community[7]=0;
+	snmp_Community[8]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+8);
+	if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
+	snmp_Community[9]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+9); 
+	if((snmp_Community[9]==0)||(snmp_Community[9]==' '))snmp_Community[9]=0;
 
-snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
-if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
-snmp_Community[1]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+1);
-if((snmp_Community[1]==0)||(snmp_Community[1]==' '))snmp_Community[1]=0;
-snmp_Community[2]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+2);
-if((snmp_Community[2]==0)||(snmp_Community[2]==' '))snmp_Community[2]=0;
-snmp_Community[3]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+3);
-if((snmp_Community[3]==0)||(snmp_Community[3]==' '))snmp_Community[3]=0;
-snmp_Community[4]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+4);
-if((snmp_Community[4]==0)||(snmp_Community[4]==' '))snmp_Community[4]=0;
-snmp_Community[5]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+5);
-if((snmp_Community[5]==0)||(snmp_Community[5]==' '))snmp_Community[5]=0;
-snmp_Community[6]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+6);
-if((snmp_Community[6]==0)||(snmp_Community[6]==' '))snmp_Community[6]=0;
-snmp_Community[7]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+7);
-if((snmp_Community[7]==0)||(snmp_Community[7]==' '))snmp_Community[7]=0;
-snmp_Community[8]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+8);
-if((snmp_Community[8]==0)||(snmp_Community[8]==' '))snmp_Community[8]=0;
-snmp_Community[9]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+9); 
-if((snmp_Community[9]==0)||(snmp_Community[9]==' '))snmp_Community[9]=0;
-
-/*
-snmp_Community[10]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+10); 
-if((snmp_Community[10]==0)||(snmp_Community[10]==' '))snmp_Community[10]=0;
-snmp_Community[11]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+11); 
-if((snmp_Community[11]==0)||(snmp_Community[11]==' '))snmp_Community[11]=0;
-snmp_Community[12]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+12); 
-if((snmp_Community[12]==0)||(snmp_Community[12]==' '))snmp_Community[12]=0;
-snmp_Community[13]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+13); 
-if((snmp_Community[13]==0)||(snmp_Community[13]==' '))snmp_Community[13]=0;
-snmp_Community[14]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+14); 
-if((snmp_Community[14]==0)||(snmp_Community[14]==' '))snmp_Community[14]=0;
-snmp_Community[15]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+15); 
-if((snmp_Community[15]==0)||(snmp_Community[15]==' '))snmp_Community[15]=0;
-*/
-snmp_Community[9]=0;
-
-//snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
-//snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
-
+	/*
+	snmp_Community[10]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+10); 
+	if((snmp_Community[10]==0)||(snmp_Community[10]==' '))snmp_Community[10]=0;
+	snmp_Community[11]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+11); 
+	if((snmp_Community[11]==0)||(snmp_Community[11]==' '))snmp_Community[11]=0;
+	snmp_Community[12]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+12); 
+	if((snmp_Community[12]==0)||(snmp_Community[12]==' '))snmp_Community[12]=0;
+	snmp_Community[13]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+13); 
+	if((snmp_Community[13]==0)||(snmp_Community[13]==' '))snmp_Community[13]=0;
+	snmp_Community[14]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+14); 
+	if((snmp_Community[14]==0)||(snmp_Community[14]==' '))snmp_Community[14]=0;
+	snmp_Community[15]=(char)lc640_read(EE_SNMP_READ_COMMUNITY+15); 
+	if((snmp_Community[15]==0)||(snmp_Community[15]==' '))snmp_Community[15]=0;
+	*/
+	snmp_Community[9]=0;
+	snmp_PortNum  = lc640_read_int(EE_SNMP_READ_PORT);
+	snmp_TrapPort = lc640_read_int(EE_SNMP_WRITE_PORT);
 	init_TcpNet ();
-
 	init_ETH();
+	bDTS=0;
 				}
 			}
 		}
@@ -801,7 +823,14 @@ snmp_Community[9]=0;
 	if(f1Hz)
 		{
 		f1Hz=0;
-		 
+		if(poz_display<20 ) count_kalibr_i_bat+=1;
+		else count_kalibr_i_bat=0;
+		if(count_kalibr_i_bat==600) RELE_I_ON;
+		if(count_kalibr_i_bat==605) {
+			Kibat0[0]=adc_buff_[1];
+			lc640_write_int(EE_KI0BAT1,Kibat0[0]);
+		}
+		if(count_kalibr_i_bat>605) {count_kalibr_i_bat=0; RELE_I_OFF; }
 		if(main_cnt<1000)main_cnt++;
 //snmp_trap_send("Main power alarm. Power source is ACB",1,1);
 	 

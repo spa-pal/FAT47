@@ -864,13 +864,19 @@ else if(adc_ch==2) 	SET_REG(LPC_ADC->ADCR,1<<5,0,8);	   // AD0.5 P1.31
 LPC_ADC->ADCR |=  (1<<24);	   // start conversion
 
 }
-
-
-
+//*******************
+void sk_init (void){
+LPC_GPIO1->FIODIR&=~(1<<26);
+LPC_GPIO1->FIODIR&=~(1<<27);
+LPC_GPIO1->FIODIR|=(1<<28);
+LPC_GPIO1->FIODIR|=(1<<29);
+}
 //*******************
 void rele_init (void){
+LPC_GPIO1->FIODIR|=(1<<22);	// калибровка нуля Iбат
 LPC_GPIO1->FIODIR|=(1<<24);
 LPC_GPIO1->FIODIR|=(1<<25);
+
 }
 
 //*************-----------------------------------------------
