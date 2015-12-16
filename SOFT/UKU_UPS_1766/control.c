@@ -764,7 +764,7 @@ temp_SL=(signed long)adc_buff_[1];
 temp_SL-=(signed long)Kibat0[0];
 temp_SL*=(signed long)Kibat1[0];
 temp_SL/=1000L;
-snmp_battery_current=(signed short)temp_SL*(-1L);
+snmp_battery_current=-1*(signed short)temp_SL;
 					  
 }
 

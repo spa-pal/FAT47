@@ -64,7 +64,7 @@ char delete_oleg;
 const char sm_mont[13][4]={"упс","янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"}; //
 char tcp_init_cnt;
 unsigned char canzz_tmp, canzx_tmp;
-
+unsigned char kontrol_seti, upravl_shim;
 
 void sk_init(void);
 #define SK_X18 (LPC_GPIO1->FIOPIN&(1<<26))
@@ -571,6 +571,8 @@ LPC_PINCON->PINMODE4&=~(1<<(BUT4*2))&~(1<<((BUT4*2)+1));
 INIT_BP;
 BEEPER_OFF;
 ///blink(0,0,0,0);
+LED_RED_OFF;
+LED_GREEN_OFF;
 INIT_LED_RED;
 INIT_LED_GREEN;
 
@@ -793,7 +795,7 @@ while(1)
 	if(f5Hz)
 		{
 		f5Hz=0;
-		avar_hndl();
+		//avar_hndl();
 		//if (poz_display<10) 
 		memo_read();
 
@@ -831,7 +833,13 @@ while(1)
 			lc640_write_int(EE_KI0BAT1,Kibat0[0]);
 		}
 		if(count_kalibr_i_bat>605) {count_kalibr_i_bat=0; RELE_I_OFF; }
+		if(poz_display==35 || poz_display==36 || poz_display==37) can1_out(27,27,0xFD,0,0,0,0,0);
+		
+		
 		if(main_cnt<1000)main_cnt++;
+
+
+
 //snmp_trap_send("Main power alarm. Power source is ACB",1,1);
 	 
 		}

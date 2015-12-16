@@ -32,6 +32,7 @@ extern signed short snmp_inverter_current;
 extern signed short snmp_inverter_temperature;
 extern signed short snmp_inverter_power;
 extern signed short snmp_main_voltage;
+extern unsigned char kontrol_seti, upravl_shim;
 
 
 // FullCAN Message List
@@ -928,11 +929,16 @@ if((RXBUFF[1]==0xDD)&&((RXBUFF[0]&0x1f)==27))  /**/
 		snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];
      }
 
-if((RXBUFF[1]==0xDE)&&((RXBUFF[0]&0x1f)==27))  /**/
+else if((RXBUFF[1]==0xDE)&&((RXBUFF[0]&0x1f)==27))  /**/
      {
 		snmp_inverter_temperature= RXBUFF[2];
 		snmp_main_voltage= (((unsigned short)RXBUFF[5])<<8)|RXBUFF[4];
 		//snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];
+     }
+else if((RXBUFF[1]==0xDF)&&((RXBUFF[0]&0x1f)==27))  /*пакет конфигурирования*/
+     {
+		kontrol_seti=RXBUFF[5];
+		upravl_shim=RXBUFF[6];	
      }
 
 
@@ -1002,7 +1008,7 @@ rotor_can[1]++;
 		}
 	can_in_an1();
 	    
- LPC_GPIO0->FIOSET|=(1<<26);   
+   
   }
 
   LPC_CAN1->CMR = 0x04; // release receive buffer
@@ -1085,7 +1091,7 @@ void can_isr_tx1 (void)
 //char *ptr,j;
 
 //plazma_can2++;
-LPC_GPIO0->FIOSET|=(1<<25);
+
 can_tx_cnt++;
 
 rotor_can[5]++;
