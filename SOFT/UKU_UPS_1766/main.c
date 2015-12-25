@@ -53,18 +53,22 @@ unsigned char poz_flash, data_can_reset;
 unsigned char par_glav_menu[10]; // [0]-включение/отключение гл. меню
 								 // [1]задержка перед включением
 							   	 // [2]интервал переключения параметров
+
+void led_beep(void);
 extern LOCALM localm[];
 extern U8 own_hw_adr[];
 
 extern U16  snmp_PortNum;
 extern U16  snmp_TrapPort;
 
+unsigned char count_iakb; // длительность непрерывных данных отрицательного тока АКБ
 
-char delete_oleg;
 const char sm_mont[13][4]={"упс","янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"}; //
 char tcp_init_cnt;
 unsigned char canzz_tmp, canzx_tmp;
 unsigned char kontrol_seti, upravl_shim;
+unsigned char rejim_led, rejim_avar_led; // режим свечения светодиода
+unsigned short count_rejim_led;
 
 void sk_init(void);
 #define SK_X18 (LPC_GPIO1->FIOPIN&(1<<26))
@@ -690,8 +694,11 @@ if(ETH_IS_ON){
 
 //tcp_init_cnt=10;
 
-//poz_display=70; 
+//poz_display=36; 
 //poz_kursor=1;
+//rejim_led=1;
+//rejim_avar_led=6;
+
 
 bDTS=0;
 while(1)
@@ -707,7 +714,8 @@ while(1)
 		LPC_GPIO1->FIODIR^=(1<<20);	 // сброс супервизора
 		//blinker();
 		//beeper();
-
+		led_beep();
+		count_rejim_led+=1;
 		keypad_long  (K_R,&count_right,&flag_right);
 		keypad_long  (K_L,&count_left,&flag_left);
 		keypad_long  (K_U,&count_up,&flag_up);
@@ -719,7 +727,7 @@ while(1)
 		}
 
 		
-		
+																						
 		
 		}
 	if(f50Hz)

@@ -926,7 +926,7 @@ if((RXBUFF[1]==0xDD)&&((RXBUFF[0]&0x1f)==27))  /**/
 		snmp_inverter_current= (((unsigned short)RXBUFF[3])<<8)|RXBUFF[2];
 		snmp_inverter_power=0;
 		snmp_inverter_power= ( snmp_inverter_power | ((unsigned short)RXBUFF[5]<<8) ) |RXBUFF[4];
-		snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];
+		snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];	// Uнагрузки
      }
 
 else if((RXBUFF[1]==0xDE)&&((RXBUFF[0]&0x1f)==27))  /**/

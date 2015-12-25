@@ -765,6 +765,8 @@ temp_SL-=(signed long)Kibat0[0];
 temp_SL*=(signed long)Kibat1[0];
 temp_SL/=1000L;
 snmp_battery_current=-1*(signed short)temp_SL;
+if(snmp_battery_current<-10 && count_iakb<200) count_iakb+=1;
+else count_iakb=0;
 					  
 }
 

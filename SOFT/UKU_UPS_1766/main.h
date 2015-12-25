@@ -23,7 +23,9 @@ extern ind_mode level_U_mode,level_I_mode,level_Q_mode;
 extern signed short flash_net_def_cnt;
 
 extern unsigned char canzz_tmp, canzx_tmp;
-
+extern unsigned char count_iakb; // длительность непрерывных данных отрицательного тока АКБ
+extern unsigned char rejim_led, rejim_avar_led; // режим свечения светодиода
+extern unsigned short count_rejim_led;
 //**********************************************
 //Коэффициенты, отображаемые из EEPROM
 //extern signed short Ktsrc[2];

@@ -15,5 +15,6 @@
 void blink(char,signed short,signed short,signed short);
 
 void blinker(void);
+void led_beep (void);
 
 #endif

@@ -1,6 +1,190 @@
 #include "led_break_drv.h"
+#include "beeper_drv.h"
 #include "main.h"
 #include "LPC17xx.H"
+
+
+
+
+void led_beep (void){
+	if(rejim_avar_led==0){
+		switch(rejim_led){
+		case 1: {  // работа от сети, АКБ не разряжается
+			LED_RED_OFF;
+			LED_GREEN_ON;
+			BEEPER_OFF;
+		break;}
+		case 2: {
+			LED_RED_ON;
+			LED_GREEN_ON;
+			BEEPER_OFF;
+		break;}
+		default:{
+			LED_RED_OFF;
+			LED_GREEN_OFF;
+			BEEPER_OFF;
+		}
+		}// end switch(rejim_led){
+	}
+	else {
+		switch(rejim_avar_led){
+		case 1: {
+			  if(count_rejim_led==1){
+			  	LED_GREEN_OFF;
+				LED_RED_ON;				
+			  }
+			  else if(count_rejim_led==20){
+			  	if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+			 }
+			 else if(count_rejim_led==40){
+			  	LED_GREEN_OFF;
+				LED_RED_ON;				
+			}
+			else if(count_rejim_led>60){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+				if(count_rejim_led>250) count_rejim_led=0;  
+			}
+
+		break;}
+		case 2: {
+			LED_GREEN_OFF;
+			LED_RED_ON;
+		break;}
+		case 3: {
+			if(count_rejim_led==1){
+			  	LED_GREEN_OFF;
+				LED_RED_ON;				
+			}
+			else if(count_rejim_led>20){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+				if(count_rejim_led>350) count_rejim_led=0;  
+			}
+
+
+		break;}
+		case 4: {
+		  	if(count_rejim_led==1){
+			  	LED_GREEN_OFF;
+				LED_RED_ON;				
+			}
+			else if(count_rejim_led>20){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+				if(count_rejim_led>120) count_rejim_led=0;  
+			}
+
+		break;}
+		case 5: {
+		 	if(count_rejim_led==1){
+			  	LED_GREEN_OFF;
+				LED_RED_OFF;				
+			}
+			else if(count_rejim_led==20){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+		   	}
+		   	else if(count_rejim_led==40){
+			  	LED_GREEN_OFF;
+				LED_RED_OFF;				
+			}
+			else if(count_rejim_led==60){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+		   	}
+			if(count_rejim_led>200) count_rejim_led=0;
+		break;}
+		case 6: {
+			if(count_rejim_led==1){
+			  	LED_GREEN_OFF;
+				LED_RED_OFF;				
+			}
+			else if(count_rejim_led==20){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+		   	}
+		   	else if(count_rejim_led==40){
+			  	LED_GREEN_OFF;
+				LED_RED_OFF;				
+			}
+			else if(count_rejim_led==60){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+		   	}
+			if(count_rejim_led==80){
+			  	LED_GREEN_OFF;
+				LED_RED_OFF;				
+			}
+			else if(count_rejim_led==100){
+				if(rejim_led==1){
+					LED_RED_OFF;
+					LED_GREEN_ON;
+				}
+				else if(rejim_led==2){
+					LED_RED_ON;
+					LED_GREEN_ON;
+				}
+		   	}
+			if(count_rejim_led>250) count_rejim_led=0;
+		
+
+		break;}
+		}//end switch(rejim_avar_led){
+	}
+
+}
+
+
 
 /*
 периодицность отсчета, т.е. периодичность опросов 1= 10мс 100Гц
