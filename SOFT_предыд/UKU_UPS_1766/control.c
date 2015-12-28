@@ -753,21 +753,129 @@ void matemat(void)
 {
 
 signed long temp_SL/*,temp_SL_*/;
+char /*temp,*/i;
 
+
+i=NUMB;
+	if(bps[i]._cnt<5)
+     	{
+     	bps[i]._Ii=bps[i]._buff[0]+(bps[i]._buff[1]*256);
+     	bps[i]._Uin=bps[i]._buff[2]+(bps[i]._buff[3]*256);
+     	bps[i]._Uii=bps[i]._buff[4]+(bps[i]._buff[5]*256);
+     	bps[i]._Ti=(signed)(bps[i]._buff[6]);
+     	bps[i]._adr_ee=bps[i]._buff[7];
+     	bps[i]._flags_tm=bps[i]._buff[8];
+	    bps[i]._rotor=bps[i]._buff[10]+(bps[i]._buff[11]*256); 
+     	} 
+	else 
+     	{
+     	bps[i]._Uii=0; 
+     	bps[i]._Ii=0;
+     	bps[i]._Uin=0;
+     	bps[i]._Ti=0;
+     	bps[i]._flags_tm=0; 
+	    bps[i]._rotor=0;
+     	}
+if (bps[i]._Uii>1900&&bps[i]._Uii<=2400) level_U=(bps[i]._Uii-1900)/50;
+else if (bps[i]._Uii>2400) level_U=10;
+else level_U=0;
+if (level_U>10)	level_U=10;
+
+snmp_inverter_voltage=	bps[i]._Uii/10;
+
+if (bps[i]._Ii>0&&bps[i]._Ii<=155)level_I=bps[i]._Ii*10/150;  // 15A при 150
+else if (bps[i]._Ii>155) level_I=0;
+else level_I=0;
+if (level_I>10)	level_I=10;
+//level_I=bps[i]._cnt/6;
+snmp_inverter_current=	bps[i]._Ii;
+
+snmp_inverter_temperature=	bps[i]._Ti;
+//snmp_inverter_temperature=	but;
+
+//if (bps[i]._Ti>0&&bps[i]._Ti<=80) level_Q=bps[i]._Ti/8;
+//else if (bps[i]._Ti>80) level_Q=10;
+//else level_Q=0;
 temp_SL=(signed long)adc_buff_[0]; //2618 (73V)
 temp_SL*=Kubat[0]; // min=1500
 temp_SL/=6400L;
 
 snmp_battery_voltage=(signed short)temp_SL;
 
+#ifndef BAT48
+if (temp_SL>500&&temp_SL<=720)level_Q=(temp_SL-500)/22;
+else if (temp_SL>720) level_Q=10;
+else level_Q=0;
+if (level_Q>10)	level_Q=10;
+#endif
+
+#ifdef BAT48
+if (temp_SL>400&&temp_SL<=570)level_Q=(temp_SL-400)/17;
+else if (temp_SL>570) level_Q=10;
+else level_Q=0;
+if (level_Q>10)	level_Q=10;
+
+#endif
+
 temp_SL=(signed long)adc_buff_[1];
 temp_SL-=(signed long)Kibat0[0];
 temp_SL*=(signed long)Kibat1[0];
 temp_SL/=1000L;
-snmp_battery_current=-1*(signed short)temp_SL;
-if(snmp_battery_current<-3 && count_iakb<200) count_iakb+=1;
-else count_iakb=0;
-					  
+snmp_battery_current=(signed short)temp_SL*(-1L);
+
+//snmp_battery_current=(signed short)adc_buff_[1];
+
+//snmp_battery_voltage=(signed short)adc_buff_[1];
+//snmp_battery_current=(signed short)Kibat0[0];
+
+//snmp_battery_current=(signed short)adc_buff_[1];
+
+temp_SL=(signed long)adc_buff_[2]; //2618 (73V)
+temp_SL*=Kunet; // min=1500
+temp_SL/=15000L;
+snmp_main_voltage=(signed short)temp_SL;
+//snmp_main_voltage=but;
+//
+//
+//
+//load_I=-(bat[0]._Ib/10)-(bat[1]._Ib/10);
+//
+//Isumm=0;
+//
+//for(i=0;i<NUMIST;i++)
+//     {
+//     if(bps[i]._cnt<5)Isumm+=bps[i]._Ii;
+//     }  
+//     
+//load_I=load_I+Isumm;
+//if(load_I<0)load_I=0;
+//
+// 
+//if (NUMINV)
+//	{
+//	for(i=4;i<(4+NUMINV);i++)// адресация инверторов начинается с 4			   /**/
+//	{
+//	if(bps[i]._cnt<25)
+//     	{
+//     	bps[i]._Ii=bps[i]._buff[0]+(bps[i]._buff[1]*256);
+//     	bps[i]._Uin=bps[i]._buff[2]+(bps[i]._buff[3]*256);
+//     	bps[i]._Uii=bps[i]._buff[4]+(bps[i]._buff[5]*256);
+//     	bps[i]._Ti=(signed)(bps[i]._buff[6]);
+//     	bps[i]._adr_ee=bps[i]._buff[7];
+//     	bps[i]._flags_tm=bps[i]._buff[8];
+//	    bps[i]._rotor=bps[i]._buff[10]+(bps[i]._buff[11]*256);    
+//     	} 
+//	else 
+//     	{
+//     	bps[i]._Uii=0; 
+//     	bps[i]._Ii=0;
+//     	bps[i]._Uin=0;
+//     	bps[i]._Ti=0;
+//     	bps[i]._flags_tm=0; 
+//	    bps[i]._rotor=0;    
+//     	}
+//     }
+//   }						  
 }
 
 ////-----------------------------------------------
@@ -811,10 +919,17 @@ NVIC_EnableIRQ(ADC_IRQn);             /* enable ADC Interrupt               */
 //-----------------------------------------------
 void adc_drv7(void) //(Uсети - постоянка)
 {
+//int temp_S;
+//char i;
+//signed short temp_SS;
 
 adc_self_ch_disp[0]=abs_pal(adc_self_ch_buff[1]-adc_self_ch_buff[0]);//adc_self_ch_buff[0]&0x0f80;
 adc_self_ch_disp[1]=abs_pal(adc_self_ch_buff[2]-adc_self_ch_buff[1]);//adc_self_ch_buff[1]&0x0f80;
 adc_self_ch_disp[2]=abs_pal(adc_self_ch_buff[2]-adc_self_ch_buff[0]);//adc_self_ch_buff[2]&0x0f80;
+
+//adc_self_ch_disp[0]=adc_self_ch_buff[0]&0x0ff0;
+//adc_self_ch_disp[1]=adc_self_ch_buff[1]&0x0ff0;
+//adc_self_ch_disp[2]=adc_self_ch_buff[2]&0x0ff0;
 
 
 if(adc_self_ch_disp[2]<300)//==adc_self_ch_disp[2])
@@ -829,8 +944,31 @@ else if(adc_self_ch_disp[0]<300)//==adc_self_ch_disp[1])
 	{
 	adc_result=adc_self_ch_buff[0];
 	}
+    //adc_result=92;
+
+//if(adc_ch_net)
+//	{
+
+	//main_power_buffer[0]+=(long)(adc_result);
+	//main_power_buffer[1]+=(long)(adc_result);
+	//main_power_buffer[2]+=(long)(adc_result);
+	//main_power_buffer[3]+=(long)(adc_result);
+
+/*	adc_net_buff_cnt++;
+	if(adc_net_buff_cnt>=0x1000)
+		{
+		adc_net_buff_cnt=0;
+		}
+	if((adc_net_buff_cnt&0x03ff)==0)
+		{
+		net_buff_=(short)((main_power_buffer[adc_net_buff_cnt>>10])>>8);
+		main_power_buffer[adc_net_buff_cnt>>10]=0;
+		} */
 
 
+//	} 
+//else if(!adc_ch_net)
+	{
 	adc_buff[adc_ch][adc_ch_cnt]=(long)adc_result;
 	
 	if((adc_ch_cnt&0x03)==0)
@@ -852,11 +990,64 @@ else if(adc_self_ch_disp[0]<300)//==adc_self_ch_disp[1])
 		adc_ch_cnt++;
 		if(adc_ch_cnt>=16)adc_ch_cnt=0;
 		}
+	}
+
+//adc_buff[adc_ch][adc_cnt1]=(adc_self_ch_buff[2]+adc_self_ch_buff[1])/2;
+
+//if(adc_buff[adc_ch][adc_cnt1]<adc_buff_min[adc_ch])adc_buff_min[adc_ch]=adc_buff[adc_ch][adc_cnt1];
+//if(adc_buff[adc_ch][adc_cnt1]>adc_buff_max[adc_ch])adc_buff_max[adc_ch]=adc_buff[adc_ch][adc_cnt1];
+/*
+	{
+	if((adc_cnt1&0x03)==0)
+		{
+		temp_S=0;
+		for(i=0;i<16;i++)
+			{
+			temp_S+=adc_buff[adc_ch][i];
+			} 
+         	adc_buff_[adc_ch]=temp_S>>4;
+          }
+	}*/
 
 
+		  
 
 adc_self_ch_cnt=0;
 
+//adc_ch_net++;
+//adc_ch_net&=1;
+
+//SET_REG(LPC_GPIO0->FIODIR,7,5,3);
+//SET_REG(LPC_GPIO0->FIOPIN,adc_ch,5,3);
+/*
+if(adc_ch_net)
+	{
+	LPC_GPIO2->FIODIR|=(1<<7);				 // ??
+	LPC_GPIO2->FIOPIN|=(1<<7);
+//	SET_REG(LPC_ADC->ADCR,1<<2,0,8);		// AD0.2 P0.25
+	}
+else
+	{
+	LPC_GPIO2->FIODIR|=(1<<7);
+	LPC_GPIO2->FIOPIN&=~(1<<7);
+	if(adc_ch==0)	SET_REG(LPC_ADC->ADCR,1<<0,0,8);   // AD0.0 P0.23
+	else 			SET_REG(LPC_ADC->ADCR,1<<1,0,8);	   // AD0.1 P0.24
+
+
+//	SET_REG(LPC_GPIO0->FIODIR,1,28,1);
+//	SET_REG(LPC_GPIO1->FIODIR,1,30,1);
+//	SET_REG(LPC_GPIO3->FIODIR,1,26,1);
+//
+//	if(!(adc_ch&(1<<0)))SET_REG(LPC_GPIO0->FIOPIN,0,28,1);
+//	else 			SET_REG(LPC_GPIO0->FIOPIN,1,28,1);
+//
+//	if(!(adc_ch&(1<<1)))SET_REG(LPC_GPIO1->FIOPIN,0,30,1);
+//	else 			SET_REG(LPC_GPIO1->FIOPIN,1,30,1);
+//
+//	if(!(adc_ch&(1<<2)))SET_REG(LPC_GPIO3->FIOPIN,0,26,1);
+//	else 			SET_REG(LPC_GPIO3->FIOPIN,1,26,1);
+	}
+*/	
 
 if(adc_ch==0)		SET_REG(LPC_ADC->ADCR,1<<0,0,8);   // AD0.0 P0.23
 else if(adc_ch==1) 	SET_REG(LPC_ADC->ADCR,1<<1,0,8);	   // AD0.1 P0.24
@@ -866,29 +1057,155 @@ else if(adc_ch==2) 	SET_REG(LPC_ADC->ADCR,1<<5,0,8);	   // AD0.5 P1.31
 LPC_ADC->ADCR |=  (1<<24);	   // start conversion
 
 }
-//*******************
-void sk_init (void){
-LPC_GPIO1->FIODIR&=~(1<<26);
-LPC_GPIO1->FIODIR&=~(1<<27);
-LPC_GPIO1->FIODIR|=(1<<28);
-LPC_GPIO1->FIODIR|=(1<<29);
-}
-//*******************
-void rele_init (void){
-LPC_GPIO1->FIODIR|=(1<<22);	// калибровка нуля Iбат
-LPC_GPIO1->FIODIR|=(1<<24);
-LPC_GPIO1->FIODIR|=(1<<25);
 
-}
 
 //*************-----------------------------------------------
 void rele_hndl(void)
 {
+LPC_GPIO1->FIODIR|=(1<<23);
+if (bps[NUMB]._av&(0x1F)) 
+	{
+	rele_cnt++;
+	if(rele_cnt>50)rele_cnt=50;
+	}
+else
+	{
+	rele_cnt--;
+	if(rele_cnt<0)rele_cnt=0;
+	}
+if(rele_cnt>48)bRELE=1;
+else if(rele_cnt<2)bRELE=0;
 
-
-//if(bRELE)LPC_GPIO1->FIOCLR|=(1<<24);
-//else LPC_GPIO1->FIOSET|=(1<<24);
-
+if(bRELE)LPC_GPIO1->FIOCLR|=(1<<23);
+else LPC_GPIO1->FIOSET|=(1<<23);
+////static char cnt_rel_sam;
+////char temp;
+//
+////temp=0;
+//
+//
+//SET_REG(LPC_PINCON->PINSEL0,0,4*2,6*2);
+//SET_REG(LPC_GPIO0->FIODIR,63,4,6);
+//SET_REG(LPC_PINCON->PINSEL7,0,(25-16)*2,2);
+//SET_REG(LPC_GPIO3->FIODIR,1,25,1);
+//SET_REG(LPC_PINCON->PINSEL1,0,(29-16)*2,2);
+//SET_REG(LPC_GPIO0->FIODIR,1,29,1);
+//
+//
+//
+//
+//
+//
+//if(((bat[0]._rel_stat)  || (tbatdisable_stat!=tbdsON))&&(tbatdisable_cmnd))
+//	{
+//	SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_BAT1,1);
+//	}
+//else SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_BAT1,1);	  	
+//
+//if(((bat[1]._rel_stat) || (tbatdisable_stat!=tbdsON))&&(tbatdisable_cmnd))
+//	{
+//	SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_BAT2,1);
+//	}
+//else SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_BAT2,1);
+//
+//
+//if(mess_find_unvol((MESS2RELE_HNDL))&&(PARAM_RELE_SAMOKALIBR)) 
+//	{
+//	if(mess_data[1]==1)SET_REG(LPC_GPIO0->FIOSET,1,29,1);
+//	else if(mess_data[1]==0) SET_REG(LPC_GPIO0->FIOCLR,1,29,1);
+//	}
+//else SET_REG(LPC_GPIO0->FIOCLR,1,29,1);
+//
+//
+////Реле аварии сети
+//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_AV_NET))
+//	{
+//	if(mess_data[1]==0) SET_REG(LPC_GPIO3->FIOSET,1,SHIFT_REL_AV_NET,1);
+//	else SET_REG(LPC_GPIO3->FIOCLR,1,SHIFT_REL_AV_NET,1);
+//	}
+//else	if(!(avar_ind_stat&0x00000001)) SET_REG(LPC_GPIO3->FIOSET,1,SHIFT_REL_AV_NET,1);
+//else SET_REG(LPC_GPIO3->FIOCLR,1,SHIFT_REL_AV_NET,1);
+//
+//
+//#ifdef U
+////Реле общей аварии
+//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_AV_COMM))
+//	{
+//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_AV_COMM);
+//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_AV_COMM);
+//	}
+//else 
+//	{
+//     if(  (!(avar_ind_stat&0x00007fff)) &&
+//          ((!SK_REL_EN[0]) || (sk_av_stat[0]!=sasON))  &&
+//          ((!SK_REL_EN[1]) || (sk_av_stat[1]!=sasON))  &&
+//          ((!SK_REL_EN[2]) || (sk_av_stat[2]!=sasON))  /*&&
+//          ((!SK_REL_EN[3]) || (sk_av_stat[3]!=sasON))*/  )temp&=~(1<<SHIFT_REL_AV_COMM);
+//     else temp|=(1<<SHIFT_REL_AV_COMM);
+//	}
+//
+//
+////Реле осевого вентилятора
+//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_VENT))
+//	{
+//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_VENT);
+//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_VENT);
+//	}
+//else 
+//	{
+//	if(mixer_vent_stat==mvsOFF) temp&=~(1<<SHIFT_REL_VENT);
+//     else temp|=(1<<SHIFT_REL_VENT);
+//	}
+///*
+////Реле аварии батарей
+//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_AV_BAT))
+//	{
+//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_AV_BAT);
+//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_AV_BAT);
+//     }
+//else 
+//	{
+//	if(!(avar_ind_stat&0x00000006)) temp&=~(1<<SHIFT_REL_AV_BAT);
+//     else temp|=(1<<SHIFT_REL_AV_BAT);
+//	} 
+//*/
+////Реле выключения нагрузки
+//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_LOAD_OFF))
+//	{
+//	if(mess_data[1]==0) temp&=~(1<<SHIFT_REL_LOAD_OFF);
+//	else if(mess_data[1]==1) temp|=(1<<SHIFT_REL_LOAD_OFF);
+//     }
+//else if(tloaddisable_cmnd==0)
+//	{
+//	temp|=(1<<SHIFT_REL_LOAD_OFF);
+//	}
+//else if((tloaddisable_cmnd)&&(tloaddisable_cmnd<=11))
+//	{
+//	temp&=~(1<<SHIFT_REL_LOAD_OFF);
+//	}
+//
+//else 
+//	{
+//	if(!(tloaddisable_stat==tldsON)) temp&=~(1<<SHIFT_REL_LOAD_OFF);
+//     else temp|=(1<<SHIFT_REL_LOAD_OFF);
+//	} 
+//
+//
+//
+////Реле освещения
+//if((mess_find_unvol(MESS2RELE_HNDL))&&	(mess_data[0]==PARAM_RELE_LIGHT))
+//	{
+//	if(mess_data[1]==0) SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_LIGHT,1);
+//	else if(mess_data[1]==1) SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_LIGHT,1);
+//     }
+//else 
+//	{
+//	if(sk_av_stat[0]!=sasON) SET_REG(LPC_GPIO0->FIOCLR,1,SHIFT_REL_LIGHT,1);
+//     else SET_REG(LPC_GPIO0->FIOSET,1,SHIFT_REL_LIGHT,1);
+//	}
+//
+//rele_stat=temp;
+//#endif
 }
 
 ////-----------------------------------------------

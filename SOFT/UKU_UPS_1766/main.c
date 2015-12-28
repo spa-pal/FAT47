@@ -53,7 +53,7 @@ unsigned char poz_flash, data_can_reset;
 unsigned char par_glav_menu[10]; // [0]-включение/отключение гл. меню
 								 // [1]задержка перед включением
 							   	 // [2]интервал переключения параметров
-
+unsigned char u_bat_on, u_bat_off;
 void led_beep(void);
 extern LOCALM localm[];
 extern U8 own_hw_adr[];
@@ -803,7 +803,7 @@ while(1)
 	if(f5Hz)
 		{
 		f5Hz=0;
-		//avar_hndl();
+		avar_hndl();
 		//if (poz_display<10) 
 		memo_read();
 

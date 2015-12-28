@@ -7,7 +7,6 @@
 #include "control.h"
 #include "beeper_drv.h"
 #include "led_break_drv.h"
-#include "snmp_data_file.h" 
 
 
      
@@ -60,10 +59,59 @@ extern char net_av;
 //-----------------------------------------------
 void avar_hndl(void)
 {
-if(count_iakb<8)rejim_led=1;
-else rejim_led=2;
+//static unsigned avar_stat_old;
+char i;
+//unsigned avar_stat_new,avar_stat_offed;
+
+if(net_av)		SET_REG(avar_stat,1,0,1);
+else	   			SET_REG(avar_stat,0,0,1);
+
+//for(i=0;i<2;i++)
+//	{
+//	if(bat[i]._av&1)	SET_REG(avar_stat,1,1+i,1);
+//	else	   		SET_REG(avar_stat,0,1+i,1);
+//	}
+
+for(i=0;i<12;i++)
+	{
+ 	if(bps[i]._av&&bps[i]._device==dSRC)	SET_REG(avar_stat,1,3+i,1);
+	else if (bps[i]._av&&bps[i]._device==dINV) SET_REG(avar_stat,1,15+i,1);
+	else
+		{
+		SET_REG(avar_stat,0,3+i,1);
+		SET_REG(avar_stat,0,15+i,1);
+		}					 
+	}
 
 
+/*for(i=0;i<4;i++)
+	{
+	if(av_dt[i])	SET_REG(avar_stat,1,21+i,1);
+	else	   		SET_REG(avar_stat,0,21+i,1);
+	}  */
+//for(i=0;i<4;i++)
+//	{
+//	if(sk_av_stat[i]==sasON)	SET_REG(avar_stat,1,25+i,1);
+//	else	   		SET_REG(avar_stat,0,25+i,1);
+//	}
+
+avar_stat_new=(avar_stat^avar_stat_old)&avar_stat;
+
+avar_ind_stat|=avar_stat_new;
+
+//if((SK_ZVUK_EN[0])) avar_ind_stat&=(~(1UL<<25));
+//if((SK_ZVUK_EN[1])) avar_ind_stat&=(~(1UL<<26));
+//if((SK_ZVUK_EN[2])) avar_ind_stat&=(~(1UL<<27));
+//if((SK_ZVUK_EN[3])) avar_ind_stat&=(~(1UL<<28));	
+
+
+avar_stat_offed=~((avar_stat^avar_stat_old)&avar_stat_old);
+
+//if(!AV_OFF_AVT)avar_stat_offed|=0xfffffffe;
+
+avar_ind_stat&=avar_stat_offed; 
+
+avar_stat_old=avar_stat;
 }
 
 ////-----------------------------------------------

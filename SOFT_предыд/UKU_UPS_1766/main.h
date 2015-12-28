@@ -8,6 +8,11 @@
 
 #define GET_REG( reg, shift, lengt) 		( (reg & MASK_OFFSET(shift,lengt)) >> shift)
 #define SET_REG( reg, val, shift, lengt)  	reg = ( (reg & ~MASK_OFFSET(shift,lengt)) | (val << shift) )
+//--------------реле
+#define COIL_ON		LPC_GPIO1->FIODIR|=(1<<23);LPC_GPIO1->FIOSET|=(1<<23)
+#define COIL_OFF	LPC_GPIO1->FIODIR|=(1<<23);LPC_GPIO1->FIOCLR|=(1<<23)
+#define COIL_CAL_ON		LPC_GPIO1->FIODIR|=(1<<22);LPC_GPIO1->FIOSET|=(1<<22)
+#define COIL_CAL_OFF	LPC_GPIO1->FIODIR|=(1<<22);LPC_GPIO1->FIOCLR|=(1<<22)
 
 //-----------------------------------
 #define CNT_SRC_MAX	10
@@ -22,11 +27,7 @@ typedef enum ind_mode{norm,reverse,alone,flash} ind_mode;	   // 3 вида режима от
 extern ind_mode level_U_mode,level_I_mode,level_Q_mode;
 extern signed short flash_net_def_cnt;
 
-extern unsigned char canzz_tmp, canzx_tmp;
-extern unsigned char count_iakb; // длительность непрерывных данных отрицательного тока АКБ
-extern unsigned char rejim_led, rejim_avar_led; // режим свечения светодиода
-extern unsigned short count_rejim_led;
-extern unsigned char u_bat_on, u_bat_off;
+
 //**********************************************
 //Коэффициенты, отображаемые из EEPROM
 //extern signed short Ktsrc[2];
@@ -167,8 +168,8 @@ extern signed short ETH_DEF_GATW_2;
 extern signed short ETH_DEF_GATW_3;
 extern signed short ETH_DEF_GATW_4;
 
-extern signed short ETH_IS_ON;
-extern signed short ETH_DHCP_ON;
+//extern signed short ETH_IS_ON;
+//extern signed short ETH_DHCP_ON;
 //extern signed short ETH_IP_1;
 //extern signed short ETH_IP_2;
 //extern signed short ETH_IP_3;
@@ -177,8 +178,8 @@ extern signed short ETH_DHCP_ON;
 //extern signed short ETH_MASK_2;
 //extern signed short ETH_MASK_3;
 //extern signed short ETH_MASK_4;
-extern signed short ETH_SNMP_PORT_READ;
-extern signed short ETH_SNMP_PORT_WRITE;
+//extern signed short ETH_SNMP_PORT_READ;
+//extern signed short ETH_SNMP_PORT_WRITE;
 //extern signed short ETH_GW_1;
 //extern signed short ETH_GW_2;
 //extern signed short ETH_GW_3;
@@ -336,7 +337,6 @@ extern stuct_ind a,b[10];
 
 signed short abs_pal(signed short in);
 void ADC_IRQHandler(void);
-void delay_us(long del);
 
 
 #define OID_ENTERPRISE 	OID0(1,3), 6, 1, 4, 1, 130, 131, 31
