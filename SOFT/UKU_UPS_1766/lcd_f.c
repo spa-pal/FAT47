@@ -1,13 +1,13 @@
 
 void ssd1306_data(char data);
-#define N_sim 16 // число символов в строке ЖКИ	//10
-#define N_toh 8 // ширина символа в точках	//12
-#define N_ss 12 //  ширина символа в файле
+unsigned char  N_sim;// 16 // число символов в строке ЖКИ	//10
+unsigned char  N_toh;// 8 // ширина символа в точках	//12
+unsigned char N_ss; //  ширина символа в файле
 //заполнение строк буфера до 
 //соответствующего размера
-void filling_lcd_buffer (char *str)
+void filling_lcd_buffer (char *str, unsigned char N_sim)
 {
-unsigned char i,j,k,_lcd_buffer[(N_sim+1)*4];
+unsigned char i,j,k,_lcd_buffer[(16+1)*4];	// 16- это N_sim
 i=0;
 j=0;
 
@@ -31,6 +31,125 @@ if(*(str+j)==0x0a) j=j+1;
 }
 for (i=0;i<N_sim*4;i++)  *(str+i)=_lcd_buffer[i];
 
+}
+
+//*****************************************************************************************
+void bitmap_hndl17x16(void)// заполнение массива точек lcd_bitmap символами из lcd_buffer 
+{
+
+char s;
+short x,i;
+unsigned int ptr_bitmap, z;
+N_ss=9;
+N_sim=8;
+N_toh=16;
+for(i=0;i<1023;i++)
+	{
+	lcd_bitmap[i]=0;
+	}
+for(i=0;i<4;i++) {
+	for(x=0;x<N_sim;x++)
+	 	{
+		s=lcd_buffer[x+N_sim*i];
+			if(s>191) z=((s-97)*N_ss*2);//если 192 то надо 95
+			else if(s>31) z=(s-32)*N_ss*2;
+			else z=0;
+
+			ptr_bitmap=(256*(unsigned)i)+(N_toh*x);
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+2];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+4];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+6];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+8];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+10];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+12];
+			//lcd_bitmap[ptr_bitmap++]=0x00;
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+14];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+16];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+18];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+20];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+22];
+			ptr_bitmap=(256*(unsigned)i)+(N_toh*x)+128;
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+1];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+3];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+5];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+7];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+9];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+11];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+13];
+			//lcd_bitmap[ptr_bitmap++]=0x00;
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+15];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+17];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+19];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+21];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+23];
+			}
+
+	
+
+	 
+	}
+
+}    
+//***************************************
+
+//***************************************
+
+void bitmap_hndl16x8(void)// заполнение массива точек lcd_bitmap символами из lcd_buffer 
+{
+char s;
+short x,i;
+unsigned int ptr_bitmap, z;
+N_ss=9;
+N_sim=16;
+N_toh=8;
+for(i=0;i<1023;i++)
+	{
+	lcd_bitmap[i]=0;
+	}
+for(i=0;i<4;i++) {
+	for(x=0;x<N_sim;x++)
+	 	{
+		s=lcd_buffer[x+N_sim*i];
+			if(s>191) z=((s-97)*N_ss*2);//если 192 то надо 95
+			else if(s>31) z=(s-32)*N_ss*2;
+			else z=0;
+
+			ptr_bitmap=(256*(unsigned)i)+(N_toh*x);
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+2];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+4];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+6];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+8];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+10];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+12];
+			//lcd_bitmap[ptr_bitmap++]=0x00;
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+14];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+16];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+18];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+20];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+22];
+			ptr_bitmap=(256*(unsigned)i)+(N_toh*x)+128;
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+1];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+3];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+5];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+7];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+9];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+11];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+13];
+			//lcd_bitmap[ptr_bitmap++]=0x00;
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+15];
+			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+17];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+19];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+21];
+			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+23];
+			}
+
+	
+
+	 
+	}
+
 }    
 //***************************************
 
@@ -39,7 +158,9 @@ void bitmap_hndl16x9(void)// заполнение массива точек lcd_bitmap символами из lc
 char s;
 short x,i;
 unsigned int ptr_bitmap, z;
-
+N_ss=12;
+N_sim=16;
+N_toh=8;
 for(i=0;i<1023;i++)
 	{
 	lcd_bitmap[i]=0;
@@ -88,19 +209,7 @@ for(i=0;i<4;i++) {
 	}
 
 }
-//************* заполнение 	lcd_buffer
-/*
-void ind_hndl(void)
-{
-if(ind==iMn)
-	{
-	}
-if(ind==iDef_net_set)
-	{
-	}
-}
-*/
-
+//*****************************************************************************
 void ind_hndl(void)
 {
 //char* ptrs[40];
@@ -115,7 +224,7 @@ switch (poz_display) {
 	case 0:{
 		sprintf(lcd_buffer," Uвых=%-uВ\n Iвых=%-u.%01uА\n Pвых=%-dВт\n Uсети=%-uВ",
 							snmp_inverter_voltage/10,
-							snmp_inverter_current/10,snmp_inverter_current%10,
+							snmp_inverter_current/100,snmp_inverter_current%100,
 							snmp_inverter_power,
 							snmp_main_voltage/10
 							);
@@ -548,9 +657,12 @@ switch (poz_display) {
  	short iiii_;
 	
 	ind_hndl();
-	filling_lcd_buffer(lcd_buffer);
+	//sprintf(lcd_buffer," !123456\n ABCD\n АБСД\n абсд");
+	//sprintf(lcd_buffer,"\n ИНИЦИАЛИЗАЦИЯ\n   ИНТЕРНЕТ\n");
+	N_sim=16;
+	filling_lcd_buffer(lcd_buffer, N_sim);
 	if(poz_display<250) lcd_buffer[poz_kursor*16]='>'; // вставляем курсор
- 	bitmap_hndl16x9();
+ 	bitmap_hndl16x8();
  	for(iiii_=0;iiii_<1024;iiii_++)	ssd1306_data(lcd_bitmap[iiii_]);
  }
 

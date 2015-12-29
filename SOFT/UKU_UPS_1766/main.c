@@ -21,6 +21,8 @@
 #include "ssd_1306.h"
 //#include "simbol.h"
 #include "simbol16x9.h"
+#include "simbol17x16.h"
+#include "simbol_p27CircleCyr_10ptBitmaps.h"
 #include "memo.h"
 #include "stdio.h"
 #include "string.h"
@@ -636,8 +638,9 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 
 if(ETH_IS_ON){
 	sprintf(lcd_buffer,"\n »Õ»÷»¿À»«¿÷»ﬂ\n   »Õ“≈–Õ≈“\n");
-	filling_lcd_buffer(lcd_buffer);
-	bitmap_hndl16x9();
+	N_sim=16;
+	filling_lcd_buffer(lcd_buffer, N_sim);
+	bitmap_hndl16x8();
 	for(iiii_=0;iiii_<1024;iiii_++)	ssd1306_data(lcd_bitmap[iiii_]);
 
 	mac_adr[5]=*((char*)&SERIAL_NUMBER);
@@ -804,6 +807,7 @@ while(1)
 		{
 		f5Hz=0;
 		avar_hndl();
+
 		//if (poz_display<10) 
 		memo_read();
 

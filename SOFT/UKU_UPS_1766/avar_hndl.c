@@ -60,8 +60,8 @@ extern char net_av;
 //-----------------------------------------------
 void avar_hndl(void)
 {
-if(count_iakb<8)rejim_led=1;
-else rejim_led=2;
+if(count_iakb>8 || snmp_main_voltage<200) rejim_led=2;
+else rejim_led=1;
 
 
 }
