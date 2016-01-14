@@ -132,12 +132,26 @@ void analiz_keypad(void){
 	case 23:{ // Uбат мах
 		if(flag_up==2 ) {flag_up++; kurs_up1();}
 		if(flag_down==2) {flag_down++; kurs_down();}
-		
+		if(flag_left==2 || flag_left==30) {
+			flag_left=3;
+			can1_out(27,27,0xEE,0x94,0x94,0,0,0);
+		}
+		if(flag_right==2 || flag_right==30) {
+			flag_right=3;
+			can1_out(27,27,0xEE,0x92,0x92,0,0,0);
+		}		
 	break;}
 	case 24:{ // Uбат мин
 		if(flag_up==2 ) {flag_up++; kurs_up1();}
 		if(flag_down==2) {flag_down++; kurs_down();}
-		
+		if(flag_left==2 || flag_left==30) {
+			flag_left=3;
+			can1_out(27,27,0xEE,0x84,0x84,0,0,0);
+		}
+		if(flag_right==2 || flag_right==30) {
+			flag_right=3;
+			can1_out(27,27,0xEE,0x82,0x82,0,0,0);
+		}
 	break;}
 	case 25:{ // вход в меню калибровка через пароль
 		if(flag_up==2 ) {flag_up++; kurs_up1();}
@@ -178,7 +192,7 @@ void analiz_keypad(void){
 		}
 		if(flag_f==2) {flag_f++; can1_out(27,27,0xEE,0x21,0x21,0,0,0);}
 	break;}
-	case 33:{   // мощьность инвертора 
+	case 33:{   // мощность инвертора 
 		if(flag_up==2 ) {flag_up++; kurs_up1();}
 		if(flag_down==2) {flag_down++; kurs_down();}
 		if(flag_left==2 || flag_left==5) {
@@ -225,14 +239,18 @@ void analiz_keypad(void){
 		if(flag_down==2) {flag_down++; kurs_down();}
 		if(flag_left==2 || flag_left==5) {
 			flag_left=3;
-			if(Kubat[0]>1 && count_left<50) Kubat[0]-=1;
-			else if(Kubat[0]>1+count_left/10) Kubat[0]-=1+count_left/10;
-			lc640_write_int(EE_KUBAT1,Kubat[0]);
+			//if(Kubat[0]>1 && count_left<50) Kubat[0]-=1;
+			//else if(Kubat[0]>1+count_left/10) Kubat[0]-=1+count_left/10;
+			//lc640_write_int(EE_KUBAT1,Kubat[0]);
+			if(count_left==0xFF) can1_out(27,27,0xEE,0x75,0x75,0,0,0);
+			else can1_out(27,27,0xEE,0x74,0x74,0,0,0);
 		}
 		if(flag_right==2 || flag_right==5) {flag_right=3;
-			if( count_right<50 && Kubat[0]<10000L) Kubat[0]+=1; 
-			else if(Kubat[0]<10000L) Kubat[0]+=1+count_right/10;
-			lc640_write_int(EE_KUBAT1,Kubat[0]);
+			//if( count_right<50 && Kubat[0]<10000L) Kubat[0]+=1; 
+			//else if(Kubat[0]<10000L) Kubat[0]+=1+count_right/10;
+			//lc640_write_int(EE_KUBAT1,Kubat[0]);
+			if(count_right==0xFF) can1_out(27,27,0xEE,0x73,0x73,0,0,0);
+			else can1_out(27,27,0xEE,0x72,0x72,0,0,0);
 		}
 		
 	break;}
@@ -244,7 +262,7 @@ void analiz_keypad(void){
 			lc640_write_int(EE_KI1BAT1,Kibat1[0]);
 		}
 		if(flag_right==2 || flag_right==15) {flag_right=5; 
-			if(Kibat1[0]<8000) Kibat1[0]+=1+count_right/10;
+			if(Kibat1[0]<20000) Kibat1[0]+=1+count_right/10;
 			lc640_write_int(EE_KI1BAT1,Kibat1[0]);
 		}
 		if(flag_f==2) {flag_f++; 

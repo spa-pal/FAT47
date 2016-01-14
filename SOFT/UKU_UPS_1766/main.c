@@ -1,4 +1,8 @@
 #include "LPC17xx.H"
+unsigned char delete_temp;
+
+
+
 #include "main.h"                   /* LPC17xx definitions                */
 //#include "ports_operations.h"
 //#include "button_drv.h"
@@ -55,6 +59,7 @@ unsigned char poz_flash, data_can_reset;
 unsigned char par_glav_menu[10]; // [0]-включение/отключение гл. меню
 								 // [1]задержка перед включением
 							   	 // [2]интервал переключения параметров
+unsigned char delay_glav_menu, intelval_glav_menu;
 unsigned char u_bat_on, u_bat_off;
 void led_beep(void);
 extern LOCALM localm[];
@@ -542,6 +547,19 @@ if (++t1==1000)
 	}
 
 }
+//**********************************************
+void glav_menu_hndl (void){
+	if(par_glav_menu[0]){
+		if(delay_glav_menu==0){
+		
+		
+		}
+		else delay_glav_menu-=1;	
+
+
+	}
+
+}
 //===============================================
 //===============================================
 #include "oleg_keypad.h"
@@ -639,7 +657,7 @@ ssd1306_init(SSD1306_SWITCHCAPVCC);
 if(ETH_IS_ON){
 	sprintf(lcd_buffer,"\n ИНИЦИАЛИЗАЦИЯ\n   ИНТЕРНЕТ\n");
 	N_sim=16;
-	filling_lcd_buffer(lcd_buffer, N_sim);
+	filling_lcd_buffer(lcd_buffer, N_sim, 4);
 	bitmap_hndl16x8();
 	for(iiii_=0;iiii_<1024;iiii_++)	ssd1306_data(lcd_bitmap[iiii_]);
 
@@ -811,6 +829,8 @@ while(1)
 		//if (poz_display<10) 
 		memo_read();
 
+		if( (poz_display>19 && poz_display<24) || (poz_display>34 && poz_display<38) ) can1_out(27,27,0xFD,0,0,0,0,0);
+		
 		matemat();
 		rele_hndl();
 		snmp_data();
@@ -845,10 +865,11 @@ while(1)
 			lc640_write_int(EE_KI0BAT1,Kibat0[0]);
 		}
 		if(count_kalibr_i_bat>605) {count_kalibr_i_bat=0; RELE_I_OFF; }
-		if(poz_display==35 || poz_display==36 || poz_display==37) can1_out(27,27,0xFD,0,0,0,0,0);
 		
 		
 		if(main_cnt<1000)main_cnt++;
+
+		glav_menu_hndl();
 
 
 

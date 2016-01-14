@@ -753,12 +753,12 @@ void matemat(void)
 {
 
 signed long temp_SL/*,temp_SL_*/;
-
+/*
 temp_SL=(signed long)adc_buff_[0]; //2618 (73V)
 temp_SL*=Kubat[0]; // min=1500
 temp_SL/=6400L;
-
 snmp_battery_voltage=(signed short)temp_SL;
+*/
 
 temp_SL=(signed long)adc_buff_[1];
 temp_SL-=(signed long)Kibat0[0];

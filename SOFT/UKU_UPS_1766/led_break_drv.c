@@ -12,17 +12,14 @@ void led_beep (void){
 		case 1: {  // работа от сети, АКБ не разряжается
 			LED_RED_OFF;
 			LED_GREEN_ON;
-			BEEPER_OFF;
 		break;}
 		case 2: {
 			LED_RED_ON;
 			LED_GREEN_ON;
-			BEEPER_OFF;
 		break;}
 		default:{
 			LED_RED_OFF;
 			LED_GREEN_OFF;
-			BEEPER_OFF;
 		}
 		}// end switch(rejim_led){
 	}

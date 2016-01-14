@@ -5,13 +5,13 @@ unsigned char  N_toh;// 8 // ширина символа в точках	//12
 unsigned char N_ss; //  ширина символа в файле
 //заполнение строк буфера до 
 //соответствующего размера
-void filling_lcd_buffer (char *str, unsigned char N_sim)
+void filling_lcd_buffer (char *str, unsigned char N_sim, unsigned char n_strok)
 {
 unsigned char i,j,k,_lcd_buffer[(16+1)*4];	// 16- это N_sim
 i=0;
 j=0;
 
-for (k=1;k<5;k++)
+for (k=1;k<=n_strok;k++)
 {
 for (i=(N_sim)*k-N_sim;i<((N_sim)*k);i++)
 {
@@ -33,56 +33,122 @@ for (i=0;i<N_sim*4;i++)  *(str+i)=_lcd_buffer[i];
 
 }
 
+
 //*****************************************************************************************
-void bitmap_hndl17x16(void)// заполнение массива точек lcd_bitmap символами из lcd_buffer 
+void bitmap_hndl21x16(void)// заполнение массива точек lcd_bitmap символами из lcd_buffer 
 {
 
 char s;
 short x,i;
 unsigned int ptr_bitmap, z;
-N_ss=9;
-N_sim=8;
-N_toh=16;
+N_ss=21;  //  ширина символа в файле
+N_sim=6;  // число символов в строке ЖКИ
+N_toh=21; // ширина символа в точках
 for(i=0;i<1023;i++)
 	{
 	lcd_bitmap[i]=0;
 	}
-for(i=0;i<4;i++) {
+for(i=0;i<2;i++) {
 	for(x=0;x<N_sim;x++)
 	 	{
 		s=lcd_buffer[x+N_sim*i];
-			if(s>191) z=((s-97)*N_ss*2);//если 192 то надо 95
-			else if(s>31) z=(s-32)*N_ss*2;
+			if(s>191) z=((s-97)*N_ss*4);//если 192 то надо 95
+			else if(s>31) z=(s-32)*N_ss*4;
 			else z=0;
 
-			ptr_bitmap=(256*(unsigned)i)+(N_toh*x);
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+2];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+4];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+6];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+8];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+10];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+12];
-			//lcd_bitmap[ptr_bitmap++]=0x00;
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+14];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+16];
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+18];
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+20];
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+22];
-			ptr_bitmap=(256*(unsigned)i)+(N_toh*x)+128;
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+1];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+3];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+5];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+7];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+9];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+11];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+13];
-			//lcd_bitmap[ptr_bitmap++]=0x00;
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+15];
-			lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+17];
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+19];
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+21];
-			//lcd_bitmap[ptr_bitmap++]=p27CircleCyr_10ptBitmaps[z+23];
+			ptr_bitmap=(512*(unsigned)i)+(N_toh*x);
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+4];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+8];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+12];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+16];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+20];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+24];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+28];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+32];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+36];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+40];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+44];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+48];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+52];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+56];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+60];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+64];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+68];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+72];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+76];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+80];
+
+			ptr_bitmap=(512*(unsigned)i)+(N_toh*x)+128;
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+1];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+5];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+9];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+13];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+17];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+21];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+25];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+29];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+33];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+37];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+41];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+45];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+49];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+53];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+57];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+61];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+65];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+69];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+73];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+77];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+81];
+
+			ptr_bitmap=(512*(unsigned)i)+(N_toh*x)+256;
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+2];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+6];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+10];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+14];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+18];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+22];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+26];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+30];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+34];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+38];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+42];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+46];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+50];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+54];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+58];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+62];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+66];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+70];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+74];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+78];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+82];
+
+			ptr_bitmap=(512*(unsigned)i)+(N_toh*x)+384;
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+3];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+7];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+11];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+15];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+19];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+23];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+27];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+31];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+35];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+39];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+43];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+47];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+51];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+55];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+59];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+63];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+67];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+71];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+75];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+79];
+			lcd_bitmap[ptr_bitmap++]=caracter21x16[z+83];
+
+
 			}
 
 	
@@ -222,16 +288,16 @@ char snmp_Community_temp[10], i;
 
 switch (poz_display) {
 	case 0:{
-		sprintf(lcd_buffer," Uвых=%-uВ\n Iвых=%-u.%01uА\n Pвых=%-dВт\n Uсети=%-uВ",
+		sprintf(lcd_buffer," Uвых=%-uВ\n Iвых=%-u.%01uА\n Pвых=%-dВт\n Uсети=%X",
 							snmp_inverter_voltage/10,
-							snmp_inverter_current/100,snmp_inverter_current%100,
+							snmp_inverter_current/10,snmp_inverter_current%10,
 							snmp_inverter_power,
-							snmp_main_voltage/10
+							RXBUFF[4]//snmp_main_voltage/10
 							);
 	break;}
 	case 1:{
-		sprintf(lcd_buffer," Iвых=%-u.%02uА\n Pвых=%-dВт\n Uсети=%-uВ\n t=%d'C",
-							snmp_inverter_current/100,snmp_inverter_current%100,
+		sprintf(lcd_buffer," Iвых=%-u.%01uА\n Pвых=%-dВт\n Uсети=%-uВ\n t=%d'C",
+							snmp_inverter_current/10,snmp_inverter_current%10,
 							snmp_inverter_power,
 							snmp_main_voltage/10,
 							snmp_inverter_temperature
@@ -307,15 +373,15 @@ switch (poz_display) {
 
 	//  *********** меню калибровка **************
 	case 30:{
-		sprintf(lcd_buffer,"   КАЛИБРОВКА\n Uвых=%-u.%01uВ\n Iвых=%-u.%02uА\n Pвых=%-dВт",
+		sprintf(lcd_buffer,"   КАЛИБРОВКА\n Uвых=%-u.%01uВ\n Iвых=%-u.%01uА\n Pвых=%-dВт",
 							snmp_inverter_voltage/10, snmp_inverter_voltage%10,
-							snmp_inverter_current/100,snmp_inverter_current%100,
+							snmp_inverter_current/10,snmp_inverter_current%10,
 							snmp_inverter_power
 							);
 	break;}
 	case 31:{
-		sprintf(lcd_buffer,"   КАЛИБРОВКА\n Iвых=%-u.%02uА\n Pвых=%-dВт\n Uсети=%-u.%01uВ",
-							snmp_inverter_current/100,snmp_inverter_current%100,
+		sprintf(lcd_buffer,"   КАЛИБРОВКА\n Iвых=%-u.%01uА\n Pвых=%-dВт\n Uсети=%-u.%01uВ",
+							snmp_inverter_current/10,snmp_inverter_current%10,
 							snmp_inverter_power,
 							snmp_main_voltage/10, snmp_main_voltage%10);
 	break;}
@@ -626,6 +692,38 @@ switch (poz_display) {
 			);
 	break;}
 
+	//*********** заставка  **********************
+	case 240:{
+		sprintf(lcd_buffer," Uвых\n %-uB",
+			snmp_inverter_voltage/10
+			);
+	break;}
+	case 241:{
+		sprintf(lcd_buffer," Iвых\n%-u.%02uА",
+			snmp_inverter_current/100,snmp_inverter_current%100
+			);
+	break;}
+	case 242:{
+		sprintf(lcd_buffer," Pвых\n%-dBт",
+			snmp_inverter_power
+			);
+	break;}
+	case 243:{
+		sprintf(lcd_buffer,"Uсети\n%-uB",
+			snmp_main_voltage/10
+			);
+	break;}
+	case 244:{
+		sprintf(lcd_buffer," Uбат\n%-u.%-uB",
+			snmp_battery_voltage/10,snmp_battery_voltage%10
+			);
+	break;}
+	case 245:{
+		sprintf(lcd_buffer," Iбат\n%.2fA",
+			(float)snmp_battery_current/100
+			);
+	break;}
+
 
 	// ********** ввод пароля  ******************
 	case 250:{
@@ -655,15 +753,24 @@ switch (poz_display) {
 
  void lcd_out (void){
  	short iiii_;
-	
+
 	ind_hndl();
-	//sprintf(lcd_buffer," !123456\n ABCD\n АБСД\n абсд");
-	//sprintf(lcd_buffer,"\n ИНИЦИАЛИЗАЦИЯ\n   ИНТЕРНЕТ\n");
-	N_sim=16;
-	filling_lcd_buffer(lcd_buffer, N_sim);
-	if(poz_display<250) lcd_buffer[poz_kursor*16]='>'; // вставляем курсор
- 	bitmap_hndl16x8();
+
+	if(poz_display>239 && poz_display<246){
+		N_sim=6;
+		filling_lcd_buffer(lcd_buffer, N_sim, 2);
+		bitmap_hndl21x16();
+	}
+	else{	
+		N_sim=16;
+		filling_lcd_buffer(lcd_buffer, N_sim, 4);
+		if(poz_display<250) lcd_buffer[poz_kursor*16]='>'; // вставляем курсор
+ 		bitmap_hndl16x8();
+	}	
  	for(iiii_=0;iiii_<1024;iiii_++)	ssd1306_data(lcd_bitmap[iiii_]);
+
+
+
  }
 
 

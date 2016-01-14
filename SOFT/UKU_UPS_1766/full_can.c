@@ -903,6 +903,9 @@ void can_adr_hndl(void)
 //
 //-----------------------------------------------
 extern unsigned char data_can_reset;
+extern signed short snmp_battery_voltage;
+extern unsigned char delete_temp;
+#include "beeper_drv.h"
 void can_in_an1(void)
 {
 //char i;
@@ -920,8 +923,9 @@ can_rotor[1]++;
 //	}
 data_can_reset=0;
 
+if((RXBUFF[0]&0x1f)==27){
 
-if((RXBUFF[1]==0xDD)&&((RXBUFF[0]&0x1f)==27))  /**/
+	if(RXBUFF[1]==0xDD)  /**/
      {
 		snmp_inverter_current= (((unsigned short)RXBUFF[3])<<8)|RXBUFF[2];
 		snmp_inverter_power=0;
@@ -929,18 +933,47 @@ if((RXBUFF[1]==0xDD)&&((RXBUFF[0]&0x1f)==27))  /**/
 		snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];	// Uнагрузки
      }
 
-else if((RXBUFF[1]==0xDE)&&((RXBUFF[0]&0x1f)==27))  /**/
+	else if(RXBUFF[1]==0xDE)  /**/
      {
 		snmp_inverter_temperature= RXBUFF[2];
+
+		if(rejim_avar_led==0 && RXBUFF[3]&0x02)	rejim_avar_led=2;
+		else if(rejim_avar_led==0 && RXBUFF[3]&0x04)	rejim_avar_led=1;
+		else if(rejim_avar_led==2 || rejim_avar_led==1) rejim_avar_led=0;
+
 		snmp_main_voltage= (((unsigned short)RXBUFF[5])<<8)|RXBUFF[4];
-		//snmp_inverter_voltage= (((unsigned short)RXBUFF[7])<<8)|RXBUFF[6];
      }
-else if((RXBUFF[1]==0xDF)&&((RXBUFF[0]&0x1f)==27))  /*пакет конфигурирования*/
+	else if(RXBUFF[1]==0xDA)  /**/
+     {
+		snmp_battery_voltage= (((unsigned short)RXBUFF[3])<<8)|RXBUFF[2];
+		delete_temp=RXBUFF[4];
+		if(rejim_avar_led==3 && RXBUFF[4]&0x02==0 )	rejim_avar_led=0;
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x02 == 1) rejim_avar_led=3;
+
+		if(rejim_avar_led==4 && RXBUFF[4]&0x04==0)	rejim_avar_led=0;
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x04 == 1) rejim_avar_led=4;
+
+		if(rejim_avar_led==5 && RXBUFF[4]&0x40==0)	rejim_avar_led=0;
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x40 == 1) rejim_avar_led=5;
+
+		if(rejim_avar_led==6 && RXBUFF[4]&0x10==0)	rejim_avar_led=0;
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x10 == 1) rejim_avar_led=6;
+		
+		if(RXBUFF[4]&0x80) BEEPER_ON;
+		else BEEPER_OFF;
+		
+     }
+	else if(RXBUFF[1]==0xDF)  /*пакет конфигурирования*/
      {
 		kontrol_seti=RXBUFF[5];
 		upravl_shim=RXBUFF[6];	
      }
-
+	 else if(RXBUFF[1]==0xDB)  /*пакет конфигурирования*/
+     {
+		u_bat_off=RXBUFF[2];
+		u_bat_on=RXBUFF[3];	
+     }
+}
 
 
 //CAN_IN_AN1_end:

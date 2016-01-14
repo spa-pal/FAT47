@@ -39,7 +39,7 @@ signed short snmp_bps_temperature[2];
 signed short snmp_bps_stat[2];
 
 //Состояние Батареи
-signed short snmp_battery_voltage;
+unsigned short snmp_battery_voltage;
 signed short snmp_battery_current;
 
 

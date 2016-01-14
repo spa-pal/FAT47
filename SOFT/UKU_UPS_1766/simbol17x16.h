@@ -1,5 +1,5 @@
 //*****************************************
-const char caracter17x16[]={
+const char caracter21x16[]={
 ///* Character bitmaps for Times New Roman 17pt */
 	/* @0 ' ' (21 pixels wide) */
 	0x00, 0x00, 0x00, 0x00,//                

@@ -26,7 +26,7 @@ extern signed short snmp_bps_temperature[2];
 extern signed short snmp_bps_stat[2];
 
 //Состояние Батареи
-extern signed short snmp_battery_voltage;
+extern unsigned short snmp_battery_voltage;
 extern signed short snmp_battery_current;
 
 //Состояние инвертора
