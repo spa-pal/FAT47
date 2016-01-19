@@ -1,7 +1,6 @@
 #include "LPC17xx.H"
+
 unsigned char delete_temp;
-
-
 
 #include "main.h"                   /* LPC17xx definitions                */
 //#include "ports_operations.h"
@@ -42,6 +41,7 @@ unsigned char delete_temp;
 #define BUT4	4	 //F
 #define BUT_MASK (1UL<<BUT0)|(1UL<<BUT1)|(1UL<<BUT2)|(1UL<<BUT3)|(1UL<<BUT4)
 unsigned char poz_display, poz_display_bf, poz_display_bf2, poz_kursor, poz_kursor_bf, poz_kursor_bf2;
+unsigned char poz_display_temp_gm;
 unsigned delay_scrin_saver;
 unsigned char count_right,count_left,count_down,count_up,count_f;
 unsigned short flag_right,flag_left,flag_down,flag_up,flag_f;
@@ -59,7 +59,7 @@ unsigned char poz_flash, data_can_reset;
 unsigned char par_glav_menu[10]; // [0]-включение/отключение гл. меню
 								 // [1]задержка перед включением
 							   	 // [2]интервал переключения параметров
-unsigned char delay_glav_menu, intelval_glav_menu;
+unsigned char delay_glav_menu, intelval_glav_menu, nomer_glav_menu;
 unsigned char u_bat_on, u_bat_off;
 void led_beep(void);
 extern LOCALM localm[];
@@ -76,6 +76,7 @@ unsigned char canzz_tmp, canzx_tmp;
 unsigned char kontrol_seti, upravl_shim;
 unsigned char rejim_led, rejim_avar_led; // режим свечения светодиода
 unsigned short count_rejim_led;
+unsigned char sw_red, sw_green;
 
 void sk_init(void);
 #define SK_X18 (LPC_GPIO1->FIOPIN&(1<<26))
@@ -547,11 +548,186 @@ if (++t1==1000)
 	}
 
 }
-//**********************************************
+//*****************   Заставка   *****************************
 void glav_menu_hndl (void){
 	if(par_glav_menu[0]){
 		if(delay_glav_menu==0){
-		
+		   if(intelval_glav_menu==0){
+		   		if(nomer_glav_menu==0){
+					if(par_glav_menu[3]=='+') {
+					 	nomer_glav_menu=1;
+						poz_display_temp_gm=poz_display;
+						poz_display=240;						
+					}
+					else if(par_glav_menu[4]=='+') {
+						nomer_glav_menu=2;
+						poz_display_temp_gm=poz_display;
+						poz_display=241;
+					}
+					else if(par_glav_menu[5]=='+') {
+					 	nomer_glav_menu=3;
+						poz_display_temp_gm=poz_display;
+						poz_display=242;
+					}
+					else if(par_glav_menu[6]=='+') {
+						nomer_glav_menu=4;
+						poz_display_temp_gm=poz_display;
+						poz_display=243;
+					}
+					else if(par_glav_menu[7]=='+') {
+						nomer_glav_menu=5;
+						poz_display_temp_gm=poz_display;
+						poz_display=244;
+					}
+					else if(par_glav_menu[8]=='+') {
+					 	nomer_glav_menu=6;
+						poz_display_temp_gm=poz_display;
+						poz_display=245;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+				else if(nomer_glav_menu==1){
+					if(par_glav_menu[4]=='+') {
+						nomer_glav_menu=2;
+						poz_display=241;
+					}
+					else if(par_glav_menu[5]=='+') {
+					 	nomer_glav_menu=3;
+						poz_display=242;
+					}
+					else if(par_glav_menu[6]=='+') {
+						nomer_glav_menu=4;
+						poz_display=243;
+					}
+					else if(par_glav_menu[7]=='+') {
+						nomer_glav_menu=5;
+						poz_display=244;
+					}
+					else if(par_glav_menu[8]=='+') {
+					 	nomer_glav_menu=6;
+						poz_display=245;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+				else if(nomer_glav_menu==2){
+					if(par_glav_menu[5]=='+') {
+					 	nomer_glav_menu=3;
+						poz_display=242;
+					}
+					else if(par_glav_menu[6]=='+') {
+						nomer_glav_menu=4;
+						poz_display=243;
+					}
+					else if(par_glav_menu[7]=='+') {
+						nomer_glav_menu=5;
+						poz_display=244;
+					}
+					else if(par_glav_menu[8]=='+') {
+					 	nomer_glav_menu=6;
+						poz_display=245;
+					}
+					else if(par_glav_menu[3]=='+') {
+					 	nomer_glav_menu=1;
+						poz_display=240;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+				else if(nomer_glav_menu==3){
+					if(par_glav_menu[6]=='+') {
+						nomer_glav_menu=4;
+						poz_display=243;
+					}
+					else if(par_glav_menu[7]=='+') {
+						nomer_glav_menu=5;
+						poz_display=244;
+					}
+					else if(par_glav_menu[8]=='+') {
+					 	nomer_glav_menu=6;
+						poz_display=245;
+					}
+					else if(par_glav_menu[3]=='+') {
+					 	nomer_glav_menu=1;
+						poz_display=240;
+					}
+					else if(par_glav_menu[4]=='+') {
+						nomer_glav_menu=2;
+						poz_display=241;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+				else if(nomer_glav_menu==4){
+					if(par_glav_menu[7]=='+') {
+						nomer_glav_menu=5;
+						poz_display=244;
+					}
+					else if(par_glav_menu[8]=='+') {
+					 	nomer_glav_menu=6;
+						poz_display=245;
+					}
+					else if(par_glav_menu[3]=='+') {
+					 	nomer_glav_menu=1;
+						poz_display=240;
+					}
+					else if(par_glav_menu[4]=='+') {
+						nomer_glav_menu=2;
+						poz_display=241;
+					}
+					else if(par_glav_menu[5]=='+') {
+					 	nomer_glav_menu=3;
+						poz_display=242;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+				else if(nomer_glav_menu==5){
+					if(par_glav_menu[8]=='+') {
+					 	nomer_glav_menu=6;
+						poz_display=245;
+					}
+					else if(par_glav_menu[3]=='+') {
+					 	nomer_glav_menu=1;
+						poz_display=240;
+					}
+					else if(par_glav_menu[4]=='+') {
+						nomer_glav_menu=2;
+						poz_display=241;
+					}
+					else if(par_glav_menu[5]=='+') {
+					 	nomer_glav_menu=3;
+						poz_display=242;
+					}
+					else if(par_glav_menu[6]=='+') {
+						nomer_glav_menu=4;
+						poz_display=243;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+				else if(nomer_glav_menu==6){
+					if(par_glav_menu[3]=='+') {
+					 	nomer_glav_menu=1;
+						poz_display=240;
+					}
+					else if(par_glav_menu[4]=='+') {
+						nomer_glav_menu=2;
+						poz_display=241;
+					}
+					else if(par_glav_menu[5]=='+') {
+					 	nomer_glav_menu=3;
+						poz_display=242;
+					}
+					else if(par_glav_menu[6]=='+') {
+						nomer_glav_menu=4;
+						poz_display=243;
+					}
+					else if(par_glav_menu[7]=='+') {
+						nomer_glav_menu=5;
+						poz_display=244;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+		   
+		   		
+		   }
+		   else intelval_glav_menu-=1;
 		
 		}
 		else delay_glav_menu-=1;	
@@ -720,7 +896,7 @@ if(ETH_IS_ON){
 //rejim_led=1;
 //rejim_avar_led=6;
 
-
+delay_glav_menu=par_glav_menu[1];
 bDTS=0;
 while(1)
 	{
@@ -735,7 +911,7 @@ while(1)
 		LPC_GPIO1->FIODIR^=(1<<20);	 // сброс супервизора
 		//blinker();
 		//beeper();
-		led_beep();
+		//led_beep();
 		count_rejim_led+=1;
 		keypad_long  (K_R,&count_right,&flag_right);
 		keypad_long  (K_L,&count_left,&flag_left);
@@ -743,7 +919,9 @@ while(1)
 		keypad_long  (K_D,&count_down,&flag_down);
 		keypad_long  (K_F,&count_f,&flag_f);
 		if(flag_right||flag_left||flag_down||flag_up||flag_f) {
-			analiz_keypad(); 
+			analiz_keypad();
+			if(nomer_glav_menu) {poz_display=poz_display_temp_gm; nomer_glav_menu=0;}
+			delay_glav_menu=par_glav_menu[1]; 
 			//lcd_out(); 
 		}
 
@@ -826,7 +1004,7 @@ while(1)
 		f5Hz=0;
 		avar_hndl();
 
-		//if (poz_display<10) 
+		
 		memo_read();
 
 		if( (poz_display>19 && poz_display<24) || (poz_display>34 && poz_display<38) ) can1_out(27,27,0xFD,0,0,0,0,0);
@@ -869,7 +1047,7 @@ while(1)
 		
 		if(main_cnt<1000)main_cnt++;
 
-		glav_menu_hndl();
+		if (poz_display<10 || (poz_display>239 && poz_display<246) ) glav_menu_hndl();
 
 
 

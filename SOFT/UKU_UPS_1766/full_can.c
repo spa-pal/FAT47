@@ -34,7 +34,6 @@ extern signed short snmp_inverter_power;
 extern signed short snmp_main_voltage;
 extern unsigned char kontrol_seti, upravl_shim;
 
-
 // FullCAN Message List
 FULLCAN_MSG volatile gFullCANList[MAX_FILTERS];
 
@@ -97,6 +96,7 @@ const char Table95[]={
 char can_debug_plazma[2][10];
 volatile uint32_t CANStatus;
 
+
 //-----------------------------------------------
 char CRC1_in(void)
 {
@@ -110,21 +110,7 @@ for(j=1;j<(lb+1);j++)
 if(r==0)r=0xFF;
 return r;	
 } 
-//
-////-----------------------------------------------
-//char CRC2_in(void)
-//{
-//char r,j,lb;
-//lb=(RXBUFF[1]&0x1f)+0x04;
-//r=RXBUFF[0];
-//for(j=1;j<(lb+1);j++)
-//	{
-//	r=(RXBUFF[j]^Table95[r]);
-//	}
-//if(r==0)r=0xFF;
-//return r;	
-//}  
-//
+
 ////-----------------------------------------------
 char CRC1_out(void)
 {
@@ -139,208 +125,7 @@ if(r==0)r=0xFF;
 return r;	
 } 
 
-////-----------------------------------------------
-//char CRC2_out(void)
-//{
-//char r,j,lb;
-//lb=(TXBUFF[1]&0x1f)+0x04;
-//r=TXBUFF[0];
-//for(j=1;j<(lb+1);j++)
-//	{
-//	r=(TXBUFF[j]^Table95[r]);
-//	}
-//if(r==0)r=0xFF;
-//return r;	
-//}
-//
-////-----------------------------------------------
-//void can1_out_adr(char* ptr,char num)
-//{
-//
-//if(num<=8)
-//	{
-//	can1_info[ptr_can1_tx_wr]=(((long)num)<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[0];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[1];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[2];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[3];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[4];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[5];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[6];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[7];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;
-//	}
-//	
-//else if(num<=16)
-//	{
-//	can1_info[ptr_can1_tx_wr]=(8UL<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[0];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[1];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[2];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[3];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[4];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[5];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[6];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[7];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;
-//	
-//	can1_info[ptr_can1_tx_wr]=(((long)(num-8))<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[8];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[9];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[10];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[11];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[12];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[13];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[14];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[15];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;	
-//	}	
-//
-//else if(num<=24)
-//	{
-//	can1_info[ptr_can1_tx_wr]=(8UL<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[0];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[1];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[2];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[3];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[4];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[5];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[6];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[7];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;
-//
-//	can1_info[ptr_can1_tx_wr]=(8UL<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[8];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[9];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[10];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[11];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[12];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[13];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[14];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[15];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;
-//	
-//	can1_info[ptr_can1_tx_wr]=(((long)(num-16))<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[16];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[17];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[18];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[19];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[20];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[21];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[22];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[23];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;	
-//	}	
-//
-//else if(num<=32)
-//	{
-//	can1_info[ptr_can1_tx_wr]=(8UL<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[0];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[1];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[2];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[3];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[4];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[5];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[6];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[7];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;
-//
-//	can1_info[ptr_can1_tx_wr]=(8UL<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[8];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[9];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[10];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[11];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[12];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[13];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[14];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[15];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;
-//	
-//	can1_info[ptr_can1_tx_wr]=(8UL<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[16];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[17];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[18];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[19];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[20];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[21];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[22];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[23];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;
-//	
-//	can1_info[ptr_can1_tx_wr]=(((long)(num-24))<<16)&0x000f0000UL;
-//	can1_id[ptr_can1_tx_wr]=0x0000009eUL;
-//	*((char*)&can1_data[ptr_can1_tx_wr])=ptr[24];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+1)=ptr[25];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+2)=ptr[26];
-//	*(((char*)&can1_data[ptr_can1_tx_wr])+3)=ptr[27];
-//	*((char*)&can1_datb[ptr_can1_tx_wr])=ptr[28];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+1)=ptr[29];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+2)=ptr[30];
-//	*(((char*)&can1_datb[ptr_can1_tx_wr])+3)=ptr[31];	
-//	ptr_can1_tx_wr++;
-//	if(ptr_can1_tx_wr>=8)ptr_can1_tx_wr=0;	
-//	}	
-//
-//
-//if(bOUT_FREE)
-//	{
-//	LPC_CAN1->TFI1=can1_info[ptr_can1_tx_rd];
-//     LPC_CAN1->TID1=can1_id[ptr_can1_tx_rd];
-//     LPC_CAN1->TDA1=can1_data[ptr_can1_tx_rd];
-//     LPC_CAN1->TDB1=can1_datb[ptr_can1_tx_rd];
-//     LPC_CAN1->CMR=0x00000021;
-//     ptr_can1_tx_rd++;
-//     if(ptr_can1_tx_rd>=8)ptr_can1_tx_rd=0;
-//     bOUT_FREE=0;	
-//	}
-//
-//}	
-//
-////-----------------------------------------------
-//void paking(char* data_ptr,char data_len)
-//{
-//char i,ii,iii;
-//for(i=0;i<data_len;i++)
-//	{
-//	ii=data_len+(i/7);
-//	iii=i-(7*(i/7)); 
-//	if(iii==0) data_ptr[ii]=0;
-//	data_ptr[ii]<<=1;
-//	if(data_ptr[i]&0x01)
-//		{
-//		data_ptr[ii]|=0x01;//(1<<(6-iii));
-//		}                      
-//	else 
-//		{
-//		data_ptr[ii]&=0xfe;//~(1<<(6-iii));
-//		}              
-//	data_ptr[i]>>=1;	        
-//	data_ptr[i]|=0x80;	
-//	}                       
-//for(i=data_len;i<(data_len+(data_len/7)+1);i++)
-//	{
-//	data_ptr[i]|=0x80;
-//	}	
-//}
-//
+
 //-----------------------------------------------
 void can1_out(char dat0,char dat1,char dat2,char dat3,char dat4,char dat5,char dat6,char dat7)
 {
@@ -384,527 +169,12 @@ void can_adr_hndl(void)
 	TXBUFF[5]=((RXBUFF[5]&0xF0)>>4)|((RXBUFF[5]&0x0f)<<4);	
 }	
 
-////-----------------------------------------------
-//void can_in_an2(void)
-//{
-//if(!bIN) goto CAN_IN_AN_end; 
-//can_debug_plazma[0][1]++;
-//
-//
-//// Версия ПО
-//if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xc0)==0x40)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x01))
-//	{ 
-//     
-//
-//    	TXBUFF[0]=0x30;
-//	TXBUFF[1]=(RXBUFF[1]&0xa0)+4;
-//	can_adr_hndl();
-//	TXBUFF[6]=0x01;
-//	TXBUFF[7]=2;
-//	TXBUFF[8]=5;
-//	TXBUFF[9]=CRC1_out();
-//	TXBUFF[10]=CRC2_out();
-//	TX_len=11;
-//
-//	can1_out_adr(TXBUFF,11);  
-//	}
-//// Общее состояние источника 
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xc0)==0x40)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0xB0))
-//	{ 
-//	can_debug_plazma[0][2]++;
-//    	TXBUFF[0]=0x30;
-//	TXBUFF[1]=(RXBUFF[1]&0xa0)+13;
-//	can_adr_hndl(); 
-//	
-//	TXBUFF[6]=0xB0;
-//	
-//	//net_U=231;
-//	//net_F=501;
-//
-//	if(net_U>=254)TXBUFF[7]=0xff;
-//	else TXBUFF[7]=net_U;
-//	
-//	if(net_F<400) TXBUFF[8]=1;
-//	else if(net_F>654) TXBUFF[8]=0xff;
-//	else TXBUFF[8]=(unsigned char)((net_F-400)+1);
-//	
-//	TXBUFF[9]=*((char*)(&load_U));
-//	TXBUFF[10]=*(((char*)(&load_U))+1);
-//	TXBUFF[11]=*((char*)(&load_I));
-//	TXBUFF[12]=*(((char*)(&load_I))+1);
-//	
-//	TXBUFF[13]=0xcc;
-//	TXBUFF[13]|=(NUMIST&0x07);
-//	TXBUFF[13]|=((NUMBAT&0x03)<<4);
-//	
-//
-//	TXBUFF[14]=0x80;
-//	if(avar_stat&0x00000001)TXBUFF[14]|=0x01;
-//	if(PAR)TXBUFF[14]|=0x40;
-//	
-//	TXBUFF[15]=25;//tbat[2];
-//     
-//	paking(&TXBUFF[6],10);
-//	
-//	TXBUFF[18]=CRC1_out();
-//	TXBUFF[19]=CRC2_out();
-//	TX_len=20;
-//				
-//	can1_out_adr(TXBUFF,20);  
-//	} 
-//
-//// Состояние Батареи №1 
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xc0)==0x40)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0xB1)&&(RXBUFF[7]==0x01))
-//	{ 
-//	signed short temp_S;
-//
-//    	TXBUFF[0]=0x30;
-//	TXBUFF[1]=(RXBUFF[1]&0xa0)+14;
-//	can_adr_hndl();
-//	TXBUFF[6]=0xB1;
-//	TXBUFF[7]=1;
-//	
-//	if(NUMBAT==0) TXBUFF[8]=0xFF;
-//	else if((BAT_IS_ON[0]==bisON)&&(!bat[0]._av))TXBUFF[8]=0xF7;
-//	else TXBUFF[8]=0xF0;
-//	
-//	if((spc_stat==spcKE))TXBUFF[9]=0xF9;
-//	else if(spc_stat==spcVZ)TXBUFF[9]=0xF8;                      
-//	else TXBUFF[9]=0xF0;
-//	
-//	
-//	temp_S=(bat[0]._Ib/10)+10000;
-//			
-//	TXBUFF[10]=*((char*)(&bat[0]._Ub));
-//	TXBUFF[11]=*(((char*)(&bat[0]._Ub))+1);
-//	TXBUFF[12]=*((char*)(&temp_S));
-//	TXBUFF[13]=*(((char*)(&temp_S))+1);
-//	TXBUFF[14]=bat[0]._Tb;
-//	TXBUFF[15]=bat[0]._zar; 
-//	
-//	if(BAT_C_REAL[0]==0x5555)TXBUFF[16]=BAT_C_NOM[0];
-//	else TXBUFF[16]=BAT_C_REAL[0]/10;	
-//	
-//    	paking(&TXBUFF[6],11);
-//    
-//	TXBUFF[19]=CRC1_out();
-//	TXBUFF[20]=CRC2_out();
-//	TX_len=21; 
-// 
-//	can1_out_adr(TXBUFF,21);  
-//	}	
-//
-//// Состояние Батареи №2 
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xc0)==0x40)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0xB1)&&(RXBUFF[7]==0x02))
-//	{ 
-//	signed short temp_S;
-//
-//    	TXBUFF[0]=0x30;
-//	TXBUFF[1]=(RXBUFF[1]&0xa0)+14;
-//	can_adr_hndl();
-//	TXBUFF[6]=0xB1;
-//	TXBUFF[7]=2;
-//	
-//	if(NUMBAT==1) TXBUFF[8]=0xFF;
-//	else if((BAT_IS_ON[1]==bisON)&&(!bat[1]._av))TXBUFF[8]=0xF7;
-//	else TXBUFF[8]=0xF0;
-//	
-//	if((spc_stat==spcKE))TXBUFF[9]=0xF9;
-//	else if(spc_stat==spcVZ)TXBUFF[9]=0xF8;                      
-//	else TXBUFF[9]=0xF0;
-//	
-//	
-//	temp_S=(bat[1]._Ib/10)+10000;
-//			
-//	TXBUFF[10]=*((char*)(&bat[1]._Ub));
-//	TXBUFF[11]=*(((char*)(&bat[1]._Ub))+1);
-//	TXBUFF[12]=*((char*)(&temp_S));
-//	TXBUFF[13]=*(((char*)(&temp_S))+1);
-//	TXBUFF[14]=bat[1]._Tb;
-//	TXBUFF[15]=bat[1]._zar; 
-//	
-//	if(BAT_C_REAL[1]==0x5555)TXBUFF[16]=BAT_C_NOM[1];
-//	else TXBUFF[16]=BAT_C_REAL[1]/10;	
-//	
-//    	paking(&TXBUFF[6],11);
-//    
-//	TXBUFF[19]=CRC1_out();
-//	TXBUFF[20]=CRC2_out();
-//	TX_len=21; 
-// 
-//	can1_out_adr(TXBUFF,21);  
-//	}		
-//		
-//
-//
-//
-//	// Состояние БПС1 
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xc0)==0x40)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0xB2)&&(RXBUFF[7]==0x01))
-//	{ 
-//    //	plazma++;
-//
-//    	TXBUFF[0]=0x30;
-//	TXBUFF[1]=(RXBUFF[1]&0xa0)+11;
-//	can_adr_hndl();
-//	TXBUFF[6]=0xB2;
-//	TXBUFF[7]=1;
-//		
-//	
-//	if(NUMIST<1)TXBUFF[8]=0xff;	
-//	else if(bps[0]._state==bsWRK)TXBUFF[8]=0xf1; 
-//	else if(bps[0]._av&(1<<3))TXBUFF[8]=0xf4;
-//	else if(bps[0]._av&(1<<0))TXBUFF[8]=0xf5;
-//	else if(bps[0]._av&(1<<1))TXBUFF[8]=0xf5;
-//	else if(bps[0]._av&(1<<2))TXBUFF[8]=0xf7;
-//	else TXBUFF[8]=0xf0;
-//
-//	TXBUFF[9]=*((char*)(&bps[0]._Uii));
-//	TXBUFF[10]=*(((char*)(&bps[0]._Uii))+1);
-//	TXBUFF[11]=*((char*)(&bps[0]._Ii));
-//	TXBUFF[12]=*(((char*)(&bps[0]._Ii))+1);
-//	TXBUFF[13]=bps[0]._Ti;
-//	
-//    	paking(&TXBUFF[6],8);
-//    
-//    	TXBUFF[16]=CRC1_out();
-//	TXBUFF[17]=CRC2_out();
-//	TX_len=18;
-//
-//	can1_out_adr(TXBUFF,18);  
-//	}	
-//	// Состояние БПС2 
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xc0)==0x40)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0xB2)&&(RXBUFF[7]==0x02))
-//	{ 
-//    //	plazma++;
-//
-//    	TXBUFF[0]=0x30;
-//	TXBUFF[1]=(RXBUFF[1]&0xa0)+11;
-//	can_adr_hndl();
-//	TXBUFF[6]=0xB2;
-//	TXBUFF[7]=2;
-//		
-//	
-//	if(NUMIST<3)TXBUFF[8]=0xff;	
-//	else if(bps[1]._state==bsWRK)TXBUFF[8]=0xf1; 
-//	else if(bps[1]._av&(1<<3))TXBUFF[8]=0xf4;
-//	else if(bps[1]._av&(1<<0))TXBUFF[8]=0xf5;
-//	else if(bps[1]._av&(1<<1))TXBUFF[8]=0xf5;
-//	else if(bps[1]._av&(1<<2))TXBUFF[8]=0xf7;
-//	else TXBUFF[8]=0xf0;
-//
-//	TXBUFF[9]=*((char*)(&bps[1]._Uii));
-//	TXBUFF[10]=*(((char*)(&bps[1]._Uii))+1);
-//	TXBUFF[11]=*((char*)(&bps[1]._Ii));
-//	TXBUFF[12]=*(((char*)(&bps[1]._Ii))+1);
-//	TXBUFF[13]=bps[1]._Ti;
-//	
-//    	paking(&TXBUFF[6],8);
-//    
-//    	TXBUFF[16]=CRC1_out();
-//	TXBUFF[17]=CRC2_out();
-//	TX_len=18;
-//
-//	can1_out_adr(TXBUFF,18);  
-//	}	
-//
-//
-//	// Состояние БПС3 
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xc0)==0x40)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0xB2)&&(RXBUFF[7]==0x03))
-//	{ 
-//    //	plazma++;
-//
-//    	TXBUFF[0]=0x30;
-//	TXBUFF[1]=(RXBUFF[1]&0xa0)+11;
-//	can_adr_hndl();
-//	TXBUFF[6]=0xB2;
-//	TXBUFF[7]=3;
-//		
-//	
-//	if(NUMIST<3)TXBUFF[8]=0xff;	
-//	else if(bps[2]._state==bsWRK)TXBUFF[8]=0xf1; 
-//	else if(bps[2]._av&(1<<3))TXBUFF[8]=0xf4;
-//	else if(bps[2]._av&(1<<0))TXBUFF[8]=0xf5;
-//	else if(bps[2]._av&(1<<1))TXBUFF[8]=0xf5;
-//	else if(bps[2]._av&(1<<2))TXBUFF[8]=0xf7;
-//	else TXBUFF[8]=0xf0;
-//
-//	TXBUFF[9]=*((char*)(&bps[2]._Uii));
-//	TXBUFF[10]=*(((char*)(&bps[2]._Uii))+1);
-//	TXBUFF[11]=*((char*)(&bps[2]._Ii));
-//	TXBUFF[12]=*(((char*)(&bps[2]._Ii))+1);
-//	TXBUFF[13]=bps[2]._Ti;
-//	
-//    	paking(&TXBUFF[6],8);
-//    
-//    	TXBUFF[16]=CRC1_out();
-//	TXBUFF[17]=CRC2_out();
-//	TX_len=18;
-//
-//	can1_out_adr(TXBUFF,18);  
-//	}	
-//
-//// Выравнивающий заряд  часа
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x03)
-//	&&((RXBUFF[7])&&(RXBUFF[7]<25)))
-// 	  
-//	{ 
-//     char temp;      		
-//
-//	temp=vz_start(RXBUFF[7]);
-//	if (temp==1)TXBUFF[7]=0xff;
-//	else TXBUFF[7]=0x01;
-//
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+3;
-//	can_adr_hndl();
-//	TXBUFF[6]=0x03;
-//	TXBUFF[7]=0x01;
-//	TXBUFF[8]=CRC1_out();
-//	TXBUFF[9]=CRC2_out();
-//	TX_len=10;
-//	can1_out_adr(TXBUFF,10);
-//	}
-//
-//// Выключение выравнивающего заряда
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x08))
-// 	  
-//	{ 
-//	if(spc_stat==spcVZ) spc_stat=spcOFF;
-//
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+2;
-//	can_adr_hndl();
-//	TXBUFF[6]=0x08;
-//	TXBUFF[7]=CRC1_out();
-//	TXBUFF[8]=CRC2_out();
-//	TX_len=9;
-//	can1_out_adr(TXBUFF,9);
-//	}
-//
-//
-//// Контроль ёмкости батареи №1
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x04)
-//	&&(RXBUFF[7]==0x01))
-//	  
-//	{
-//	ke_start(0);
-//
-//	if(ke_start_stat==kssYES)TXBUFF[7]=0xff;
-//	else TXBUFF[7]=0x01;
-//
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+3;
-//	can_adr_hndl();
-//	TXBUFF[6]=0x04;
-//	TXBUFF[7]=0x01;
-//	TXBUFF[8]=CRC1_out();
-//	TXBUFF[9]=CRC2_out();
-//	TX_len=10;
-//	can1_out_adr(TXBUFF,10);
-//	} 
-//	
-//// Контроль ёмкости батареи №2
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x04)
-//	&&(RXBUFF[7]==0x02))
-//	  
-//	{
-//	ke_start(1);
-//
-//	if(ke_start_stat==kssYES)TXBUFF[7]=0xff;
-//	else TXBUFF[7]=0x01;
-//
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+3;
-//	can_adr_hndl();
-//	TXBUFF[6]=0x04;
-//	TXBUFF[7]=0x02;
-//	TXBUFF[8]=CRC1_out();
-//	TXBUFF[9]=CRC2_out();
-//	TX_len=10;
-//	can1_out_adr(TXBUFF,10);
-//	}	
-//	
-//	// Выключение контроля ёмкости 
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x07))
-//	  
-//	{
-//   	
-//	if(spc_stat==spcKE)spc_stat=spcOFF;
-//	
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+2;
-//	can_adr_hndl();
-//	TXBUFF[6]=0x07;
-//	TXBUFF[7]=CRC1_out();
-//	TXBUFF[8]=CRC2_out();
-//	TX_len=9;
-//	can1_out_adr(TXBUFF,9);
-//	}
-//
-//
-//
-//// БПС1 - выключить
-//if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x05)
-//	&&(RXBUFF[7]==0x01))
-//	  
-//	{
-//	bps[0]._ist_blok_host_cnt=3000;
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+3;
-//	can_adr_hndl();
-//	TXBUFF[6]=0x05;
-//	TXBUFF[7]=0x01;
-//	TXBUFF[8]=CRC1_out();
-//	TXBUFF[9]=CRC2_out();
-//	TX_len=10;
-//	can1_out_adr(TXBUFF,10);
-//
-//	}
-//
-//// БПС2 - выключить
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x05)
-//	&&(RXBUFF[7]==0x02))
-//	  
-//	{                  
-//	bps[1]._ist_blok_host_cnt=3000;
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+3;
-// 	can_adr_hndl();
-//	TXBUFF[6]=0x05;
-//	TXBUFF[7]=0x02;
-//	TXBUFF[8]=CRC1_out();
-//	TXBUFF[9]=CRC2_out();
-//	TX_len=10;     
-//
-//	can1_out_adr(TXBUFF,10);
-//
-//	}
-//
-//// БПС3 - выключить
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x05)
-//	&&(RXBUFF[7]==0x03))
-//	  
-//	{                  
-//	bps[2]._ist_blok_host_cnt=3000;
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+3;
-// 	can_adr_hndl();
-//	TXBUFF[6]=0x05;
-//	TXBUFF[7]=0x03;
-//	TXBUFF[8]=CRC1_out();
-//	TXBUFF[9]=CRC2_out();
-//	TX_len=10;     
-//
-//	can1_out_adr(TXBUFF,10);
-//
-//	}
-//
-//
-//// БПС4 - выключить
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x05)
-//	&&(RXBUFF[7]==0x04))
-//	  
-//	{                  
-//	bps[3]._ist_blok_host_cnt=3000;
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+3;
-// 	can_adr_hndl();
-//	TXBUFF[6]=0x05;
-//	TXBUFF[7]=0x03;
-//	TXBUFF[8]=CRC1_out();
-//	TXBUFF[9]=CRC2_out();
-//	TX_len=10;     
-//
-//	can1_out_adr(TXBUFF,10);
-//
-//	}
-//
-//
-////Разблокировать все источники
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x06))
-//	  
-//	{                  
-//	bps[0]._ist_blok_host_cnt=0;
-//	bps[1]._ist_blok_host_cnt=0;
-//	bps[2]._ist_blok_host_cnt=0;
-//	bps[3]._ist_blok_host_cnt=0;
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+2;
-// 	can_adr_hndl();
-//	TXBUFF[6]=0x05;
-//
-//	TXBUFF[7]=CRC1_out();
-//	TXBUFF[8]=CRC2_out();
-//	TX_len=9;     
-//
-//	can1_out_adr(TXBUFF,9);
-//
-//	}
-//
-//// Включить параллельную работу источников
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x0a))
-//	  
-//	{                  
-//	PAR=1;
-//	lc640_write_int(EE_PAR,PAR);
-//	
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+2;
-// 	can_adr_hndl();
-//	TXBUFF[6]=0x0a;
-//	TXBUFF[7]=CRC1_out();
-//	TXBUFF[8]=CRC2_out();
-//
-//	can1_out_adr(TXBUFF,9);    
-//
-//	}
-//
-//// Выключить параллельную работу источников
-//else if((RXBUFF[0]==0x30)&&((RXBUFF[1]&0xe0)==0x60)&&
-//	((RXBUFF[4]&0xf0)==0xe0)&&((RXBUFF[5]&0xf0)==0x20)&&(RXBUFF[6]==0x0b))
-//	  
-//	{                  
-//	PAR=0;
-//	lc640_write_int(EE_PAR,PAR);
-//	
-//     TXBUFF[0]=0x30;
-//	TXBUFF[1]=0x20+2;
-// 	can_adr_hndl();
-//	TXBUFF[6]=0x0b;
-//	TXBUFF[7]=CRC1_out();
-//	TXBUFF[8]=CRC2_out();
-//	TX_len=9;     
-//
-//	can1_out_adr(TXBUFF,9);
-//
-//	}
-//
-//CAN_IN_AN_end:
-//bIN=0;
-//}
-//
+
 //-----------------------------------------------
 extern unsigned char data_can_reset;
 extern signed short snmp_battery_voltage;
 extern unsigned char delete_temp;
+extern unsigned char sw_red, sw_green;
 #include "beeper_drv.h"
 void can_in_an1(void)
 {
@@ -936,29 +206,40 @@ if((RXBUFF[0]&0x1f)==27){
 	else if(RXBUFF[1]==0xDE)  /**/
      {
 		snmp_inverter_temperature= RXBUFF[2];
-
+		/*
 		if(rejim_avar_led==0 && RXBUFF[3]&0x02)	rejim_avar_led=2;
 		else if(rejim_avar_led==0 && RXBUFF[3]&0x04)	rejim_avar_led=1;
-		else if(rejim_avar_led==2 || rejim_avar_led==1) rejim_avar_led=0;
-
+		else if( (rejim_avar_led==2 || rejim_avar_led==1) && RXBUFF[3]&0x06==0 ) rejim_avar_led=0;
+		*/
 		snmp_main_voltage= (((unsigned short)RXBUFF[5])<<8)|RXBUFF[4];
      }
 	else if(RXBUFF[1]==0xDA)  /**/
      {
 		snmp_battery_voltage= (((unsigned short)RXBUFF[3])<<8)|RXBUFF[2];
-		delete_temp=RXBUFF[4];
+
+		
+delete_temp=RXBUFF[4];
+
+		/*
 		if(rejim_avar_led==3 && RXBUFF[4]&0x02==0 )	rejim_avar_led=0;
-		else if(rejim_avar_led==0 && RXBUFF[4]&0x02 == 1) rejim_avar_led=3;
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x02) rejim_avar_led=3;
 
 		if(rejim_avar_led==4 && RXBUFF[4]&0x04==0)	rejim_avar_led=0;
-		else if(rejim_avar_led==0 && RXBUFF[4]&0x04 == 1) rejim_avar_led=4;
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x04) rejim_avar_led=4;
 
-		if(rejim_avar_led==5 && RXBUFF[4]&0x40==0)	rejim_avar_led=0;
-		else if(rejim_avar_led==0 && RXBUFF[4]&0x40 == 1) rejim_avar_led=5;
+		if(rejim_avar_led==5 && RXBUFF[4]&0x08==0)	rejim_avar_led=0;
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x08) rejim_avar_led=5;
 
 		if(rejim_avar_led==6 && RXBUFF[4]&0x10==0)	rejim_avar_led=0;
-		else if(rejim_avar_led==0 && RXBUFF[4]&0x10 == 1) rejim_avar_led=6;
-		
+		else if(rejim_avar_led==0 && RXBUFF[4]&0x10) rejim_avar_led=6;
+		*/
+
+		if(RXBUFF[4]&0x40) sw_green=1;
+		else sw_green=0;
+
+		if(RXBUFF[4]&0x20) sw_red=1;
+		else sw_red=0;
+
 		if(RXBUFF[4]&0x80) BEEPER_ON;
 		else BEEPER_OFF;
 		

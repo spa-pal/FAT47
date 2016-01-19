@@ -288,11 +288,11 @@ char snmp_Community_temp[10], i;
 
 switch (poz_display) {
 	case 0:{
-		sprintf(lcd_buffer," Uâûõ=%-uÂ\n Iâûõ=%-u.%01uÀ\n Pâûõ=%-dÂò\n Uñåòè=%X",
+		sprintf(lcd_buffer," Uâûõ=%-uÂ\n Iâûõ=%-u.%01uÀ\n Pâûõ=%-dÂò\n Uñåòè=%-uÂ",
 							snmp_inverter_voltage/10,
 							snmp_inverter_current/10,snmp_inverter_current%10,
 							snmp_inverter_power,
-							RXBUFF[4]//snmp_main_voltage/10
+							snmp_main_voltage/10
 							);
 	break;}
 	case 1:{
@@ -719,9 +719,13 @@ switch (poz_display) {
 			);
 	break;}
 	case 245:{
-		sprintf(lcd_buffer," Iáàò\n%.2fA",
-			(float)snmp_battery_current/100
-			);
+		if(snmp_battery_current>500 || snmp_battery_current<-500){
+			snmp_battery_current=snmp_battery_current/10;
+			sprintf(lcd_buffer," Iáàò\n%.1fA",(float)(snmp_battery_current) /10	);
+		}
+		else{ 
+			sprintf(lcd_buffer," Iáàò\n%.2fA",(float)(snmp_battery_current) /100	);
+		}
 	break;}
 
 
@@ -738,7 +742,11 @@ switch (poz_display) {
 
 	case 255:{
 		sprintf(lcd_buffer,"\n     Ïàğîëü\n    íå âåğåí!\n");
-		if(!pass_error--) {poz_display=poz_display_bf; poz_kursor=poz_kursor_bf;} 
+		if(!pass_error--) {
+			if(password_obr==184){poz_display=poz_display_bf; poz_kursor=poz_kursor_bf;}
+			if(password_obr==873){poz_display=poz_display_bf2; poz_kursor=poz_kursor_bf2;}
+			password_obr=0;
+		} 
 	break;}
 
 }

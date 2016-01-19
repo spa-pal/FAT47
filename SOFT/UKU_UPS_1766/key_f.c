@@ -16,7 +16,7 @@ void kurs_up1(){
 //****  интернет по умолчанию
 void ethernet_default (void){
 unsigned char i;	  
-		lc640_write_int(EE_ETH_IS_ON,1);
+		lc640_write_int(EE_ETH_IS_ON,0);
 		lc640_write_int(EE_ETH_DHCP_ON,0);
 		lc640_write_int(EE_ETH_IP_1,192);
 		lc640_write_int(EE_ETH_IP_2,168);
@@ -957,7 +957,7 @@ void analiz_keypad(void){
 			if(password_obr==password && password==184) {poz_display=20;poz_kursor=1;}			
 			else if(password_obr==password && password==873) {poz_display=30;poz_kursor=1;}			
 			else {poz_display=255; pass_error=4;}
-			password=password_obr=0;
+			password=0;
 		}
 	break;}
 	case 251:{ 
@@ -975,7 +975,7 @@ void analiz_keypad(void){
 			if(password_obr==password && password==184) {poz_display=20;poz_kursor=1;}			
 			else if(password_obr==password && password==873) {poz_display=30;poz_kursor=1;}			
 			else {poz_display=255; pass_error=4;}
-			password=password_obr=0;
+			password=0;
 		}
 	break;}
 	case 252:{ 
@@ -992,7 +992,7 @@ void analiz_keypad(void){
 			if(password_obr==password && password==184) {poz_display=20;poz_kursor=1;}
 			else if(password_obr==password && password==873) {poz_display=30;poz_kursor=1;}			
 			else {poz_display=255; pass_error=4;}
-			password=password_obr=0;
+			password=0;
 		}
 	break;}
 	
