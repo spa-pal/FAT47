@@ -48,7 +48,7 @@ SNMP_READ_PORT=lc640_read_int(EE_SNMP_READ_PORT);
 SNMP_WRITE_PORT=lc640_read_int(EE_SNMP_WRITE_PORT);
 for(i=0;i<9;i++)
 	{
-	snmp_snmp_settings_read_community[i]=lc640_read(EE_SNMP_READ_COMMUNITY+i);
+	snmp_snmp_settings_write_community[i]=snmp_snmp_settings_read_community[i]=lc640_read(EE_SNMP_READ_COMMUNITY+i);
 	}
 snmp_snmp_settings_read_community[9]=0;
 /*

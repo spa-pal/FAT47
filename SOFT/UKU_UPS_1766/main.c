@@ -311,7 +311,7 @@ extern unsigned short rotor_can[6];
 extern char RXBUFF[40],TXBUFF[40];
 //***********************************************
 //—осто€ние первичной сети
-char net_av;
+char net_av=1;
 signed short net_stat_cnt=0;
 
 
@@ -795,7 +795,7 @@ Delay(10000000);
 ///LPC_GPIO0->FIOSET|=(1<<POWER_NET);
 
 adc_init();
-
+//lc640_write_int(EE_MAIN_POWER_TRAP_SEND_OF_AV,1);
 //lc640_write_int(EEPROM_INIT,0xFFFF);	//сбросить на умолчани€	EEPROM
 if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализаци€ EEPROM
 	lc640_write_int(EE_KUBAT1,1800); 
@@ -812,6 +812,17 @@ if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализаци€ EEPROM
 	lc640_write_int(EE_PAR_GLAV_MENU+14,'-');
 	lc640_write_int(EE_PAR_GLAV_MENU+16,'-');
 	lc640_write_int(EE_PAR_GLAV_MENU+18,'-');
+	lc640_write_int(EE_MAIN_POWER_TRAP_SEND_OF_AV,1);
+	lc640_write_int(EE_MAIN_POWER_TRAP_SEND_OF_NO_AV,1);
+	lc640_write_int(EE_INVERTER_TEMPERATURE_TRAP_SEND_OF_AV,1);
+	lc640_write_int(EE_INVERTER_TEMPERATURE_TRAP_SEND_OF_NO_AV,1);
+	lc640_write_int(EE_INVERTER_VOLTAGE_TRAP_SEND_OF_AV,1);
+	lc640_write_int(EE_INVERTER_VOLTAGE_TRAP_SEND_OF_NO_AV,1);
+	lc640_write_int(EE_INVERTER_CURRENT_TRAP_SEND_OF_AV,1);
+	lc640_write_int(EE_INVERTER_CURRENT_TRAP_SEND_OF_NO_AV,1);
+	lc640_write_int(EE_BATTERY_VOLTAGE_TRAP_SEND_OF_AV,1);
+	lc640_write_int(EE_BATTERY_VOLTAGE_TRAP_SEND_OF_NO_AV,1);
+
 	lc640_write_int(EEPROM_INIT,0);
 }
 memo_read();
@@ -941,8 +952,9 @@ while(1)
 		LPC_GPIO1->FIOPIN^=(1<<20);
 
 		unet_drv();			// следилка за сетью 220
+
 		if(main_cnt>2)inv_drv(NUMB);
-		 
+
 		timer_poll ();
      	main_TcpNet ();
 

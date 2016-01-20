@@ -712,18 +712,8 @@ void samokalibr_hndl(void)
 
 
 ////-----------------------------------------------
-//void ubat_old_drv(void)
-//{        
-//bat_u_old_cnt++;
-//gran_ring(&bat_u_old_cnt,0,8);
-//
-//bat[0]._u_old[bat_u_old_cnt]=bat[0]._Ub;
-//bat[1]._u_old[bat_u_old_cnt]=bat[1]._Ub;
-//}
-//
-////-----------------------------------------------
 void unet_drv(void)
-{
+{   
 if ((snmp_main_voltage<180)&&(main_cnt>3))//(LPC_GPIO1->FIOPIN&(1<<28))
 	{
 	net_stat_cnt--;
