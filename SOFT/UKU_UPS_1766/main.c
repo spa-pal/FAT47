@@ -56,7 +56,7 @@ unsigned short password, password_obr;
 unsigned char pass_error; 
 unsigned char poz_flash, data_can_reset;
 
-unsigned char par_glav_menu[10]; // [0]-включение/отключение гл. меню
+unsigned char par_glav_menu[11]; // [0]-включение/отключение гл. меню
 								 // [1]задержка перед включением
 							   	 // [2]интервал переключения параметров
 unsigned char delay_glav_menu, intelval_glav_menu, nomer_glav_menu;
@@ -77,6 +77,8 @@ unsigned char kontrol_seti, upravl_shim;
 unsigned char rejim_led, rejim_avar_led; // режим свечения светодиода
 unsigned short count_rejim_led;
 unsigned char sw_red, sw_green;
+unsigned char avar_seti, avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin;
+
 
 void sk_init(void);
 #define SK_X18 (LPC_GPIO1->FIOPIN&(1<<26))
@@ -250,8 +252,8 @@ signed short ETH_DEF_GATW_3;
 signed short ETH_DEF_GATW_4;
 
 //
-signed short ETH_SNMP_PORT_READ;
-signed short ETH_SNMP_PORT_WRITE;
+//signed short ETH_SNMP_PORT_READ;
+//signed short ETH_SNMP_PORT_WRITE;
 //
 
 
@@ -795,7 +797,7 @@ Delay(10000000);
 ///LPC_GPIO0->FIOSET|=(1<<POWER_NET);
 
 adc_init();
-//lc640_write_int(EE_MAIN_POWER_TRAP_SEND_OF_AV,1);
+
 //lc640_write_int(EEPROM_INIT,0xFFFF);	//сбросить на умолчания	EEPROM
 if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализация EEPROM
 	lc640_write_int(EE_KUBAT1,1800); 
@@ -825,6 +827,7 @@ if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализация EEPROM
 
 	lc640_write_int(EEPROM_INIT,0);
 }
+
 memo_read();
 
 
@@ -902,7 +905,7 @@ if(ETH_IS_ON){
 
 //tcp_init_cnt=10;
 
-//poz_display=36; 
+//poz_display=246; 
 //poz_kursor=1;
 //rejim_led=1;
 //rejim_avar_led=6;
@@ -916,6 +919,7 @@ while(1)
 		f1000Hz=0;
 		adc_drv7();
 		}
+		//**************************************************************************
 	if(f100Hz)
 		{
 		f100Hz=0;
@@ -933,39 +937,35 @@ while(1)
 			analiz_keypad();
 			if(nomer_glav_menu) {poz_display=poz_display_temp_gm; nomer_glav_menu=0;}
 			delay_glav_menu=par_glav_menu[1]; 
-			//lcd_out(); 
+
 		}
 
 		
 																						
 		
 		}
+		//**************************************************************
 	if(f50Hz)
 		{
 		f50Hz=0;
 		if (init) net_drv(); // задержка опросов иначе зависает кан
 
 		}
+		//**************************************************************
 	if(f10Hz)
 		{
 		f10Hz=0;
 		LPC_GPIO1->FIOPIN^=(1<<20);
-
-		unet_drv();			// следилка за сетью 220
-
-		if(main_cnt>2)inv_drv(NUMB);
-
+		unet_drv();			// следилка за сетью 220 
+		if(main_cnt>2)inv_drv(NUMB); 
 		timer_poll ();
      	main_TcpNet ();
-
-		//ind_hndl();
 		
 		if(tcp_init_cnt)
 			{
 			tcp_init_cnt--;
 			if(!tcp_init_cnt)
-				{
-				
+				{				
 	bDTS=1;
 	snmp_Community[0]=(char)lc640_read(EE_SNMP_READ_COMMUNITY);
 	if((snmp_Community[0]==0)||(snmp_Community[0]==' '))snmp_Community[0]=0;
@@ -1011,28 +1011,25 @@ while(1)
 				}
 			}
 		}
+		//*******************************************************
 	if(f5Hz)
 		{
 		f5Hz=0;
-		avar_hndl();
-
-		
-		memo_read();
-
-		if( (poz_display>19 && poz_display<24) || (poz_display>34 && poz_display<38) ) can1_out(27,27,0xFD,0,0,0,0,0);
-		
+		//if( (poz_display>19 && poz_display<24) || (poz_display>34 && poz_display<38) ) can1_out(27,27,0xFD,0,0,0,0,0);
+		avar_hndl();		
+		memo_read();		
 		matemat();
 		rele_hndl();
 		snmp_data();
+		lcd_out();
 		}
+		//*********************************************************
 	if(f2Hz)
 		{
 		f2Hz=0;
- 		lcd_out();
 		if(flash_1S) {
 			flash_1S=0; 
-			if(data_can_reset<5) data_can_reset+=1;
-			
+			if(data_can_reset<5) data_can_reset+=1;			
 		}
 		else {flash_1S=1;}
 		if(data_can_reset==4){
@@ -1044,6 +1041,7 @@ while(1)
 		}
 
 		}
+		//*************************************************************
 	if(f1Hz)
 		{
 		f1Hz=0;
@@ -1054,14 +1052,13 @@ while(1)
 			Kibat0[0]=adc_buff_[1];
 			lc640_write_int(EE_KI0BAT1,Kibat0[0]);
 		}
-		if(count_kalibr_i_bat>605) {count_kalibr_i_bat=0; RELE_I_OFF; }
-		
+		if(count_kalibr_i_bat>605) {count_kalibr_i_bat=0; RELE_I_OFF; }		
 		
 		if(main_cnt<1000)main_cnt++;
 
 		if (poz_display<10 || (poz_display>239 && poz_display<246) ) glav_menu_hndl();
 
-
+		can1_out(27,27,0xFD,0,0,0,0,0);
 
 //snmp_trap_send("Main power alarm. Power source is ACB",1,1);
 	 

@@ -175,6 +175,7 @@ extern unsigned char data_can_reset;
 extern signed short snmp_battery_voltage;
 extern unsigned char delete_temp;
 extern unsigned char sw_red, sw_green;
+extern unsigned char avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin;
 #include "beeper_drv.h"
 void can_in_an1(void)
 {
@@ -206,6 +207,11 @@ if((RXBUFF[0]&0x1f)==27){
 	else if(RXBUFF[1]==0xDE)  /**/
      {
 		snmp_inverter_temperature= RXBUFF[2];
+		if(RXBUFF[3]&0x02) avar_t70=1;
+		else avar_t70=0;
+		if(RXBUFF[2]&0x02) avar_t80=1;
+		else avar_t80=0;
+
 		/*
 		if(rejim_avar_led==0 && RXBUFF[3]&0x02)	rejim_avar_led=2;
 		else if(rejim_avar_led==0 && RXBUFF[3]&0x04)	rejim_avar_led=1;
@@ -233,6 +239,16 @@ delete_temp=RXBUFF[4];
 		if(rejim_avar_led==6 && RXBUFF[4]&0x10==0)	rejim_avar_led=0;
 		else if(rejim_avar_led==0 && RXBUFF[4]&0x10) rejim_avar_led=6;
 		*/
+
+		if(RXBUFF[4]&0x01==0) avar_akb_umin=1;
+		else avar_akb_umin=0;
+
+		if(RXBUFF[4]&0x02==0) avar_p1=1;
+		else avar_p1=0;
+
+		if(RXBUFF[4]&0x04==0) avar_p2=1;
+		else avar_p2=0;
+
 
 		if(RXBUFF[4]&0x40) sw_green=1;
 		else sw_green=0;

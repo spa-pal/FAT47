@@ -94,6 +94,8 @@ char* aaa_="abc";
 
 	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_BATTERY, DISPLAY_BATTERY_VOLTAGE, 0},  				MIB_INT(snmp_battery_voltage),  		NULL},	//напряжение батареи
   	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_BATTERY, DISPLAY_BATTERY_CURRENT, 0},  				MIB_INT(snmp_battery_current),  		NULL},	//ток батареи
+	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_BATTERY, DISPLAY_BATTERY_VOLTAGE_ON, 0},  				MIB_INT(u_bat_on),  	NULL},	//напряжение батареи- включения Uвых
+	{ MIB_INTEGER | MIB_ATR_RO,  	12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_BATTERY, DISPLAY_BATTERY_VOLTAGE_OFF, 0},  			MIB_INT(u_bat_off),  	NULL},//напряжение батареи- выключения Uвых
 
 	{ MIB_IP_ADDR,  				12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_ETH_SETTINGS, DISPLAY_ETH_SETTINGS_IP, 0},MIB_INT(snmp_eth_settings_ip),  				snmp_eth_settings_ip_write},		//ETH, IP
 	{ MIB_IP_ADDR,  				12, {OID_ENTERPRISE, OID_DEVICE, DISPLAY_ETH_SETTINGS, DISPLAY_ETH_SETTINGS_NET_MASK, 0},MIB_INT(snmp_eth_settings_net_mask),  	snmp_eth_settings_net_mask_write},	//ETH, маска

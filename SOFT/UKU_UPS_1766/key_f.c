@@ -30,8 +30,8 @@ unsigned char i;
 		lc640_write_int(EE_ETH_DEF_GATW_2,168);
 		lc640_write_int(EE_ETH_DEF_GATW_3,1);
 		lc640_write_int(EE_ETH_DEF_GATW_4,254);
-		lc640_write_int(EE_ETH_SNMP_PORT_READ,161);
-		lc640_write_int(EE_ETH_SNMP_PORT_WRITE,162);
+		//lc640_write_int(EE_ETH_SNMP_PORT_READ,161);
+		//lc640_write_int(EE_ETH_SNMP_PORT_WRITE,162);
 		lc640_write_int(EE_SNMP_READ_PORT,161);
 		lc640_write_int(EE_SNMP_WRITE_PORT,162);
 		lc640_write(EE_SNMP_READ_COMMUNITY,'p');
@@ -65,7 +65,7 @@ unsigned char i;
 		lc640_write_int(EE_PAR_GLAV_MENU+2,30);//запуск через 30 секунд
 		lc640_write_int(EE_PAR_GLAV_MENU+4,3);//время индикации 3 секунды
 
-		for(i=3;i<10;i++) lc640_write_int(EE_PAR_GLAV_MENU+i*2,'-');
+		for(i=3;i<11;i++) lc640_write_int(EE_PAR_GLAV_MENU+i*2,'-');
 
 }
 //*********************************
@@ -113,7 +113,7 @@ void analiz_keypad(void){
 	case 21:{  // выбор главного меню 
 		if(flag_down==2) {flag_down++; kurs_down();}
 		if(flag_f==2) { flag_f++; poz_display_bf2=poz_display; poz_kursor_bf2=poz_kursor;
-						poz_kursor=1;
+						poz_kursor=0;
 						poz_display=70; 
 		}
 	break;}

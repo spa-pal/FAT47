@@ -146,14 +146,13 @@ signed short snmp_alarm_status;
 
 char snmp_spc_trap_message[100];
 signed short snmp_spc_trap_value_0,snmp_spc_trap_value_1,snmp_spc_trap_value_2;
-
+extern unsigned char avar_seti, avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin;
 //-----------------------------------------------
 void snmp_data (void) 
 {
 //char i;
 
 snmp_snmp_settings_read_port=SNMP_READ_PORT;
-//snmp_snmp_settings_read_port=bps[NUMB]._flags_tm ;
 snmp_snmp_settings_write_port=SNMP_WRITE_PORT;
 snmp_snmp_settings_trap_server_1=(((long)SNMP_TRAP1_IP_4)<<24)+(((long)SNMP_TRAP1_IP_3)<<16)+(((long)SNMP_TRAP1_IP_2)<<8)+(((long)SNMP_TRAP1_IP_1));
 snmp_snmp_settings_trap_server_2=(((long)SNMP_TRAP2_IP_4)<<24)+(((long)SNMP_TRAP2_IP_3)<<16)+(((long)SNMP_TRAP2_IP_2)<<8)+(((long)SNMP_TRAP2_IP_1));
@@ -167,7 +166,7 @@ snmp_eth_settings_def_gatw=(((long)ETH_DEF_GATW_4)<<24)+(((long)ETH_DEF_GATW_3)<
 
 
 
-snmp_trap_settings_main_power_trap_send_of_no_av=MAIN_POWER_TRAP_SEND_OF_AV;
+snmp_trap_settings_main_power_trap_send_of_av=MAIN_POWER_TRAP_SEND_OF_AV;
 snmp_trap_settings_main_power_trap_send_of_no_av=MAIN_POWER_TRAP_SEND_OF_NO_AV;
 snmp_trap_settings_inverter_temperature_trap_send_of_av=INVERTER_TEMPERATURE_TRAP_SEND_OF_AV;
 snmp_trap_settings_inverter_temperature_trap_send_of_no_av=INVERTER_TEMPERATURE_TRAP_SEND_OF_NO_AV;
@@ -178,7 +177,9 @@ snmp_trap_settings_inverter_current_trap_send_of_no_av=INVERTER_CURRENT_TRAP_SEN
 snmp_trap_settings_battery_voltage_trap_send_of_av=BATTERY_VOLTAGE_TRAP_SEND_OF_AV;
 snmp_trap_settings_battery_voltage_trap_send_of_no_av=BATTERY_VOLTAGE_TRAP_SEND_OF_NO_AV;
 
-snmp_alarm_status=bps[NUMB]._flags_tm;
+
+snmp_alarm_status=avar_seti|(avar_t70<<1)|(avar_t80<<2)|(avar_p1<<3)|(avar_p2<<4)|(avar_akb_umin<<5);
+if(!snmp_alarm_status) snmp_alarm_status=0x80;
 
 //snmp_main_voltage=220;
 
@@ -434,7 +435,6 @@ if(mode==MIB_WRITE)
 	lc640_write_int(EE_SNMP_TRAP5_IP_4,SNMP_TRAP5_IP_4);
 	}
 }
-
 //-----------------------------------------------
 void snmp_eth_settings_ip_write (int mode)
 {
@@ -485,7 +485,7 @@ if(mode==MIB_WRITE)
 
 //-----------------------------------------------
 void snmp_trap_settings_main_power_trap_send_of_av_write (int mode)
-{
+{ 
 if(mode==MIB_WRITE)
 	{
 	lc640_write_int(EE_MAIN_POWER_TRAP_SEND_OF_AV,snmp_trap_settings_main_power_trap_send_of_av);

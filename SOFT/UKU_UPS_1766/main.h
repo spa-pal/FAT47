@@ -177,8 +177,8 @@ extern signed short ETH_DHCP_ON;
 //extern signed short ETH_MASK_2;
 //extern signed short ETH_MASK_3;
 //extern signed short ETH_MASK_4;
-extern signed short ETH_SNMP_PORT_READ;
-extern signed short ETH_SNMP_PORT_WRITE;
+//extern signed short ETH_SNMP_PORT_READ;
+//extern signed short ETH_SNMP_PORT_WRITE;
 //extern signed short ETH_GW_1;
 //extern signed short ETH_GW_2;
 //extern signed short ETH_GW_3;
@@ -364,6 +364,8 @@ void delay_us(long del);
 #define DISPLAY_BATTERY						4
 #define DISPLAY_BATTERY_VOLTAGE					1
 #define DISPLAY_BATTERY_CURRENT					2
+#define DISPLAY_BATTERY_VOLTAGE_ON				3
+#define DISPLAY_BATTERY_VOLTAGE_OFF				4
 
 #define DISPLAY_SPECIALS					5
 #define DISPLAY_ALARM_STATUS				 	1

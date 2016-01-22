@@ -241,15 +241,15 @@ BATTERY_VOLTAGE_TRAP_SEND_OF_NO_AV=lc640_read_int(EE_BATTERY_VOLTAGE_TRAP_SEND_O
 
 
 
-ETH_SNMP_PORT_READ=lc640_read_int(EE_ETH_SNMP_PORT_READ);
-ETH_SNMP_PORT_WRITE=lc640_read_int(EE_ETH_SNMP_PORT_WRITE);
+//ETH_SNMP_PORT_READ=lc640_read_int(EE_ETH_SNMP_PORT_READ);
+//ETH_SNMP_PORT_WRITE=lc640_read_int(EE_ETH_SNMP_PORT_WRITE);
 /*
 for(i=0;i<64;i++)
 	{
 	snmp_location[i]=lc640_read(EE_LOCATION+i);
 	}*/
 
-for(i=0;i<10;i++) par_glav_menu[i]=(unsigned char)lc640_read_int(EE_PAR_GLAV_MENU+i*2);
+for(i=0;i<11;i++) par_glav_menu[i]=(unsigned char)lc640_read_int(EE_PAR_GLAV_MENU+i*2);
 
 
 }

@@ -710,7 +710,7 @@ void samokalibr_hndl(void)
 }
 
 
-
+extern unsigned char avar_seti;
 ////-----------------------------------------------
 void unet_drv(void)
 {   
@@ -729,12 +729,14 @@ if((net_stat_cnt<-5)&&(!net_av))
 	{
 	avar_unet_hndl(1);
 	snmp_main_power_on_off=0;
+	avar_seti=1;
 	}
 										 
 else if((net_stat_cnt>5)&&(net_av))
 	{
 	avar_unet_hndl(0);
 	snmp_main_power_on_off=1;
+	avar_seti=0;
 	}
 }
 

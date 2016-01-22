@@ -288,16 +288,16 @@ char snmp_Community_temp[10], i;
 
 switch (poz_display) {
 	case 0:{
-		sprintf(lcd_buffer," Uâûõ=%-uÂ\n Iâûõ=%-u.%01uÀ\n Pâûõ=%-dÂò\n Uñåòè=%-uÂ",
+		sprintf(lcd_buffer," Uâûõ=%-uÂ\n Iâûõ=%.1fÀ\n Pâûõ=%-dÂò\n Uñåòè=%-uÂ",
 							snmp_inverter_voltage/10,
-							snmp_inverter_current/10,snmp_inverter_current%10,
+							(float)snmp_inverter_current/10,
 							snmp_inverter_power,
 							snmp_main_voltage/10
 							);
 	break;}
 	case 1:{
-		sprintf(lcd_buffer," Iâûõ=%-u.%01uÀ\n Pâûõ=%-dÂò\n Uñåòè=%-uÂ\n t=%d'C",
-							snmp_inverter_current/10,snmp_inverter_current%10,
+		sprintf(lcd_buffer," Iâûõ=%.1fÀ\n Pâûõ=%-dÂò\n Uñåòè=%-uÂ\n t=%d'C",
+							(float)snmp_inverter_current/10,
 							snmp_inverter_power,
 							snmp_main_voltage/10,
 							snmp_inverter_temperature
@@ -373,15 +373,15 @@ switch (poz_display) {
 
 	//  *********** ìåíþ êàëèáðîâêà **************
 	case 30:{
-		sprintf(lcd_buffer,"   ÊÀËÈÁÐÎÂÊÀ\n Uâûõ=%-u.%01uÂ\n Iâûõ=%-u.%01uÀ\n Pâûõ=%-dÂò",
+		sprintf(lcd_buffer,"   ÊÀËÈÁÐÎÂÊÀ\n Uâûõ=%-u.%01uÂ\n Iâûõ=%.1fÀ\n Pâûõ=%-dÂò",
 							snmp_inverter_voltage/10, snmp_inverter_voltage%10,
-							snmp_inverter_current/10,snmp_inverter_current%10,
+							(float)snmp_inverter_current/10,
 							snmp_inverter_power
 							);
 	break;}
 	case 31:{
-		sprintf(lcd_buffer,"   ÊÀËÈÁÐÎÂÊÀ\n Iâûõ=%-u.%01uÀ\n Pâûõ=%-dÂò\n Uñåòè=%-u.%01uÂ",
-							snmp_inverter_current/10,snmp_inverter_current%10,
+		sprintf(lcd_buffer,"   ÊÀËÈÁÐÎÂÊÀ\n Iâûõ=%.1fÀ\n Pâûõ=%-dÂò\n Uñåòè=%-u.%01uÂ",
+							(float)snmp_inverter_current/10,
 							snmp_inverter_power,
 							snmp_main_voltage/10, snmp_main_voltage%10);
 	break;}
@@ -699,8 +699,8 @@ switch (poz_display) {
 			);
 	break;}
 	case 241:{
-		sprintf(lcd_buffer," Iâûõ\n%-u.%02uÀ",
-			snmp_inverter_current/100,snmp_inverter_current%100
+		sprintf(lcd_buffer," Iâûõ\n%.1fÀ",
+			(float)snmp_inverter_current/10
 			);
 	break;}
 	case 242:{
@@ -726,6 +726,13 @@ switch (poz_display) {
 		else{ 
 			sprintf(lcd_buffer," Iáàò\n%.2fA",(float)(snmp_battery_current) /100	);
 		}
+	break;}
+	case 246:{
+	i=32;
+		sprintf(lcd_buffer," t%cC\n%-d'C",
+			i,
+			snmp_inverter_temperature
+			);
 	break;}
 
 
@@ -764,7 +771,7 @@ switch (poz_display) {
 
 	ind_hndl();
 
-	if(poz_display>239 && poz_display<246){
+	if(poz_display>239 && poz_display<247){
 		N_sim=6;
 		filling_lcd_buffer(lcd_buffer, N_sim, 2);
 		bitmap_hndl21x16();

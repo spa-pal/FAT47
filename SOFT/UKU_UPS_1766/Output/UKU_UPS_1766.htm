@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Output\UKU_UPS_1766.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Output\UKU_UPS_1766.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 644]: Last Updated: Wed Jan 20 16:31:56 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 644]: Last Updated: Fri Jan 22 16:49:45 2016
 <BR><P>
 <H3>Maximum Stack Usage =        312 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -362,7 +362,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ind_hndl
 </UL>
 
-<P><STRONG><a name="[69]"></a>__aeabi_f2d</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, f2d.o(.text))
+<P><STRONG><a name="[68]"></a>__aeabi_f2d</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, f2d.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ind_hndl
 </UL>
 
@@ -486,19 +486,19 @@ Global Symbols
 
 <P><STRONG><a name="[110]"></a>bitmap_hndl16x9</STRONG> (Thumb, 524 bytes, Stack size 20 bytes, main.o(.text), UNUSED)
 
-<P><STRONG><a name="[67]"></a>ind_hndl</STRONG> (Thumb, 7306 bytes, Stack size 184 bytes, main.o(.text))
+<P><STRONG><a name="[67]"></a>ind_hndl</STRONG> (Thumb, 7312 bytes, Stack size 184 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = ind_hndl &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
-<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
+<LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
-<LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
+<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_out
 </UL>
 
-<P><STRONG><a name="[6b]"></a>lcd_out</STRONG> (Thumb, 906 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[6b]"></a>lcd_out</STRONG> (Thumb, 914 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = lcd_out &rArr; ind_hndl &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ssd1306_data
@@ -522,7 +522,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;analiz_keypad
 </UL>
 
-<P><STRONG><a name="[70]"></a>ethernet_default</STRONG> (Thumb, 448 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[70]"></a>ethernet_default</STRONG> (Thumb, 432 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = ethernet_default &rArr; lc640_write &rArr; lc640_rdsr
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lc640_write_int
@@ -532,7 +532,7 @@ Global Symbols
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;analiz_keypad
 </UL>
 
-<P><STRONG><a name="[73]"></a>analiz_keypad</STRONG> (Thumb, 12862 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[73]"></a>analiz_keypad</STRONG> (Thumb, 12864 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = analiz_keypad &rArr; can1_out
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lc640_write_int
@@ -546,7 +546,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[42]"></a>main</STRONG> (Thumb, 2470 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[42]"></a>main</STRONG> (Thumb, 2438 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = main &rArr; unet_drv &rArr; avar_unet_hndl &rArr; snmp_trap_send &rArr; snmp_trap &rArr; udp_send &rArr; ip_send_frame &rArr; dispatch_frame &rArr; eth_send_frame &rArr; arp_cache_find &rArr; arp_send_req &rArr; alloc_mem
 </UL>
 <BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;unet_drv
@@ -585,7 +585,7 @@ Global Symbols
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;timer_poll
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemInit
-<LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
+<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry7.o(.ARM.Collect$$$$00000007)
 </UL>
@@ -593,7 +593,7 @@ Global Symbols
 
 <P><STRONG><a name="[112]"></a>samokalibr_hndl</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, control.o(.text), UNUSED)
 
-<P><STRONG><a name="[87]"></a>unet_drv</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, control.o(.text))
+<P><STRONG><a name="[87]"></a>unet_drv</STRONG> (Thumb, 172 bytes, Stack size 8 bytes, control.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = unet_drv &rArr; avar_unet_hndl &rArr; snmp_trap_send &rArr; snmp_trap &rArr; udp_send &rArr; ip_send_frame &rArr; dispatch_frame &rArr; eth_send_frame &rArr; arp_cache_find &rArr; arp_send_req &rArr; alloc_mem
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;avar_unet_hndl
@@ -629,7 +629,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[88]"></a>inv_drv</STRONG> (Thumb, 1742 bytes, Stack size 16 bytes, control.o(.text))
+<P><STRONG><a name="[88]"></a>inv_drv</STRONG> (Thumb, 1746 bytes, Stack size 16 bytes, control.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = inv_drv &rArr; avar_bps_hndl &rArr; beep
 </UL>
 <BR>[Calls]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;avar_bps_hndl
@@ -637,7 +637,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[7c]"></a>memo_read</STRONG> (Thumb, 770 bytes, Stack size 8 bytes, memo.o(.text))
+<P><STRONG><a name="[7c]"></a>memo_read</STRONG> (Thumb, 746 bytes, Stack size 8 bytes, memo.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = memo_read &rArr; lc640_read_int &rArr; lc640_rdsr
 </UL>
 <BR>[Calls]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lc640_read_int
@@ -669,7 +669,7 @@ Global Symbols
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;net_drv
 </UL>
 
-<P><STRONG><a name="[8d]"></a>snmp_data</STRONG> (Thumb, 434 bytes, Stack size 0 bytes, snmp_data_file.o(.text))
+<P><STRONG><a name="[8d]"></a>snmp_data</STRONG> (Thumb, 486 bytes, Stack size 0 bytes, snmp_data_file.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -725,7 +725,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> snmp_mib.o(.data)
 </UL>
-<P><STRONG><a name="[9]"></a>snmp_snmp_settings_trap_server_4_write</STRONG> (Thumb, 388 bytes, Stack size 8 bytes, snmp_data_file.o(.text))
+<P><STRONG><a name="[9]"></a>snmp_snmp_settings_trap_server_4_write</STRONG> (Thumb, 414 bytes, Stack size 8 bytes, snmp_data_file.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = snmp_snmp_settings_trap_server_4_write &rArr; lc640_write_int &rArr; lc640_rdsr
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lc640_write_int
@@ -838,19 +838,19 @@ Global Symbols
 
 <P><STRONG><a name="[117]"></a>snmp_command_execute</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, snmp_data_file.o(.text), UNUSED)
 
-<P><STRONG><a name="[96]"></a>datatime2str</STRONG> (Thumb, 256 bytes, Stack size 48 bytes, snmp_data_file.o(.text), UNUSED)
+<P><STRONG><a name="[96]"></a>datatime2str</STRONG> (Thumb, 434 bytes, Stack size 48 bytes, snmp_data_file.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;event2snmp
 </UL>
 
-<P><STRONG><a name="[98]"></a>event2snmp</STRONG> (Thumb, 3084 bytes, Stack size 72 bytes, snmp_data_file.o(.text), UNUSED)
+<P><STRONG><a name="[98]"></a>event2snmp</STRONG> (Thumb, 2902 bytes, Stack size 72 bytes, snmp_data_file.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lc640_read_long_ptr
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;datatime2str
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 
-<P><STRONG><a name="[92]"></a>snmp_trap_send</STRONG> (Thumb, 876 bytes, Stack size 40 bytes, snmp_data_file.o(.text))
+<P><STRONG><a name="[92]"></a>snmp_trap_send</STRONG> (Thumb, 878 bytes, Stack size 40 bytes, snmp_data_file.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = snmp_trap_send &rArr; snmp_trap &rArr; udp_send &rArr; ip_send_frame &rArr; dispatch_frame &rArr; eth_send_frame &rArr; arp_cache_find &rArr; arp_send_req &rArr; alloc_mem
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;snmp_trap
@@ -1075,11 +1075,11 @@ Global Symbols
 
 <P><STRONG><a name="[11a]"></a>can_adr_hndl</STRONG> (Thumb, 64 bytes, Stack size 0 bytes, full_can.o(.text), UNUSED)
 
-<P><STRONG><a name="[a6]"></a>can_in_an1</STRONG> (Thumb, 334 bytes, Stack size 0 bytes, full_can.o(.text))
+<P><STRONG><a name="[a6]"></a>can_in_an1</STRONG> (Thumb, 574 bytes, Stack size 0 bytes, full_can.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_ISR_Rx1
 </UL>
 
-<P><STRONG><a name="[a5]"></a>CAN_ISR_Rx1</STRONG> (Thumb, 358 bytes, Stack size 16 bytes, full_can.o(.text))
+<P><STRONG><a name="[a5]"></a>CAN_ISR_Rx1</STRONG> (Thumb, 222 bytes, Stack size 16 bytes, full_can.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = CAN_ISR_Rx1
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;can_in_an1
@@ -1393,7 +1393,7 @@ Global Symbols
 
 <P><STRONG><a name="[124]"></a>__1sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0sprintf), UNUSED)
 
-<P><STRONG><a name="[68]"></a>__2sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0sprintf))
+<P><STRONG><a name="[69]"></a>__2sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0sprintf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
