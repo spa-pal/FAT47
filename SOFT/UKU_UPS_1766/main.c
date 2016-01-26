@@ -586,6 +586,11 @@ void glav_menu_hndl (void){
 						poz_display_temp_gm=poz_display;
 						poz_display=245;
 					}
+					else if(par_glav_menu[9]=='+') {
+					 	nomer_glav_menu=7;
+						poz_display_temp_gm=poz_display;
+						poz_display=246;
+					}
 					intelval_glav_menu=par_glav_menu[2];
 				}
 				else if(nomer_glav_menu==1){
@@ -609,6 +614,10 @@ void glav_menu_hndl (void){
 					 	nomer_glav_menu=6;
 						poz_display=245;
 					}
+					else if(par_glav_menu[9]=='+') {
+					 	nomer_glav_menu=7;
+						poz_display=246;
+					}
 					intelval_glav_menu=par_glav_menu[2];
 				}
 				else if(nomer_glav_menu==2){
@@ -627,6 +636,10 @@ void glav_menu_hndl (void){
 					else if(par_glav_menu[8]=='+') {
 					 	nomer_glav_menu=6;
 						poz_display=245;
+					}
+					else if(par_glav_menu[9]=='+') {
+					 	nomer_glav_menu=7;
+						poz_display=246;
 					}
 					else if(par_glav_menu[3]=='+') {
 					 	nomer_glav_menu=1;
@@ -647,6 +660,10 @@ void glav_menu_hndl (void){
 					 	nomer_glav_menu=6;
 						poz_display=245;
 					}
+					else if(par_glav_menu[9]=='+') {
+					 	nomer_glav_menu=7;
+						poz_display=246;
+					}
 					else if(par_glav_menu[3]=='+') {
 					 	nomer_glav_menu=1;
 						poz_display=240;
@@ -665,6 +682,10 @@ void glav_menu_hndl (void){
 					else if(par_glav_menu[8]=='+') {
 					 	nomer_glav_menu=6;
 						poz_display=245;
+					}
+					else if(par_glav_menu[9]=='+') {
+					 	nomer_glav_menu=7;
+						poz_display=246;
 					}
 					else if(par_glav_menu[3]=='+') {
 					 	nomer_glav_menu=1;
@@ -685,6 +706,10 @@ void glav_menu_hndl (void){
 					 	nomer_glav_menu=6;
 						poz_display=245;
 					}
+					else if(par_glav_menu[9]=='+') {
+					 	nomer_glav_menu=7;
+						poz_display=246;
+					}
 					else if(par_glav_menu[3]=='+') {
 					 	nomer_glav_menu=1;
 						poz_display=240;
@@ -704,7 +729,11 @@ void glav_menu_hndl (void){
 					intelval_glav_menu=par_glav_menu[2];
 				}
 				else if(nomer_glav_menu==6){
-					if(par_glav_menu[3]=='+') {
+					if(par_glav_menu[9]=='+') {
+					 	nomer_glav_menu=7;
+						poz_display=246;
+					}
+					else if(par_glav_menu[3]=='+') {
 					 	nomer_glav_menu=1;
 						poz_display=240;
 					}
@@ -726,6 +755,34 @@ void glav_menu_hndl (void){
 					}
 					intelval_glav_menu=par_glav_menu[2];
 				}
+				else if(nomer_glav_menu==7){
+					if(par_glav_menu[3]=='+') {
+					 	nomer_glav_menu=1;
+						poz_display=240;
+					}
+					else if(par_glav_menu[4]=='+') {
+						nomer_glav_menu=2;
+						poz_display=241;
+					}
+					else if(par_glav_menu[5]=='+') {
+					 	nomer_glav_menu=3;
+						poz_display=242;
+					}
+					else if(par_glav_menu[6]=='+') {
+						nomer_glav_menu=4;
+						poz_display=243;
+					}
+					else if(par_glav_menu[7]=='+') {
+						nomer_glav_menu=5;
+						poz_display=244;
+					}
+					else if(par_glav_menu[8]=='+') {
+					 	nomer_glav_menu=6;
+						poz_display=245;
+					}
+					intelval_glav_menu=par_glav_menu[2];
+				}
+
 		   
 		   		
 		   }
@@ -1056,7 +1113,7 @@ while(1)
 		
 		if(main_cnt<1000)main_cnt++;
 
-		if (poz_display<10 || (poz_display>239 && poz_display<246) ) glav_menu_hndl();
+		if (poz_display<10 || (poz_display>239 && poz_display<247) ) glav_menu_hndl();
 
 		can1_out(27,27,0xFD,0,0,0,0,0);
 

@@ -935,6 +935,12 @@ void analiz_keypad(void){
 	break;}
 	case 79:{
 		if(flag_up==2 ) {flag_up++; kurs_up();}
+		if(flag_down==2) {flag_down++; kurs_down();}
+		if(flag_left==2) {flag_left++; par_glav_menu[9]='-'; lc640_write_int(EE_PAR_GLAV_MENU+18,par_glav_menu[9]);}
+		if(flag_right==2) {flag_right++; par_glav_menu[9]='+'; lc640_write_int(EE_PAR_GLAV_MENU+18,par_glav_menu[9]);}
+	break;}
+	case 80:{
+		if(flag_up==2 ) {flag_up++; kurs_up();}
 		else if(flag_f==2) {	flag_f++;
 			poz_display=poz_display_bf2; poz_kursor=poz_kursor_bf2;
 		}

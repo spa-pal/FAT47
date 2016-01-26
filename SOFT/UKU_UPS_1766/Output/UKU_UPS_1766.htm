@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Output\UKU_UPS_1766.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Output\UKU_UPS_1766.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 644]: Last Updated: Fri Jan 22 16:49:45 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 644]: Last Updated: Mon Jan 25 11:38:58 2016
 <BR><P>
 <H3>Maximum Stack Usage =        312 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -448,7 +448,7 @@ Global Symbols
 <P><STRONG><a name="[1e]"></a>SysTick_Handler</STRONG> (Thumb, 292 bytes, Stack size 0 bytes, main.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_lpc17xx.o(RESET)
 </UL>
-<P><STRONG><a name="[8e]"></a>glav_menu_hndl</STRONG> (Thumb, 1216 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[8e]"></a>glav_menu_hndl</STRONG> (Thumb, 1580 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -464,20 +464,20 @@ Global Symbols
 
 <P><STRONG><a name="[10f]"></a>keypad_fixed</STRONG> (Thumb, 146 bytes, Stack size 8 bytes, main.o(.text), UNUSED)
 
-<P><STRONG><a name="[6c]"></a>filling_lcd_buffer</STRONG> (Thumb, 174 bytes, Stack size 88 bytes, main.o(.text))
+<P><STRONG><a name="[6c]"></a>filling_lcd_buffer</STRONG> (Thumb, 204 bytes, Stack size 88 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = filling_lcd_buffer
 </UL>
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_out
 </UL>
 
-<P><STRONG><a name="[6d]"></a>bitmap_hndl21x16</STRONG> (Thumb, 1984 bytes, Stack size 20 bytes, main.o(.text))
+<P><STRONG><a name="[6d]"></a>bitmap_hndl21x16</STRONG> (Thumb, 1942 bytes, Stack size 20 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = bitmap_hndl21x16
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_out
 </UL>
 
-<P><STRONG><a name="[6e]"></a>bitmap_hndl16x8</STRONG> (Thumb, 554 bytes, Stack size 20 bytes, main.o(.text))
+<P><STRONG><a name="[6e]"></a>bitmap_hndl16x8</STRONG> (Thumb, 548 bytes, Stack size 20 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = bitmap_hndl16x8
 </UL>
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -486,7 +486,7 @@ Global Symbols
 
 <P><STRONG><a name="[110]"></a>bitmap_hndl16x9</STRONG> (Thumb, 524 bytes, Stack size 20 bytes, main.o(.text), UNUSED)
 
-<P><STRONG><a name="[67]"></a>ind_hndl</STRONG> (Thumb, 7312 bytes, Stack size 184 bytes, main.o(.text))
+<P><STRONG><a name="[67]"></a>ind_hndl</STRONG> (Thumb, 7340 bytes, Stack size 184 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = ind_hndl &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
@@ -498,7 +498,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_out
 </UL>
 
-<P><STRONG><a name="[6b]"></a>lcd_out</STRONG> (Thumb, 914 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[6b]"></a>lcd_out</STRONG> (Thumb, 956 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = lcd_out &rArr; ind_hndl &rArr; __2sprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ssd1306_data
@@ -532,7 +532,7 @@ Global Symbols
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;analiz_keypad
 </UL>
 
-<P><STRONG><a name="[73]"></a>analiz_keypad</STRONG> (Thumb, 12864 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[73]"></a>analiz_keypad</STRONG> (Thumb, 13034 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = analiz_keypad &rArr; can1_out
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lc640_write_int
@@ -546,7 +546,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[42]"></a>main</STRONG> (Thumb, 2438 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[42]"></a>main</STRONG> (Thumb, 2410 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = main &rArr; unet_drv &rArr; avar_unet_hndl &rArr; snmp_trap_send &rArr; snmp_trap &rArr; udp_send &rArr; ip_send_frame &rArr; dispatch_frame &rArr; eth_send_frame &rArr; arp_cache_find &rArr; arp_send_req &rArr; alloc_mem
 </UL>
 <BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;unet_drv

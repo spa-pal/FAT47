@@ -687,8 +687,13 @@ switch (poz_display) {
 			);
 	break;}
 	case 76:{
-		sprintf(lcd_buffer,"  %c Uсети\n  %c Uбат\n  %c Iбат\n ВЫХОД",
-			par_glav_menu[6],par_glav_menu[7],par_glav_menu[8]
+		sprintf(lcd_buffer,"  %c Uсети\n  %c Uбат\n  %c Iбат\n  %c t`",
+			par_glav_menu[6],par_glav_menu[7],par_glav_menu[8],par_glav_menu[9]
+			);
+	break;}
+	case 77:{
+		sprintf(lcd_buffer,"  %c Uбат\n  %c Iбат\n  %c t`\n ВЫХОД",
+			par_glav_menu[7],par_glav_menu[8],par_glav_menu[9]
 			);
 	break;}
 
@@ -728,10 +733,9 @@ switch (poz_display) {
 		}
 	break;}
 	case 246:{
-	i=32;
-		sprintf(lcd_buffer," t%cC\n%-d'C",
-			i,
-			snmp_inverter_temperature
+		sprintf(lcd_buffer,"  t%c\n %-d%cC",
+			34,
+			snmp_inverter_temperature, 34
 			);
 	break;}
 
