@@ -176,6 +176,8 @@ extern signed short snmp_battery_voltage;
 extern unsigned char delete_temp;
 extern unsigned char sw_red, sw_green;
 extern unsigned char avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin;
+extern signed short inverter_temperature_usr[10];
+extern unsigned char count_inverter_temperature_usr;
 #include "beeper_drv.h"
 void can_in_an1(void)
 {
@@ -206,7 +208,10 @@ if((RXBUFF[0]&0x1f)==27){
 
 	else if(RXBUFF[1]==0xDE)  /**/
      {
-		snmp_inverter_temperature= RXBUFF[2];
+		inverter_temperature_usr[count_inverter_temperature_usr]= RXBUFF[2];
+		count_inverter_temperature_usr+=1;
+		if(count_inverter_temperature_usr>9) count_inverter_temperature_usr=0;
+
 		if(RXBUFF[3]&0x02) avar_t70=1;
 		else avar_t70=0;
 		if(RXBUFF[2]&0x02) avar_t80=1;

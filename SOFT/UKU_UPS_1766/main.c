@@ -61,6 +61,9 @@ unsigned char par_glav_menu[11]; // [0]-включение/отключение гл. меню
 							   	 // [2]интервал переключения параметров
 unsigned char delay_glav_menu, intelval_glav_menu, nomer_glav_menu;
 unsigned char u_bat_on, u_bat_off;
+signed short inverter_temperature_usr[10];
+unsigned char count_inverter_temperature_usr;
+
 void led_beep(void);
 extern LOCALM localm[];
 extern U8 own_hw_adr[];
@@ -78,6 +81,7 @@ unsigned char rejim_led, rejim_avar_led; // режим свечения светодиода
 unsigned short count_rejim_led;
 unsigned char sw_red, sw_green;
 unsigned char avar_seti, avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin;
+unsigned char id_rele1, id_rele2=1;
 
 
 void sk_init(void);

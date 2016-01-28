@@ -741,10 +741,12 @@ else if((net_stat_cnt>5)&&(net_av))
 }
 
 //-----------------------------------------------
+extern signed short inverter_temperature_usr[10];
 void matemat(void)
 {
-
+char i;
 signed long temp_SL/*,temp_SL_*/;
+
 /*
 temp_SL=(signed long)adc_buff_[0]; //2618 (73V)
 temp_SL*=Kubat[0]; // min=1500
@@ -759,7 +761,10 @@ temp_SL/=1000L;
 snmp_battery_current=-1*(signed short)temp_SL;
 if(snmp_battery_current<-3 && count_iakb<200) count_iakb+=1;
 else count_iakb=0;
-					  
+
+temp_SL=0;
+for(i=0;i<10;i++) temp_SL=temp_SL+inverter_temperature_usr[i];					  
+snmp_inverter_temperature=temp_SL/10;
 }
 
 ////-----------------------------------------------

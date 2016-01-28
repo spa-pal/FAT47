@@ -153,13 +153,31 @@ void analiz_keypad(void){
 			can1_out(27,27,0xEE,0x82,0x82,0,0,0);
 		}
 	break;}
-	case 25:{ // вход в меню калибровка через пароль
+	case 25:{ // Реле 1
+		if(flag_up==2 ) {flag_up++; kurs_up1();}
+		if(flag_down==2) {flag_down++; kurs_down();}
+		if(flag_f==2) {
+			flag_left=3;
+			poz_display_bf2=poz_display; poz_kursor_bf2=poz_kursor;
+			poz_display=80; poz_kursor=0; 
+		}
+	break;}
+	case 26:{ // Реле 2
+		if(flag_up==2 ) {flag_up++; kurs_up1();}
+		if(flag_down==2) {flag_down++; kurs_down();}
+		if(flag_f==2) {
+			flag_left=3;
+			poz_display_bf2=poz_display; poz_kursor_bf2=poz_kursor;
+			poz_display=90; poz_kursor=0; 
+		}
+	break;}
+	case 27:{ // вход в меню калибровка через пароль
 		if(flag_up==2 ) {flag_up++; kurs_up1();}
 		if(flag_down==2) {flag_down++; kurs_down();}
 		if(flag_f==2) {flag_f++; poz_display_bf2=poz_display; poz_kursor_bf2=poz_kursor;
 			poz_display=252; poz_kursor=0; password_obr=873;}
 	break;}
-	case 26:{  // выход из меню установки
+	case 28:{  // выход из меню установки
 		if(flag_up==2 ) {flag_up++; kurs_up1(); }
 		if(flag_f==2) {flag_f++; poz_display=poz_display_bf; poz_kursor=poz_kursor_bf;}
 	break;}
@@ -945,9 +963,54 @@ void analiz_keypad(void){
 			poz_display=poz_display_bf2; poz_kursor=poz_kursor_bf2;
 		}
 	break;}
-
-
-
+	// ********* меню реле 1  ***********************
+	case 81:{
+		if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+		id_rele1=0;	
+		}
+	break;}
+	case 82:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+		id_rele1=2;	
+		}
+	break;}
+	case 83:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele1=3;	
+		}
+	break;}
+	case 84:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele1=4;	
+		}
+	break;}
+	case 85:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele1=5;	
+		}
+	break;}
+	case 86:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele1=6;	
+		}
+	break;}
+	case 87:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_f==2) {	flag_f++;
+			poz_display=poz_display_bf2; poz_kursor=poz_kursor_bf2;
+		}
+	break;}
 	// ********* меню пароль  ***********************
 	case 250:{ 
 		if(flag_left==2) {flag_left++; poz_display++;}
