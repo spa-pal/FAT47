@@ -4,6 +4,7 @@
 #include "main.h"
 #include "snmp_data_file.h"
 extern unsigned char par_glav_menu[10];
+extern unsigned char id_rele1, id_rele2;
 //-----------------------------------------------
 void memo_read (void)
 {
@@ -251,6 +252,8 @@ for(i=0;i<64;i++)
 
 for(i=0;i<11;i++) par_glav_menu[i]=(unsigned char)lc640_read_int(EE_PAR_GLAV_MENU+i*2);
 
+id_rele1=(unsigned char)lc640_read_int(EE_ID_RELE1);
+id_rele2=(unsigned char)lc640_read_int(EE_ID_RELE2);
 
 }
 

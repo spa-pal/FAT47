@@ -159,7 +159,7 @@ void analiz_keypad(void){
 		if(flag_f==2) {
 			flag_left=3;
 			poz_display_bf2=poz_display; poz_kursor_bf2=poz_kursor;
-			poz_display=80; poz_kursor=0; 
+			poz_display=80; poz_kursor=1; 
 		}
 	break;}
 	case 26:{ // Реле 2
@@ -168,7 +168,7 @@ void analiz_keypad(void){
 		if(flag_f==2) {
 			flag_left=3;
 			poz_display_bf2=poz_display; poz_kursor_bf2=poz_kursor;
-			poz_display=90; poz_kursor=0; 
+			poz_display=90; poz_kursor=1; 
 		}
 	break;}
 	case 27:{ // вход в меню калибровка через пароль
@@ -967,45 +967,107 @@ void analiz_keypad(void){
 	case 81:{
 		if(flag_down==2) {flag_down++; kurs_down();}
 		else if(flag_f==2) {	flag_f++;
-		id_rele1=0;	
+			id_rele1=0; lc640_write_int(EE_ID_RELE1,id_rele1);	
 		}
 	break;}
 	case 82:{
 		if(flag_up==2 ) {flag_up++; kurs_up1();} 
 		else if(flag_down==2) {flag_down++; kurs_down();}
 		else if(flag_f==2) {	flag_f++;
-		id_rele1=2;	
+			id_rele1=1;	lc640_write_int(EE_ID_RELE1,id_rele1);
 		}
 	break;}
 	case 83:{
 		if(flag_up==2 ) {flag_up++; kurs_up1();} 
 		else if(flag_down==2) {flag_down++; kurs_down();}
 		else if(flag_f==2) {	flag_f++;
-			id_rele1=3;	
+			id_rele1=2;	lc640_write_int(EE_ID_RELE1,id_rele1);
 		}
 	break;}
 	case 84:{
 		if(flag_up==2 ) {flag_up++; kurs_up1();} 
 		else if(flag_down==2) {flag_down++; kurs_down();}
 		else if(flag_f==2) {	flag_f++;
-			id_rele1=4;	
+			id_rele1=3;	lc640_write_int(EE_ID_RELE1,id_rele1);
 		}
 	break;}
 	case 85:{
 		if(flag_up==2 ) {flag_up++; kurs_up1();} 
 		else if(flag_down==2) {flag_down++; kurs_down();}
 		else if(flag_f==2) {	flag_f++;
-			id_rele1=5;	
+			id_rele1=4; lc640_write_int(EE_ID_RELE1,id_rele1);	
 		}
 	break;}
 	case 86:{
 		if(flag_up==2 ) {flag_up++; kurs_up1();} 
 		else if(flag_down==2) {flag_down++; kurs_down();}
 		else if(flag_f==2) {	flag_f++;
-			id_rele1=6;	
+			id_rele1=5;	lc640_write_int(EE_ID_RELE1,id_rele1);
 		}
 	break;}
 	case 87:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele1=6; lc640_write_int(EE_ID_RELE1,id_rele1);	
+		}
+	break;}
+	case 88:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_f==2) {	flag_f++;
+			poz_display=poz_display_bf2; poz_kursor=poz_kursor_bf2;
+		}
+	break;}
+	// ********* меню реле 2  ***********************
+	case 91:{
+		if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele2=0;	lc640_write_int(EE_ID_RELE2,id_rele2);
+		}
+	break;}
+	case 92:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele2=1;	lc640_write_int(EE_ID_RELE2,id_rele2);
+		}
+	break;}
+	case 93:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele2=2;	lc640_write_int(EE_ID_RELE2,id_rele2);
+		}
+	break;}
+	case 94:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele2=3;	lc640_write_int(EE_ID_RELE2,id_rele2);
+		}
+	break;}
+	case 95:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele2=4;	lc640_write_int(EE_ID_RELE2,id_rele2);
+		}
+	break;}
+	case 96:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele2=5;	lc640_write_int(EE_ID_RELE2,id_rele2);
+		}
+	break;}
+	case 97:{
+		if(flag_up==2 ) {flag_up++; kurs_up1();} 
+		else if(flag_down==2) {flag_down++; kurs_down();}
+		else if(flag_f==2) {	flag_f++;
+			id_rele2=6;	lc640_write_int(EE_ID_RELE2,id_rele2);
+		}
+	break;}
+	case 98:{
 		if(flag_up==2 ) {flag_up++; kurs_up1();} 
 		else if(flag_f==2) {	flag_f++;
 			poz_display=poz_display_bf2; poz_kursor=poz_kursor_bf2;

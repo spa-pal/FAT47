@@ -81,8 +81,7 @@ unsigned char rejim_led, rejim_avar_led; // режим свечени€ светодиода
 unsigned short count_rejim_led;
 unsigned char sw_red, sw_green;
 unsigned char avar_seti, avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin;
-unsigned char id_rele1, id_rele2=1;
-
+unsigned char id_rele1, id_rele2;
 
 void sk_init(void);
 #define SK_X18 (LPC_GPIO1->FIOPIN&(1<<26))
@@ -93,12 +92,11 @@ void sk_init(void);
 #define  X17_ON LPC_GPIO1->FIOSET|=(1<<28)                                           
 
 void rele_init(void);
-#define  RELE1_OFF LPC_GPIO1->FIOCLR|=(1<<24)
-#define  RELE1_ON LPC_GPIO1->FIOSET|=(1<<24)
-#define  RELE2_OFF LPC_GPIO1->FIOCLR|=(1<<25)
-#define  RELE2_ON LPC_GPIO1->FIOSET|=(1<<25)
+
 #define  RELE_I_OFF LPC_GPIO1->FIOCLR|=(1<<22)
 #define  RELE_I_ON LPC_GPIO1->FIOSET|=(1<<22)
+
+
 
 //------“аймер
 short t100=10-10,t50=20-5,t10=100-25,t5=200-45,t2=500-65,t1=1000-85;   // подобрана фаза дл€ несовпадени€ событий
@@ -840,8 +838,8 @@ INIT_LED_RED;
 INIT_LED_GREEN;
 
 RELE_I_OFF;
-RELE1_OFF;
-RELE2_OFF;
+LPC_GPIO1->FIOCLR|=(1<<25);//RELE1_OFF;
+LPC_GPIO1->FIOCLR|=(1<<24);//RELE2_OFF;
 rele_init();
 
 
@@ -885,7 +883,8 @@ if(lc640_read_int(EEPROM_INIT)==0xFFFF){ //инициализаци€ EEPROM
 	lc640_write_int(EE_INVERTER_CURRENT_TRAP_SEND_OF_NO_AV,1);
 	lc640_write_int(EE_BATTERY_VOLTAGE_TRAP_SEND_OF_AV,1);
 	lc640_write_int(EE_BATTERY_VOLTAGE_TRAP_SEND_OF_NO_AV,1);
-
+	lc640_write_int(EE_ID_RELE1,0);
+	lc640_write_int(EE_ID_RELE2,1);
 	lc640_write_int(EEPROM_INIT,0);
 }
 

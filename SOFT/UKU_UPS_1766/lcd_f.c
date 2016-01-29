@@ -365,16 +365,16 @@ switch (poz_display) {
 		sprintf(lcd_buffer,"    УСТАНОВКИ\n Интернет\n Uбат.вкл=%-uB\n Uбат.выкл=%-uB", u_bat_on, u_bat_off );
 	break;}
 	case 22:{
-		sprintf(lcd_buffer,"    УСТАНОВКИ\n Uбат.вкл=%-uB\n Uбат.выкл=%-uB\n Реле №1", u_bat_on, u_bat_off);
+		sprintf(lcd_buffer,"    УСТАНОВКИ\n Uбат.вкл=%-uB\n Uбат.выкл=%-uB\n Реле 1", u_bat_on, u_bat_off);
 	break;}
 	case 23:{
-		sprintf(lcd_buffer,"    УСТАНОВКИ\n Uбат.выкл=%-uB\n Реле №1\n Реле №2", u_bat_off);
+		sprintf(lcd_buffer,"    УСТАНОВКИ\n Uбат.выкл=%-uB\n Реле 1\n Реле 2", u_bat_off);
 	break;}
 	case 24:{
-		sprintf(lcd_buffer,"    УСТАНОВКИ\n Реле №1\n Реле №2\n Калибровка");
+		sprintf(lcd_buffer,"    УСТАНОВКИ\n Реле 1\n Реле 2\n Калибровка");
 	break;}
 	case 25:{
-		sprintf(lcd_buffer,"    УСТАНОВКИ\n Реле №2\n Калибровка\n Выход");
+		sprintf(lcd_buffer,"    УСТАНОВКИ\n Реле 2\n Калибровка\n Выход");
 	break;}
 
 	//  *********** меню калибровка **************
@@ -712,25 +712,75 @@ switch (poz_display) {
 		else sprintf(lcd_buffer,"   Реле 1:\n авария сети НЗ\n авария сети НР\n авария Uвых НЗ"); 
 	break;}
 	case 81:{
-		sprintf(lcd_buffer,"   Реле 1:\n авария сети НР\n авария Uвых НЗ\n авария Uвых HP");
+		if(flash_1S){
+			if(id_rele1==1) sprintf(lcd_buffer,"   Реле 1:\n \n авария Uвых НЗ\n авария Uвых HP");
+			else if(id_rele1==2) sprintf(lcd_buffer,"   Реле 1:\n авария сети НР\n \n авария Uвых HP");
+			else if(id_rele1==3) sprintf(lcd_buffer,"   Реле 1:\n авария сети НР\n авария Uвых НЗ\n ");
+		}
+		else sprintf(lcd_buffer,"   Реле 1:\n авария сети НР\n авария Uвых НЗ\n авария Uвых HP");
 	break;}
 	case 82:{
-		sprintf(lcd_buffer,"   Реле 1:\n авария Uвых НЗ\n авария Uвых HP\n авария Uвых HЗ");
+		if(flash_1S){
+			if(id_rele1==2) sprintf(lcd_buffer,"   Реле 1:\n \n авария Uвых HP\n АКБ разряж. НЗ");
+			else if(id_rele1==3) sprintf(lcd_buffer,"   Реле 1:\n авария Uвых НЗ\n \n АКБ разряж. НЗ");
+			else if(id_rele1==4) sprintf(lcd_buffer,"   Реле 1:\n авария Uвых НЗ\n авария Uвых HP\n ");
+		}
+		else sprintf(lcd_buffer,"   Реле 1:\n авария Uвых НЗ\n авария Uвых HP\n АКБ разряж. НЗ");
 	break;}
 	case 83:{
-		sprintf(lcd_buffer,"   Реле 1:\n авария Uвых HP\n авария Uвых HЗ\n АКБ разряж. НЗ");
+		if(flash_1S){
+			if(id_rele1==3) sprintf(lcd_buffer,"   Реле 1:\n \n АКБ разряж. НЗ\n АКБ разряж. НР");
+			else if(id_rele1==4) sprintf(lcd_buffer,"   Реле 1:\n авария Uвых HP\n \n АКБ разряж. НР");
+			else if(id_rele1==5) sprintf(lcd_buffer,"   Реле 1:\n авария Uвых HP\n АКБ разряж. НЗ\n ");
+		}
+		else sprintf(lcd_buffer,"   Реле 1:\n авария Uвых HP\n АКБ разряж. НЗ\n АКБ разряж. НР");
 	break;}
 	case 84:{
-		sprintf(lcd_buffer,"   Реле 1:\n авария Uвых HЗ\n АКБ разряж. НЗ\n АКБ разряж. НР");
-	break;}
-	case 85:{
-		sprintf(lcd_buffer,"   Реле 1:\n АКБ разряж. НЗ\n АКБ разряж. НР\n ВЫХОД");
+		if(flash_1S){
+			if(id_rele1==4) sprintf(lcd_buffer,"   Реле 1:\n \n АКБ разряж. НР\n ВЫХОД");
+			else if(id_rele1==5) sprintf(lcd_buffer,"   Реле 1:\n АКБ разряж. НЗ\n \n ВЫХОД");
+		}
+		else sprintf(lcd_buffer,"   Реле 1:\n АКБ разряж. НЗ\n АКБ разряж. НР\n ВЫХОД");
 	break;}
 	//  *********** меню реле 2   **************
-	case 90:{
-		sprintf(lcd_buffer,"  Uбат\n  Iбат\n  \n ВЫХОД"
-			
-			);
+	case 90:{		
+		if(flash_1S){
+			if(id_rele2==0) sprintf(lcd_buffer,"   Реле 2:\n  \n авария сети НР\n авария Uвых НЗ");
+			else if(id_rele2==1) sprintf(lcd_buffer,"   Реле 2:\n авария сети НЗ\n \n авария Uвых НЗ");
+			else if(id_rele2==2) sprintf(lcd_buffer,"   Реле 2:\n авария сети НЗ\n авария сети НР\n ");
+		}
+		else sprintf(lcd_buffer,"   Реле 2:\n авария сети НЗ\n авария сети НР\n авария Uвых НЗ"); 
+	break;}
+	case 91:{
+		if(flash_1S){
+			if(id_rele2==1) sprintf(lcd_buffer,"   Реле 2:\n \n авария Uвых НЗ\n авария Uвых HP");
+			else if(id_rele2==2) sprintf(lcd_buffer,"   Реле 2:\n авария сети НР\n \n авария Uвых HP");
+			else if(id_rele2==3) sprintf(lcd_buffer,"   Реле 2:\n авария сети НР\n авария Uвых НЗ\n ");
+		}
+		else sprintf(lcd_buffer,"   Реле 2:\n авария сети НР\n авария Uвых НЗ\n авария Uвых HP");
+	break;}
+	case 92:{
+		if(flash_1S){
+			if(id_rele2==2) sprintf(lcd_buffer,"   Реле 2:\n \n авария Uвых HP\n АКБ разряж. НЗ");
+			else if(id_rele2==3) sprintf(lcd_buffer,"   Реле 2:\n авария Uвых НЗ\n \n АКБ разряж. НЗ");
+			else if(id_rele2==4) sprintf(lcd_buffer,"   Реле 2:\n авария Uвых НЗ\n авария Uвых HP\n ");
+		}
+		else sprintf(lcd_buffer,"   Реле 2:\n авария Uвых НЗ\n авария Uвых HP\n АКБ разряж. НЗ");
+	break;}
+	case 93:{
+		if(flash_1S){
+			if(id_rele2==3) sprintf(lcd_buffer,"   Реле 2:\n \n АКБ разряж. НЗ\n АКБ разряж. НР");
+			else if(id_rele2==4) sprintf(lcd_buffer,"   Реле 2:\n авария Uвых HP\n \n АКБ разряж. НР");
+			else if(id_rele2==5) sprintf(lcd_buffer,"   Реле 2:\n авария Uвых HP\n АКБ разряж. НЗ\n ");
+		}
+		else sprintf(lcd_buffer,"   Реле 2:\n авария Uвых HP\n АКБ разряж. НЗ\n АКБ разряж. НР");
+	break;}
+	case 94:{
+		if(flash_1S){
+			if(id_rele2==4) sprintf(lcd_buffer,"   Реле 2:\n \n АКБ разряж. НР\n ВЫХОД");
+			else if(id_rele2==5) sprintf(lcd_buffer,"   Реле 2:\n АКБ разряж. НЗ\n \n ВЫХОД");
+		}
+		else sprintf(lcd_buffer,"   Реле 2:\n АКБ разряж. НЗ\n АКБ разряж. НР\n ВЫХОД");
 	break;}
 	//*********** заставка  **********************
 	case 240:{

@@ -245,8 +245,8 @@ delete_temp=RXBUFF[4];
 		else if(rejim_avar_led==0 && RXBUFF[4]&0x10) rejim_avar_led=6;
 		*/
 
-		if(RXBUFF[4]&0x01==0) avar_akb_umin=1;
-		else avar_akb_umin=0;
+		if(RXBUFF[4]&0x01==0) avar_akb_umin=0;
+		else avar_akb_umin=1;
 
 		if(RXBUFF[4]&0x02==0) avar_p1=1;
 		else avar_p1=0;

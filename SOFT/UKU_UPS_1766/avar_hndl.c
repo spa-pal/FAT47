@@ -55,12 +55,12 @@ extern signed short net_F,hz_out,hz_out_cnt;
 extern signed char unet_drv_cnt;
 extern char net_av;
 extern unsigned char sw_red, sw_green;
-
+extern unsigned char avar_seti;
 
 //-----------------------------------------------
 void avar_hndl(void)
 {
-if(count_iakb>8 || snmp_main_voltage<200) rejim_led=2;
+if(count_iakb>8 || avar_seti==1) rejim_led=2;
 else rejim_led=1;
 
 if(sw_red){ LED_RED_ON; LED_GREEN_OFF; }

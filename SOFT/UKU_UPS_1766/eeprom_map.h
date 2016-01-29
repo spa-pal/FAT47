@@ -286,7 +286,8 @@
 // параметры главного меню	11 байт х2
 #define EE_PAR_GLAV_MENU 		450
 
-
+#define EE_ID_RELE1 		480
+#define EE_ID_RELE2 		482
 
 /*
 #define KE_PTR			996
