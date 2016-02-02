@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Output\UKU_UPS_1766.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Output\UKU_UPS_1766.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 644]: Last Updated: Fri Jan 29 16:50:38 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 4.1 [Build 644]: Last Updated: Mon Feb 01 16:26:35 2016
 <BR><P>
 <H3>Maximum Stack Usage =        312 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -532,7 +532,7 @@ Global Symbols
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;analiz_keypad
 </UL>
 
-<P><STRONG><a name="[73]"></a>analiz_keypad</STRONG> (Thumb, 14740 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[73]"></a>analiz_keypad</STRONG> (Thumb, 14566 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = analiz_keypad &rArr; can1_out
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lc640_write_int
@@ -589,7 +589,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry7.o(.ARM.Collect$$$$00000007)
 </UL>
-<P><STRONG><a name="[87]"></a>unet_drv</STRONG> (Thumb, 172 bytes, Stack size 8 bytes, control.o(.text))
+<P><STRONG><a name="[87]"></a>unet_drv</STRONG> (Thumb, 316 bytes, Stack size 8 bytes, control.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = unet_drv &rArr; avar_unet_hndl &rArr; snmp_trap_send &rArr; snmp_trap &rArr; udp_send &rArr; ip_send_frame &rArr; dispatch_frame &rArr; eth_send_frame &rArr; arp_cache_find &rArr; arp_send_req &rArr; alloc_mem
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;avar_unet_hndl
@@ -613,7 +613,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[79]"></a>sk_init</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, control.o(.text))
+<P><STRONG><a name="[79]"></a>sk_init</STRONG> (Thumb, 150 bytes, Stack size 0 bytes, control.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -621,11 +621,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8c]"></a>rele_hndl</STRONG> (Thumb, 426 bytes, Stack size 0 bytes, control.o(.text))
+<P><STRONG><a name="[8c]"></a>rele_hndl</STRONG> (Thumb, 448 bytes, Stack size 0 bytes, control.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[88]"></a>inv_drv</STRONG> (Thumb, 1672 bytes, Stack size 16 bytes, control.o(.text))
+<P><STRONG><a name="[88]"></a>inv_drv</STRONG> (Thumb, 1684 bytes, Stack size 16 bytes, control.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = inv_drv &rArr; avar_bps_hndl &rArr; beep
 </UL>
 <BR>[Calls]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;avar_bps_hndl
@@ -642,7 +642,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8a]"></a>avar_hndl</STRONG> (Thumb, 182 bytes, Stack size 0 bytes, avar_hndl.o(.text))
+<P><STRONG><a name="[8a]"></a>avar_hndl</STRONG> (Thumb, 234 bytes, Stack size 0 bytes, avar_hndl.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -655,7 +655,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;unet_drv
 </UL>
 
-<P><STRONG><a name="[62]"></a>avar_bps_hndl</STRONG> (Thumb, 1164 bytes, Stack size 24 bytes, avar_hndl.o(.text))
+<P><STRONG><a name="[62]"></a>avar_bps_hndl</STRONG> (Thumb, 1182 bytes, Stack size 24 bytes, avar_hndl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = avar_bps_hndl &rArr; beep
 </UL>
 <BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;blink
@@ -1071,7 +1071,7 @@ Global Symbols
 
 <P><STRONG><a name="[118]"></a>can_adr_hndl</STRONG> (Thumb, 64 bytes, Stack size 0 bytes, full_can.o(.text), UNUSED)
 
-<P><STRONG><a name="[a6]"></a>can_in_an1</STRONG> (Thumb, 604 bytes, Stack size 0 bytes, full_can.o(.text))
+<P><STRONG><a name="[a6]"></a>can_in_an1</STRONG> (Thumb, 592 bytes, Stack size 0 bytes, full_can.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_ISR_Rx1
 </UL>
 

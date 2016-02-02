@@ -9,10 +9,10 @@
 #include "snmp_data_file.h"
 char chch;
 
-#define  RELE1_OFF LPC_GPIO1->FIOCLR|=(1<<25)
-#define  RELE1_ON LPC_GPIO1->FIOSET|=(1<<25)
-#define  RELE2_OFF LPC_GPIO1->FIOCLR|=(1<<24)
-#define  RELE2_ON LPC_GPIO1->FIOSET|=(1<<24)
+#define  RELE1_OFF LPC_GPIO1->FIOCLR|=(1<<24)
+#define  RELE1_ON LPC_GPIO1->FIOSET|=(1<<24)
+#define  RELE2_OFF LPC_GPIO1->FIOCLR|=(1<<25)
+#define  RELE2_ON LPC_GPIO1->FIOSET|=(1<<25)
 
 long adc_buff[16][16];
 char adc_self_ch_cnt/*,adc_ch_net*/;
@@ -25,10 +25,12 @@ short adc_result;
 short adc_net_buff_cnt;
 
 extern unsigned char avar_seti, avar_akb_umin;
+extern signed short out_stat_cnt;
+extern unsigned char out_av;
 ////-----------------------------------------------
 void unet_drv(void)
 {   
-if ((snmp_main_voltage<180)&&(main_cnt>3))//(LPC_GPIO1->FIOPIN&(1<<28))
+if ((snmp_main_voltage<1800)&&(main_cnt>3))//(LPC_GPIO1->FIOPIN&(1<<28))
 	{
 	net_stat_cnt--;
 	}
@@ -52,6 +54,29 @@ else if((net_stat_cnt>5)&&(net_av))
 	snmp_main_power_on_off=1;
 	avar_seti=0;
 	}
+//************** следилка за выходом 
+if ((snmp_inverter_voltage<1800)&&(main_cnt>3))//(LPC_GPIO1->FIOPIN&(1<<28))
+	{
+	out_stat_cnt--;
+	}
+else 
+	{
+	out_stat_cnt++;
+	}
+if(out_stat_cnt<-10) out_stat_cnt=-10;
+if(out_stat_cnt>10)	out_stat_cnt=10;
+
+if((out_stat_cnt<-5)&&(!out_av))
+	{
+		out_av=1;
+	}
+										 
+else if((out_stat_cnt>5)&&(out_av))
+	{
+		out_av=0;
+	}
+
+
 }
 
 //-----------------------------------------------
@@ -188,51 +213,55 @@ void rele_hndl(void)
 {
 	switch (id_rele1){
 	case 0:{
-		 if(avar_seti==1) RELE1_ON;
-		 else RELE1_OFF;
+		 if(avar_seti) RELE1_OFF;
+		 else RELE1_ON;
 	break;}
 	case 1:{
-		 if(avar_seti==1) RELE1_OFF;
-		 else RELE1_ON;
-	break;}
-	case 2:{
-
-	break;}
-	case 3:{
-
-	break;}
-	case 4:{
-		 if(avar_akb_umin) RELE1_ON;
+		 if(avar_seti) RELE1_ON;
 		 else RELE1_OFF;
 	break;}
-	case 5:{
+	case 2:{
+		 if(out_av)  RELE1_OFF;
+		 else RELE1_ON;
+	break;}
+	case 3:{
+		 if(out_av) RELE1_ON;
+		 RELE1_OFF;  
+	break;}
+	case 4:{
 		 if(avar_akb_umin) RELE1_OFF;
 		 else RELE1_ON;
+	break;}
+	case 5:{
+		 if(avar_akb_umin) RELE1_ON;
+		 else RELE1_OFF;
 	break;}
 	}// end switch (id_rele1){
 
 	switch (id_rele2){
 	case 0:{
-		 if(avar_seti==1) RELE2_ON;
-		 else RELE2_OFF;
+		 if(avar_seti) RELE2_OFF;
+		 else RELE2_ON;
 	break;}
 	case 1:{
-		 if(avar_seti==1) RELE2_OFF;
-		 else RELE2_ON;
-	break;}
-	case 2:{
-
-	break;}
-	case 3:{
-
-	break;}
-	case 4:{
-		 if(avar_akb_umin) RELE2_ON;
+		 if(avar_seti) RELE2_ON;
 		 else RELE2_OFF;
 	break;}
-	case 5:{
+	case 2:{
+		 if(out_av)  RELE2_OFF;
+		 else RELE2_ON;
+	break;}
+	case 3:{
+		 if(out_av) RELE2_ON;
+		 else RELE2_OFF;  
+	break;}
+	case 4:{
 		 if(avar_akb_umin) RELE2_OFF;
 		 else RELE2_ON;
+	break;}
+	case 5:{
+		 if(avar_akb_umin) RELE2_ON;
+		 else RELE2_OFF;
 	break;}
 	}// end switch (id_rele1){
 

@@ -56,10 +56,14 @@ extern signed char unet_drv_cnt;
 extern char net_av;
 extern unsigned char sw_red, sw_green;
 extern unsigned char avar_seti;
-
+extern unsigned char avar_akb_umin;
 //-----------------------------------------------
 void avar_hndl(void)
 {
+
+if((snmp_battery_voltage/10)<u_bat_off) avar_akb_umin=1;
+if((snmp_battery_voltage/10)>=u_bat_on) avar_akb_umin=0;
+
 if(count_iakb>8 || avar_seti==1) rejim_led=2;
 else rejim_led=1;
 

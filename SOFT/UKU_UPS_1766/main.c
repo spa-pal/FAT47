@@ -80,7 +80,7 @@ unsigned char kontrol_seti, upravl_shim;
 unsigned char rejim_led, rejim_avar_led; // режим свечения светодиода
 unsigned short count_rejim_led;
 unsigned char sw_red, sw_green;
-unsigned char avar_seti, avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin;
+unsigned char avar_seti, avar_t70, avar_t80, avar_p1, avar_p2, avar_akb_umin, out_av;
 unsigned char id_rele1, id_rele2;
 
 void sk_init(void);
@@ -317,8 +317,8 @@ extern char RXBUFF[40],TXBUFF[40];
 //Состояние первичной сети
 char net_av=1;
 signed short net_stat_cnt=0;
-
-
+//Состояние выходного напряжения
+signed short out_stat_cnt;
 
 //-----------------------------------------------
 //Кнопки
@@ -993,9 +993,9 @@ while(1)
 		keypad_long  (K_U,&count_up,&flag_up);
 		keypad_long  (K_D,&count_down,&flag_down);
 		keypad_long  (K_F,&count_f,&flag_f);
-		if(flag_right||flag_left||flag_down||flag_up||flag_f) {
-			analiz_keypad();
+		if(flag_right||flag_left||flag_down||flag_up||flag_f) {			
 			if(nomer_glav_menu) {poz_display=poz_display_temp_gm; nomer_glav_menu=0;}
+			else analiz_keypad();
 			delay_glav_menu=par_glav_menu[1]; 
 
 		}

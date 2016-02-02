@@ -761,7 +761,7 @@ switch (poz_display) {
 	break;}
 	case 92:{
 		if(flash_1S){
-			if(id_rele2==2) sprintf(lcd_buffer,"   Реле 2:\n \n авария Uвых HP\n АКБ разряж. НЗ");
+			if(id_rele2==2) sprintf(lcd_buffer,     "   Реле 2:\n \n авария Uвых HP\n АКБ разряж. НЗ");
 			else if(id_rele2==3) sprintf(lcd_buffer,"   Реле 2:\n авария Uвых НЗ\n \n АКБ разряж. НЗ");
 			else if(id_rele2==4) sprintf(lcd_buffer,"   Реле 2:\n авария Uвых НЗ\n авария Uвых HP\n ");
 		}
